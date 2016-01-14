@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
 
 publishMavenStyle := false
 
-coverageHighlighting := false
+// Temporarily removed due to downgrade of sbt-coverall
+//coverageHighlighting := false
 
 // Settings to build a nice looking plugin site
 site.settings
