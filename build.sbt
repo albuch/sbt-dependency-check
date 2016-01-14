@@ -15,6 +15,8 @@ libraryDependencies ++= Seq(
 
 publishMavenStyle := false
 
+coverageHighlighting := false
+
 // Settings to build a nice looking plugin site
 site.settings
 com.typesafe.sbt.SbtSite.SiteKeys.siteMappings <+= baseDirectory map { dir =>
