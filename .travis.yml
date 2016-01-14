@@ -5,4 +5,5 @@ jdk:
   - oraclejdk8
   - oraclejdk7
 script: "sbt clean coverage test"
-after_success: "sbt coveralls"
+# commented out until sbt-coveralls plugin is fixed
+#after_success: "sbt coveralls"
