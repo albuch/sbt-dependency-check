@@ -14,3 +14,12 @@ libraryDependencies ++= Seq(
 )
 
 publishMavenStyle := false
+
+// Settings to build a nice looking plugin site
+site.settings
+com.typesafe.sbt.SbtSite.SiteKeys.siteMappings <+= baseDirectory map { dir =>
+	val nojekyll = dir / "src" / "site" / ".nojekyll"
+	nojekyll -> ".nojekyll"
+}
+site.sphinxSupport()
+site.includeScaladoc()

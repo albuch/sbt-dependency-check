@@ -11,16 +11,24 @@ import org.owasp.dependencycheck.utils.Settings
 import sbt.Keys._
 import sbt._
 
+import DependencyCheckKeys._
+
 object DependencyCheckPlugin extends AutoPlugin {
 
-	object autoImport {
-		lazy val checkDependencies = TaskKey[Unit]("scan")
-	}
-
-	import autoImport._
+	object autoImport extends DependencyCheckKeys
 
 	override lazy val projectSettings = Seq(
-		checkDependencies <<= scanDependencies(Compile),
+		dependencyCheckAutoUpdate := true,
+		dependencyCheckCveValidForHours := 4,
+		dependencyCheckFailBuildOnCVSS := 11,
+		dependencyCheckFormat := "HTML",
+		dependencyCheckName := "dependency-check",
+		dependencyCheckOutputDirectory := target.value,
+		dependencyCheckSkip := false,
+		dependencyCheckSkipTestScope := true,
+		dependencyCheckSkipRuntimeScope := false,
+		dependencyCheckSuppressionFile := null,
+		dependencyCheckTask <<= scanDependencies(Compile),
 		commands += dependencyCheckCommand
 	)
 
