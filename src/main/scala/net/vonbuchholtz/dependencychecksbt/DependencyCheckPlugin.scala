@@ -65,9 +65,10 @@ object DependencyCheckPlugin extends AutoPlugin {
 	)
 
 	lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
+		val log: Logger = streams.value.log
 		Settings.initialize()
 
-		println("Applying project settings to DependencyCheck settings")
+		log.info("Applying project settings to DependencyCheck settings")
 		setBooleanSetting(AUTO_UPDATE, dependencyCheckAutoUpdate.value)
 		setIntSetting(CVE_CHECK_VALID_FOR_HOURS, dependencyCheckCveValidForHours.value)
 
@@ -175,7 +176,7 @@ object DependencyCheckPlugin extends AutoPlugin {
 						}
 
 					case None =>
-						// unmanaged JAR, just
+						// unmanaged JAR, just scan the file
 						engine.scan {
 							new File(attributed.data.getAbsolutePath)
 						}
@@ -188,7 +189,8 @@ object DependencyCheckPlugin extends AutoPlugin {
 	}
 
 	def writeReports(engine: Engine, outputDir: File, format: String): Unit = {
-		println(s"writing reports to ${outputDir.absolutePath}")
+		val log: Logger = streams.value.log
+		log.info(s"Writing reports to ${outputDir.absolutePath}")
 		var prop: DatabaseProperties = null
 		var cve: CveDB = null
 		try {
