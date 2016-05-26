@@ -2,7 +2,6 @@ package net.vonbuchholtz.dependencychecksbt
 
 import java.io.{File, IOException}
 
-import net.vonbuchholtz.dependencychecksbt.DependencyCheckKeys._
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
 import org.owasp.dependencycheck.data.nvdcve.{CveDB, DatabaseException, DatabaseProperties}
@@ -15,9 +14,14 @@ import sbt._
 
 object DependencyCheckPlugin extends AutoPlugin {
 
+
 	object autoImport extends DependencyCheckKeys
+	import autoImport._
 
 	private lazy val initSettingsTask = taskKey[Settings]("Initialize dependency check settings with project settings.")
+	private lazy val writeReportTask = taskKey[Settings]("Write the reports.")
+
+	override def trigger = allRequirements
 
 	override lazy val projectSettings = Seq(
 		dependencyCheckFormat := "all",
@@ -106,7 +110,6 @@ object DependencyCheckPlugin extends AutoPlugin {
 		setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
 		setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
 		setFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, dependencyCheckPathToMono.value)
-
 		// Advanced Configuration
 		setUrlSetting(CVE_MODIFIED_12_URL, dependencyCheckCveUrl12Modified.value)
 		setUrlSetting(CVE_MODIFIED_20_URL, dependencyCheckCveUrl20Modified.value)
@@ -142,11 +145,6 @@ object DependencyCheckPlugin extends AutoPlugin {
 
 	private def setUrlSetting(key: String, url: Option[URL]): Unit = {
 		Settings.setStringIfNotEmpty(key, url match{ case Some(u) => u.toExternalForm case None => null})
-	}
-
-	def initSettings = Def.task {
-		Settings.initialize()
-
 	}
 
 	def scanDependencies(conf: Configuration) = Def.task {
@@ -189,8 +187,8 @@ object DependencyCheckPlugin extends AutoPlugin {
 	}
 
 	def writeReports(engine: Engine, outputDir: File, format: String): Unit = {
-		val log: Logger = streams.value.log
-		log.info(s"Writing reports to ${outputDir.absolutePath}")
+		// val log: Logger = streams.value.log
+		// log.info(s"Writing reports to ${outputDir.absolutePath}")
 		var prop: DatabaseProperties = null
 		var cve: CveDB = null
 		try {

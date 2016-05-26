@@ -1,6 +1,6 @@
 
 organization := "net.vonbuchholtz"
-name := "dependency-check-sbt"
+name := "sbt-dependency-check"
 
 version := "1.0-SNAPSHOT"
 scalaVersion := "2.10.6"

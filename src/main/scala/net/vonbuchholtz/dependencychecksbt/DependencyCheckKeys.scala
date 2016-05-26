@@ -4,6 +4,7 @@ import sbt._
 
 trait DependencyCheckKeys {
 
+	//TODO copy docs from dependency-check?
 	// Configuration
 	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false.")
 	lazy val dependencyCheckCveValidForHours = settingKey[Option[Int]]("")
@@ -55,5 +56,3 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckUpdateOnly = TaskKey[Unit]("update-only", "Updates the local cache of the NVD data from NIST.")
 	lazy val dependencyCheckPurge = TaskKey[Unit]("purge", "Deletes the local copy of the NVD. This is used to force a refresh of the data.")
 }
-
-object DependencyCheckKeys extends DependencyCheckKeys
