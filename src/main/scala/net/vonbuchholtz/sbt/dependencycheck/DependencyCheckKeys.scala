@@ -1,20 +1,22 @@
-package net.vonbuchholtz.dependencychecksbt
+package net.vonbuchholtz.sbt.dependencycheck
 
 import sbt._
 
 trait DependencyCheckKeys {
 
-	//TODO copy docs from dependency-check?
+	//TODO copy docs from dependency-check
 	// Configuration
 	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false.")
 	lazy val dependencyCheckCveValidForHours = settingKey[Option[Int]]("")
-	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Option[Int]]("")
+	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Option[Float]]("")
 	lazy val dependencyCheckFormat = settingKey[String]("")
 	lazy val dependencyCheckName = settingKey[Option[String]]("")
 	lazy val dependencyCheckOutputDirectory = settingKey[Option[File]]("")
-	lazy val dependencyCheckSkip = settingKey[Option[Boolean]]("")
-	lazy val dependencyCheckSkipTestScope = settingKey[Option[Boolean]]("")
-	lazy val dependencyCheckSkipRuntimeScope = settingKey[Option[Boolean]]("")
+	lazy val dependencyCheckSkip = settingKey[Boolean]("")
+	lazy val dependencyCheckSkipTestScope = settingKey[Boolean]("")
+	lazy val dependencyCheckSkipRuntimeScope = settingKey[Boolean]("")
+	lazy val dependencyCheckSkipProvidedScope = settingKey[Boolean]("")
+	lazy val dependencyCheckSkipOptionalScope = settingKey[Boolean]("")
 	lazy val dependencyCheckSuppressionFile = settingKey[Option[File]]("")
 	// Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("")

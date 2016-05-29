@@ -1,4 +1,4 @@
-package net.vonbuchholtz.dependencychecksbt
+package net.vonbuchholtz.sbt.dependencycheck
 
 import sbt.ModuleID
 import sbt.std.TaskStreams
