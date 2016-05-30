@@ -1,14 +1,14 @@
 # sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/dependency-check-sbt.svg)](https://travis-ci.org/albuch/dependency-check-sbt) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Getting started
-Simply add the plugin to `project/plugins.sbt` file.
+`sbt-dependency-check` is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0-SNAPSHOT")
 
 ## Usage
 ### Tasks
 #### check
-#### aggregate
+#### aggregate-check
 #### update-only
 #### purge
 ### Configuration

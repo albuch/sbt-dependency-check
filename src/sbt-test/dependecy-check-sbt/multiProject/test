@@ -1,0 +1,3 @@
+> check
+$ exists target/dependency-check-report.html
+$ exists core/target/dependency-check-report.html

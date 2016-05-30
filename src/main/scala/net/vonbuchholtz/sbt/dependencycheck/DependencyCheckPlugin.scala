@@ -69,7 +69,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
-    dependencyCheckTask := scanDependencies.value,
+    dependencyCheckTask := checkTask.value,
+    aggregate in dependencyCheckAggregate := false,
+    dependencyCheckAggregate := aggregateTask.value,
     initSettingsTask := initializeSettings.value
   )
 
@@ -149,7 +151,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   })
 
 
-  def scanDependencies = Def.task {
+  def checkTask = Def.task {
     val log: Logger = streams.value.log
     val settings: Settings = initSettingsTask.value
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
@@ -190,6 +192,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     if(failBuildOnCVSS(engine.getDependencies, cvssScore)) {
       throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Build failed.")
     }
+  }
+
+  def aggregateTask = Def.task {
+    val log: Logger = streams.value.log
+    val settings: Settings = initSettingsTask.value
+    // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
+    Settings.setInstance(settings)
+
+    log.info(s"Running aggregate-check for ${name.value}")
+
+    Settings.cleanup()
   }
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
@@ -260,8 +273,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     try {
       r.generateReports(outputDir.getAbsolutePath, format)
     } catch {
-      case ioe: IOException =>
-      case ex: Throwable =>
+      case ioe: IOException => log.error(ioe.getLocalizedMessage)
+      case ex: Throwable => log.error(ex.getLocalizedMessage)
     }
   }
 
