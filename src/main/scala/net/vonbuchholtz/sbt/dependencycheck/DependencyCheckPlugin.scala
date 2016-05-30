@@ -32,7 +32,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckAutoUpdate := None,
     dependencyCheckCveValidForHours := None,
     dependencyCheckFailBuildOnCVSS := Some(11),
-    dependencyCheckOutputDirectory := Some(new File("./target")),
+    dependencyCheckOutputDirectory := Some(target.value),
     dependencyCheckSkip := false,
     dependencyCheckSkipTestScope := true,
     dependencyCheckSkipRuntimeScope := false,
@@ -173,11 +173,26 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       if(dependencyCheckSkipOptionalScope.value) {
         checkClasspath --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
       }
+
+      addDependencies(checkClasspath, engine, log)
+
+      engine.analyzeDependencies()
+      writeReports(engine, dependencyCheckOutputDirectory.value.getOrElse(target.value), dependencyCheckFormat.value, log)
     }
     else {
       log.info("Skipping check.")
     }
 
+    engine.cleanup()
+    Settings.cleanup()
+
+    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
+    if(failBuildOnCVSS(engine.getDependencies, cvssScore)) {
+      throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Build failed.")
+    }
+  }
+
+  def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
     checkClasspath.foreach(
       attributed =>
         attributed.get(Keys.moduleID.key) match {
@@ -200,16 +215,6 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
             }
         }
     )
-    engine.analyzeDependencies()
-    writeReports(engine, dependencyCheckOutputDirectory.value.getOrElse(new File("./target")), dependencyCheckFormat.value, log)
-
-    engine.cleanup()
-    Settings.cleanup()
-
-    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
-    if(failBuildOnCVSS(engine.getDependencies, cvssScore)) {
-      throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Build failed.")
-    }
   }
 
   def logAddDependencies(classpath: Seq[Attributed[File]], configuration: Configuration, log: Logger): Seq[Attributed[File]] = {
