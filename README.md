@@ -22,6 +22,7 @@
     ```sbt
     dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
     ```
+
 ## License
 Copyright 2016 Alexander v. Buchholtz
 
