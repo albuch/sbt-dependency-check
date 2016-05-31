@@ -15,7 +15,8 @@ object DependencyCheckUpdateTask {
       engine.doUpdates()
     } catch {
       case e: Exception =>
-        log.error(s"An exception occured connecting to the local database: ${e.getLocalizedMessage}")
+        log.error(s"An exception occurred connecting to the local database: ${e.getLocalizedMessage}")
+        throw e
     } finally {
       engine.cleanup()
       Settings.cleanup()
