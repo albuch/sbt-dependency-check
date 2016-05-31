@@ -1,6 +1,5 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
-import java.io.IOException
 import java.util
 
 import org.owasp.dependencycheck.Engine
@@ -70,8 +69,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
     dependencyCheckTask := checkTask.value,
-    aggregate in dependencyCheckAggregate := false,
     dependencyCheckAggregate := aggregateTask.value,
+    dependencyCheckUpdateOnly := updateTask().value,
+    dependencyCheckPurge := purgeTask.value,
+    aggregate in dependencyCheckAggregate := false,
+    aggregate in dependencyCheckUpdateOnly := false,
+    aggregate in dependencyCheckPurge := false,
     initSettingsTask := initializeSettings.value
   )
 
@@ -121,6 +124,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(DB_PASSWORD, dependencyCheckDatabasePassword.value)
     // TODO used for writeDataFile in Maven aggregate to keep data between child scans
     dependencyCheckMetaFileName
+    // TODO jvm/sbt proxy settings
     Settings.getInstance()
   }
 
@@ -150,7 +154,6 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     })
   })
 
-
   def checkTask = Def.task {
     val log: Logger = streams.value.log
     val settings: Settings = initSettingsTask.value
@@ -172,7 +175,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       if (dependencyCheckSkipProvidedScope.value) {
         checkClasspath --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypes.value, update.value), Provided, log)
       }
-      if(dependencyCheckSkipOptionalScope.value) {
+      if (dependencyCheckSkipOptionalScope.value) {
         checkClasspath --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
       }
 
@@ -189,21 +192,35 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.cleanup()
 
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
-    if(failBuildOnCVSS(engine.getDependencies, cvssScore)) {
+    if (failBuildOnCVSS(engine.getDependencies, cvssScore)) {
       throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Build failed.")
     }
+  }
+
+  def updateTask() = Def.task {
+    val log: Logger = streams.value.log
+    val settings: Settings = initSettingsTask.value
+    log.info(s"Running update-only for ${name.value}")
+
+    DependencyCheckUpdateTask.update(settings, log)
+  }
+
+  def purgeTask = Def.task {
+    val log: Logger = streams.value.log
+    val settings: Settings = initSettingsTask.value
+    log.info(s"Running purge for ${name.value}")
+
+    DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
   }
 
   def aggregateTask = Def.task {
     val log: Logger = streams.value.log
     val settings: Settings = initSettingsTask.value
-    // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-    Settings.setInstance(settings)
-
     log.info(s"Running aggregate-check for ${name.value}")
 
-    Settings.cleanup()
+    DependencyCheckAggregateTask.aggregate(settings)
   }
+
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
     checkClasspath.foreach(
@@ -264,6 +281,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       prop = cve.getDatabaseProperties
     } catch {
       case ex: DatabaseException =>
+        log.error(s"Error opening CVE Database: ${ex.getLocalizedMessage}")
+        throw ex
     } finally {
       if (cve != null) {
         cve.close()
@@ -273,8 +292,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     try {
       r.generateReports(outputDir.getAbsolutePath, format)
     } catch {
-      case ioe: IOException => log.error(ioe.getLocalizedMessage)
-      case ex: Throwable => log.error(ex.getLocalizedMessage)
+      case ex: Exception =>
+        log.error(s"Error generating report: ${ex.getLocalizedMessage}")
+        throw ex
     }
   }
 
