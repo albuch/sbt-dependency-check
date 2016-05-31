@@ -1,2 +1,2 @@
 > check
-$ exists target/dependency-check-report.html
+$ exists target/scala-2.10/dependency-check-report.html

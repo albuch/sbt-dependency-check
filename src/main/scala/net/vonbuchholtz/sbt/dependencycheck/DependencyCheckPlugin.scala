@@ -31,7 +31,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckAutoUpdate := None,
     dependencyCheckCveValidForHours := None,
     dependencyCheckFailBuildOnCVSS := Some(11),
-    dependencyCheckOutputDirectory := Some(target.value),
+    dependencyCheckOutputDirectory := Some(crossTarget.value),
     dependencyCheckSkip := false,
     dependencyCheckSkipTestScope := true,
     dependencyCheckSkipRuntimeScope := false,
@@ -182,10 +182,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       addDependencies(checkClasspath, engine, log)
 
       engine.analyzeDependencies()
-      writeReports(engine, dependencyCheckOutputDirectory.value.getOrElse(target.value), dependencyCheckFormat.value, log)
+      writeReports(engine, dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value), dependencyCheckFormat.value, log)
     }
     else {
-      log.info("Skipping check.")
+      log.info("Skipping dependency check.")
     }
 
     engine.cleanup()
@@ -193,7 +193,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
     if (failBuildOnCVSS(engine.getDependencies, cvssScore)) {
-      throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Build failed.")
+      throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Failing build.")
     }
   }
 
@@ -218,7 +218,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val settings: Settings = initSettingsTask.value
     log.info(s"Running aggregate-check for ${name.value}")
 
-    DependencyCheckAggregateTask.aggregate(settings)
+    DependencyCheckAggregateTask.aggregate(settings, log)
   }
 
 
