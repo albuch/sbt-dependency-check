@@ -1,5 +1,5 @@
-# sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/dependency-check-sbt.svg)](https://travis-ci.org/albuch/dependency-check-sbt) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
+# sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+The sbt dependency check plugin allows projects to monitor dependent libraries for known, published vulnerabilities (CVEs).
 ## Getting started
 `sbt-dependency-check` is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
@@ -8,11 +8,83 @@
 ## Usage
 ### Tasks
 #### check
+Runs dependency-check against the current project,its aggregate and dependencies and generates a report for each project.
+
+    $ sbt check
+The report will be written to the default location `crossTarget`. This can be overwritten by setting `dependencyCheckOutputDirectory`.
+
+    dependencyCheckOutputDirectory := Some(new File("./target"))
 #### aggregate-check
+Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report
+ in the current project's output directory.
+
+    $ sbt aggregate-check
 #### update-only
+Updates the local cache of the NVD data from NIST.
+
+    $ sbt update-only
 #### purge
+Deletes the local copy of the NVD. This is used to force a refresh of the data.
+    $ sbt purge
 ### Configuration
-`dependency-check-sbt` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override all settings with sbt task settings.
+`sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override all settings with sbt task settings.
+To following command lists all available settings. Look for settings starting with `dependencyCheck` for all available settings of the plugin.
+
+    $ sbt "settings -V"
+
+#### Increasing Log Level
+
+    logLevel in dependencyCheckAggregate := Level.Debug
+### Multi-Project setup
+
+Add all dependency check settings to your commonSettings that you pass to your projects.
+
+**build.sbt**
+```Scala
+lazy val commonSettings = Seq(
+  organization := "com.example",
+  version := "0.1.0",
+  scalaVersion := "2.10.6",
+  // Add your sbt-dependency-check settings
+  dependencyCheckFormat := Some("All")
+)
+
+lazy val root = (project in file("."))
+  .aggregate(core)
+  .settings(commonSettings: _*)
+  .settings(
+	libraryDependencies += "com.github.t3hnar" %% "scala-bcrypt" % "2.6" % "test",
+	dependencyCheckSkipTestScope := false
+  )
+
+lazy val util = (project in file("util"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies += "commons-beanutils" % "commons-beanutils" % "1.9.1"
+  )
+
+lazy val core = project.dependsOn(util)
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies += "org.apache.commons" % "commons-collections4" % "4.1" % "runtime",
+    dependencyCheckSkip := true
+  )
+
+```
+
+The only settings, that are supported to work for `aggregate` and `dependOn` projects right now are the scope skipping ones:
+* `dependencyCheckSkip`
+* `dependencyCheckSkipTestScope`
+* `dependencyCheckSkipRuntimeScope`
+* `dependencyCheckSkipProvidedScope`
+* `dependencyCheckSkipOptionalScope`
+
+You can set these individually for each project.
+
+### Running behind a proxy
+sbt and sbt-dependency-check both honor the standard proxy settings for http and https for the JVM.
+
+    sbt -Dhttp.proxyHost=proxy.example.com -Dhttp.proxyPort=3218 -Dhttp.proxyUser=username -Dhttp.proxyPassword=password -DnoProxyHosts="localhost|http://www.google.de" check
 
 ## Known issues
 * Check task runs forever, CVE database file size increases drastically
