@@ -10,20 +10,19 @@ import org.owasp.dependencycheck.reporting.ReportGenerator
 import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
-import sbt.{File, _}
+import sbt.plugins.JvmPlugin
+import sbt.{File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
 
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
-
   object autoImport extends DependencyCheckKeys
 
   import autoImport._
 
-  private lazy val initSettingsTask = taskKey[Settings]("Initialize dependency check settings with project settings.")
-
+  override def requires = JvmPlugin
   override def trigger = allRequirements
 
   override lazy val projectSettings = Seq(
@@ -74,11 +73,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPurge := purgeTask.value,
     aggregate in dependencyCheckAggregate := false,
     aggregate in dependencyCheckUpdateOnly := false,
-    aggregate in dependencyCheckPurge := false,
-    initSettingsTask := initializeSettings.value
+    aggregate in dependencyCheckPurge := false
   )
 
-  lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
+  private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
     val log: Logger = streams.value.log
     Settings.initialize()
 
@@ -122,113 +120,180 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(DB_CONNECTION_STRING, dependencyCheckConnectionString.value)
     setStringSetting(DB_USER, dependencyCheckDatabaseUser.value)
     setStringSetting(DB_PASSWORD, dependencyCheckDatabasePassword.value)
-    // TODO used for writeDataFile in Maven aggregate to keep data between child scans
-    dependencyCheckMetaFileName
-    // TODO jvm/sbt proxy settings
+
+    initProxySettings()
+
     Settings.getInstance()
   }
 
-  private def setBooleanSetting(key: String, b: Option[Boolean]) = {
+  def initProxySettings(): Unit = {
+    val httpsProxyHost = sys.props.get("https.proxyHost")
+    val httpsProxyPort = sys.props.get("https.proxyPort")
+    if (httpsProxyHost.isDefined && httpsProxyPort.isDefined) {
+      setStringSetting(PROXY_SERVER, httpsProxyHost)
+      setIntSetting(PROXY_PORT, httpsProxyPort.map(_.toInt))
+      setStringSetting(PROXY_USERNAME, sys.props.get("https.proxyUser"))
+      setStringSetting(PROXY_PASSWORD, sys.props.get("https.proxyPassword"))
+    } else {
+      setStringSetting(PROXY_SERVER, sys.props.get("http.proxyHost"))
+      setIntSetting(PROXY_PORT, sys.props.get("http.proxyPort").map(_.toInt))
+      setStringSetting(PROXY_USERNAME, sys.props.get("http.proxyUser"))
+      setStringSetting(PROXY_PASSWORD, sys.props.get("http.proxyPassword"))
+    }
+    setStringSetting(PROXY_NON_PROXY_HOSTS, sys.props.get("nonProxyHosts"))
+  }
+
+  private[this] def setBooleanSetting(key: String, b: Option[Boolean]) = {
     Settings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
   }
 
-  private def setIntSetting(key: String, i: Option[Int]) = {
+  private[this] def setIntSetting(key: String, i: Option[Int]) = {
     Settings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
   }
 
-  private def setStringSetting(key: String, s: Option[String]) = {
+  private[this] def setStringSetting(key: String, s: Option[String]) = {
     Settings.setStringIfNotEmpty(key, s.orNull)
   }
 
-  private def setFileSetting(key: String, file: Option[File]) = {
+  private[this] def setFileSetting(key: String, file: Option[File]) = {
     Settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
   }
 
-  private def setUrlSetting(key: String, url: Option[URL]) = {
+  private[this] def setUrlSetting(key: String, url: Option[URL]) = {
     Settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
   }
 
-  def failBuildOnCVSS(dependencies: util.List[Dependency], cvssScore: Float): Boolean = dependencies.asScala.exists(p => {
-    p.getVulnerabilities.asInstanceOf[java.util.Set[Vulnerability]].asScala.exists(v => {
-      v.getCvssScore >= cvssScore
-    })
-  })
-
   def checkTask = Def.task {
     val log: Logger = streams.value.log
-    val settings: Settings = initSettingsTask.value
+
+    if (!dependencyCheckSkip.value) {
+      log.info(s"Running check for ${name.value}")
+
+      val settings: Settings = initializeSettings.value
+      val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
+      val reportFormat: String = dependencyCheckFormat.value
+      val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
+
+      // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
+      Settings.setInstance(settings)
+
+      var checkDependencies = Set[Attributed[File]]()
+      checkDependencies ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
+
+      if (!dependencyCheckSkipRuntimeScope.value) {
+        checkDependencies ++= logAddDependencies((dependencyClasspath in Runtime).value, Runtime, log)
+      }
+      if (!dependencyCheckSkipTestScope.value) {
+        checkDependencies ++= logAddDependencies((dependencyClasspath in Test).value, Test, log)
+      }
+      if (dependencyCheckSkipProvidedScope.value) {
+        checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypes.value, update.value), Provided, log)
+      }
+      if (dependencyCheckSkipOptionalScope.value) {
+        checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
+      }
+
+      val engine: Engine = createReport(checkDependencies, outputDir, reportFormat, log)
+      determineTaskFailureStatus(cvssScore, engine)
+    }
+    else {
+      log.info(s"Skipping dependency check for ${name.value}")
+    }
+  }
+
+
+  def aggregateTask = Def.task {
+    val log: Logger = streams.value.log
+    log.info(s"Running aggregate-check for ${name.value}")
+
+    val settings: Settings = initializeSettings.value
+    val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
+    val reportFormat: String = dependencyCheckFormat.value
+    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
+
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
     Settings.setInstance(settings)
 
-    val engine: Engine = new Engine(classOf[Engine].getClassLoader)
+    var aggregatedDependencies = Set[Attributed[File]]()
+    val compileDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateCompileTask.all(aggregateCompileFilter).value
+    aggregatedDependencies = addClasspathDependencies(compileDependencies, aggregatedDependencies, log)
+    val runtimeDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateRuntimeTask.all(aggregateRuntimeFilter).value
+    aggregatedDependencies = addClasspathDependencies(runtimeDependencies, aggregatedDependencies, log)
+    val testDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateTestTask.all(aggregateTestFilter).value
+    aggregatedDependencies = addClasspathDependencies(testDependencies, aggregatedDependencies, log)
+    val providedDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateProvidedTask.all(aggregateProvidedFilter).value
+    aggregatedDependencies = removeClasspathDependencies(providedDependencies, aggregatedDependencies, log)
+    val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
+    aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
-    var checkClasspath = Set[Attributed[File]]()
-    if (!dependencyCheckSkip.value) {
-      checkClasspath ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
+    val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, log)
+    determineTaskFailureStatus(cvssScore, engine)
 
-      if (!dependencyCheckSkipRuntimeScope.value) {
-        checkClasspath ++= logAddDependencies((dependencyClasspath in Runtime).value, Runtime, log)
-      }
-      if (!dependencyCheckSkipTestScope.value) {
-        checkClasspath ++= logAddDependencies((dependencyClasspath in Test).value, Test, log)
-      }
-      if (dependencyCheckSkipProvidedScope.value) {
-        checkClasspath --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypes.value, update.value), Provided, log)
-      }
-      if (dependencyCheckSkipOptionalScope.value) {
-        checkClasspath --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
-      }
+  }
 
-      addDependencies(checkClasspath, engine, log)
+  lazy val aggregateCompileFilter = ScopeFilter(inAnyProject, inConfigurations(Compile))
+  lazy val aggregateRuntimeFilter = ScopeFilter(inAnyProject, inConfigurations(Runtime))
+  lazy val aggregateTestFilter = ScopeFilter(inAnyProject, inConfigurations(Test))
+  lazy val aggregateProvidedFilter = ScopeFilter(inAnyProject, inConfigurations(Provided))
+  lazy val aggregateOptionalFilter = ScopeFilter(inAnyProject, inConfigurations(Optional))
+  lazy val aggregateCompileTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
+    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value) Seq.empty else (dependencyClasspath in configuration).value)
+  }
+  lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
+    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || dependencyCheckSkipRuntimeScope.value) Seq.empty else (dependencyClasspath in configuration).value)
+  }
+  lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
+    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || dependencyCheckSkipTestScope.value) Seq.empty else (dependencyClasspath in configuration).value)
+  }
+  lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
+    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || !dependencyCheckSkipProvidedScope.value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+  }
+  lazy val aggregateOptionalTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
+    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || !dependencyCheckSkipOptionalScope.value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+  }
 
-      engine.analyzeDependencies()
-      writeReports(engine, dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value), dependencyCheckFormat.value, log)
+  def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
+    var newClasspath = checkClasspath
+    for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
+      log.info(s"Adding ${conf.name} classpath for project ${projectRef.project}")
+      classpath.foreach(f => log.debug(s"\t${f.data.getName}"))
+      newClasspath ++= classpath
     }
-    else {
-      log.info("Skipping dependency check.")
-    }
+    newClasspath
+  }
 
-    engine.cleanup()
-    Settings.cleanup()
-
-    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
-    if (failBuildOnCVSS(engine.getDependencies, cvssScore)) {
-      throw new IllegalStateException(s"Vulnerability with CVSS score higher $cvssScore found. Failing build.")
+  def removeClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
+    var newClasspath = checkClasspath
+    for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
+      log.debug(s"Removing ${conf.name} classpath for project ${projectRef.project}")
+      classpath.foreach(f => log.info(s"\t${f.data.getName}"))
+      newClasspath --= classpath
     }
+    newClasspath
   }
 
   def updateTask() = Def.task {
     val log: Logger = streams.value.log
-    val settings: Settings = initSettingsTask.value
     log.info(s"Running update-only for ${name.value}")
+    val settings: Settings = initializeSettings.value
 
     DependencyCheckUpdateTask.update(settings, log)
   }
 
   def purgeTask = Def.task {
     val log: Logger = streams.value.log
-    val settings: Settings = initSettingsTask.value
     log.info(s"Running purge for ${name.value}")
+    val settings: Settings = initializeSettings.value
 
     DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
   }
-
-  def aggregateTask = Def.task {
-    val log: Logger = streams.value.log
-    val settings: Settings = initSettingsTask.value
-    log.info(s"Running aggregate-check for ${name.value}")
-
-    DependencyCheckAggregateTask.aggregate(settings, log)
-  }
-
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
     checkClasspath.foreach(
       attributed =>
         attributed.get(Keys.moduleID.key) match {
           case Some(moduleId) =>
-            // TODO excludes
-            log.info(s"Scanning ${moduleId.name} ${moduleId.configurations}")
+            log.info(s"Scanning ${moduleId.name} ${moduleId.revision}")
             if (attributed.data != null) {
               val dependencies = engine.scan {
                 new File(attributed.data.getAbsolutePath)
@@ -270,6 +335,30 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       case None =>
     }
   }
+
+  def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, log: Logger): Engine = {
+    val engine: Engine = new Engine(classOf[Engine].getClassLoader)
+
+    addDependencies(checkClasspath, engine, log)
+    engine.analyzeDependencies()
+    writeReports(engine, outputDir, reportFormat, log)
+    engine
+  }
+
+  def determineTaskFailureStatus(failCvssScore: Float, engine: Engine): Unit = {
+    engine.cleanup()
+    Settings.cleanup()
+
+    if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
+      throw new IllegalStateException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
+    }
+  }
+
+  def failBuildOnCVSS(dependencies: util.List[Dependency], cvssScore: Float): Boolean = dependencies.asScala.exists(p => {
+    p.getVulnerabilities.asInstanceOf[java.util.Set[Vulnerability]].asScala.exists(v => {
+      v.getCvssScore >= cvssScore
+    })
+  })
 
   def writeReports(engine: Engine, outputDir: File, format: String, log: Logger): Unit = {
     log.info(s"Writing reports to ${outputDir.absolutePath}")
