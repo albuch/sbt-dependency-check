@@ -11,33 +11,42 @@ The sbt dependency check plugin allows projects to monitor dependent libraries f
 Runs dependency-check against the current project,its aggregate and dependencies and generates a report for each project.
 
     $ sbt check
-The report will be written to the default location `crossTarget`. This can be overwritten by setting `dependencyCheckOutputDirectory`.
+
+The report will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`.
 
     dependencyCheckOutputDirectory := Some(new File("./target"))
+
 #### aggregate-check
 Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report
  in the current project's output directory.
 
     $ sbt aggregate-check
+
 #### update-only
 Updates the local cache of the NVD data from NIST.
 
     $ sbt update-only
+
 #### purge
 Deletes the local copy of the NVD. This is used to force a refresh of the data.
-    $ sbt purge
-### Configuration
-`sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override all settings with sbt task settings.
-To following command lists all available settings. Look for settings starting with `dependencyCheck` for all available settings of the plugin.
 
-    $ sbt "settings -V"
+    $ sbt purge
+
+#### list-settings
+Prints all settings and their values for the project.
+
+    $ sbt list-settings
+
+### Configuration
+`sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override them in your `build.sbt` files.
+Use the task `list-settings` to print their values to the sbt console.
 
 #### Increasing Log Level
 
     logLevel in dependencyCheckAggregate := Level.Debug
 ### Multi-Project setup
 
-Add all dependency check settings to your commonSettings that you pass to your projects.
+Add all plugin settings to your commonSettings that you pass to your projects.
 
 **build.sbt**
 ```Scala

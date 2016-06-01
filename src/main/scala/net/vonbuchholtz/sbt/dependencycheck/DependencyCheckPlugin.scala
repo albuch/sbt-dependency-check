@@ -71,9 +71,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckAggregate := aggregateTask.value,
     dependencyCheckUpdateOnly := updateTask().value,
     dependencyCheckPurge := purgeTask.value,
+    dependencyCheckListSettings := listSettingsTask.value,
     aggregate in dependencyCheckAggregate := false,
     aggregate in dependencyCheckUpdateOnly := false,
-    aggregate in dependencyCheckPurge := false
+    aggregate in dependencyCheckPurge := false,
+    aggregate in dependencyCheckListSettings := false
   )
 
   private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
@@ -286,6 +288,13 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val settings: Settings = initializeSettings.value
 
     DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
+  }
+
+  def listSettingsTask = Def.task {
+    val log: Logger = streams.value.log
+    log.info(s"Running list-settings for ${name.value}")
+    val settings: Settings = initializeSettings.value
+    DependencyCheckListSettingsTask.logSettings(settings, log)
   }
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
