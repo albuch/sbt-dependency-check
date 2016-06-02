@@ -257,7 +257,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
     var newClasspath = checkClasspath
     for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
-      log.info(s"Adding ${conf.name} classpath for project ${projectRef.project}")
+      log.debug(s"Adding ${conf.name} classpath for project ${projectRef.project}")
       classpath.foreach(f => log.debug(s"\t${f.data.getName}"))
       newClasspath ++= classpath
     }
@@ -302,14 +302,15 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       attributed =>
         attributed.get(Keys.moduleID.key) match {
           case Some(moduleId) =>
-            log.info(s"Scanning ${moduleId.name} ${moduleId.revision}")
+            log.debug(s"Scanning ${moduleId.name} ${moduleId.revision}")
             if (attributed.data != null) {
               val dependencies = engine.scan {
                 new File(attributed.data.getAbsolutePath)
               }
               if (dependencies != null && !dependencies.isEmpty) {
                 val dependency: Dependency = dependencies.get(0)
-                addEvidence(moduleId, dependency)
+                if(dependency != null)
+                  addEvidence(moduleId, dependency)
               }
             }
           case None =>
