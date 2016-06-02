@@ -81,7 +81,7 @@ lazy val core = project.dependsOn(util)
 
 ```
 
-The only settings, that are supported to work for `aggregate` and `dependOn` projects right now are the scope skipping ones:
+The only settings, that are supported to work for `aggregate` and `dependOn` projects right now, are the scope skipping ones:
 * `dependencyCheckSkip`
 * `dependencyCheckSkipTestScope`
 * `dependencyCheckSkipRuntimeScope`
@@ -91,9 +91,14 @@ The only settings, that are supported to work for `aggregate` and `dependOn` pro
 You can set these individually for each project.
 
 ### Running behind a proxy
-sbt and sbt-dependency-check both honor the standard proxy settings for http and https for the JVM.
+SBT and `sbt-dependency-check` both honor the standard http and https proxy settings for the JVM.
 
-    sbt -Dhttp.proxyHost=proxy.example.com -Dhttp.proxyPort=3218 -Dhttp.proxyUser=username -Dhttp.proxyPassword=password -DnoProxyHosts="localhost|http://www.google.de" check
+    sbt -Dhttp.proxyHost=proxy.example.com \
+        -Dhttp.proxyPort=3218 \
+        -Dhttp.proxyUser=username \
+        -Dhttp.proxyPassword=password \
+        -DnoProxyHosts="localhost|http://www.google.com" \
+        check
 
 ## Known issues
 * Check task runs forever, CVE database file size increases drastically
