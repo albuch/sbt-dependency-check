@@ -228,9 +228,14 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
-    val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, log)
-    determineTaskFailureStatus(cvssScore, engine)
-
+    try {
+      val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, log)
+      determineTaskFailureStatus(cvssScore, engine)
+    } catch {
+      case e: Exception =>
+        log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+        throw e
+    }
   }
 
   lazy val aggregateCompileFilter = ScopeFilter(inAnyProject, inConfigurations(Compile))
