@@ -336,8 +336,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   def logDependencies(log: Logger, classpath: Seq[Attributed[File]], configuration: Configuration, action: String): Seq[Attributed[File]] = {
-    log.info(s"$action ${configuration.name} dependencies to check.")
-    classpath.foreach(f => log.info("\t" + f.data.getName))
+    log.debug(s"$action ${configuration.name} dependencies to check.")
+    classpath.foreach(f => log.debug("\t" + f.data.getName))
     classpath
   }
 
