@@ -1,7 +1,9 @@
 # sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
-The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck) which already offers several other build system and CI integrations.
+The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
+(e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
+which already offers several integrations with other build and continuous integration systems.
 ## Getting started
-`sbt-dependency-check` is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
+sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0-SNAPSHOT")
 
@@ -38,10 +40,11 @@ Prints all settings and their values for the project.
     $ sbt list-settings
 
 ### Configuration
-`sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override them in your `build.sbt` files.
-Use the task `list-settings` to print all available settings to sbt console.
+`sbt-dependency-check` uses the default configuration of [OWASP DependencyCheck](https://github.com/jeremylong/DependencyCheck).
+You can override them in your `build.sbt` files.
+Use the task `list-settings` to print all available settings and their values to sbt console.
 
-The default values are identical to the [DependencyCheck Maven plugin](http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html).
+The default values are identical to those of the [DependencyCheck Maven plugin](http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html).
 
 #### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to `debug`.
@@ -108,11 +111,20 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         check
 
 ## Known issues
-* Check task runs forever, CVE database file size increases drastically
-  * SBT projects that have a H2 database version 1.4.x in the classpath (e.g. Play Framework projects) will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
+* Tasks fail with `org.owasp.dependencycheck.data.nvdcve.DatabaseException: Unable to connect to the database` when adding plugin to Play framework projects.
+  * If the sbt project has a H2 Database version 1.4x in the classpath (as most Play applications have by default)
+  the default connection `jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;` string won't work as the file lock
+  mode `SERIALIZED` is not supported in H2 v1.4 anymore.
+  * Change the connection string to the following.
+
+      ```
+      dependencyCheckConnectionString := "jdbc:h2:file:%s;AUTOCOMMIT=ON;"
+      ```
+* Check/Aggregate tasks runs forever, CVE database file size increases drastically
+  * SBT projects that have a specific H2 database version 1.4.x in the classpath (e.g. Play Framework 2.4.x projects) will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
   * Current proposed workaround is to override the dependency to the latest 1.3.x release of H2 database in `project/plugins.sbt`.
 
-    ```sbt
+    ```
     dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
     ```
 
