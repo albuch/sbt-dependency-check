@@ -18,6 +18,8 @@ The report will be written to the default location `crossTarget.value`. This can
 
     dependencyCheckOutputDirectory := Some(new File("./target"))
 
+**Note:** the first run might take a while as the full NVD data has to be downloaded and imported into the database.
+Later runs will only download change sets unless the last update was more than 7 days ago.
 #### aggregate-check
 Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report
  in the current project's output directory.
@@ -111,17 +113,19 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         check
 
 ## Known issues
-* Tasks fail with `org.owasp.dependencycheck.data.nvdcve.DatabaseException: Unable to connect to the database` when adding plugin to Play framework projects.
+* Tasks fail with `org.owasp.dependencycheck.data.nvdcve.DatabaseException: Unable to connect to the database` when
+adding plugin to e.g. Play Framework projects.
   * If the sbt project has a H2 Database version 1.4x in the classpath (as most Play applications have by default)
   the default connection `jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;` string won't work as the file lock
-  mode `SERIALIZED` is not supported in H2 v1.4 anymore.
-  * Change the connection string to the following.
+  mode `SERIALIZED` is not supported in H2 v1.4 anymore. As DependencyChecks maintenance task doesn't work well
+  with H2 v1.4.x (see next issue) the recommended way is to downgrade to H2 v1.3
 
       ```
-      dependencyCheckConnectionString := "jdbc:h2:file:%s;AUTOCOMMIT=ON;"
+         dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
       ```
-* Check/Aggregate tasks runs forever, CVE database file size increases drastically
-  * SBT projects that have a specific H2 database version 1.4.x in the classpath (e.g. Play Framework 2.4.x projects) will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
+* Check/Aggregate tasks runs forever, CVE database file size increases drastically if run with H2 v1.4.x
+  * SBT projects that have a specific H2 database version 1.4.x in the classpath (e.g. Play Framework 2.4.x projects)
+  will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
   * Current proposed workaround is to override the dependency to the latest 1.3.x release of H2 database in `project/plugins.sbt`.
 
     ```
