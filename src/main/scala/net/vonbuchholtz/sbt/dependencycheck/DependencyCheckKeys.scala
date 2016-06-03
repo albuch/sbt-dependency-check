@@ -51,7 +51,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckMetaFileName = settingKey[Option[String]]("CURRENTLY NOT USED. Sets the name of the file to use for storing the metadata about the project. ")
 
 	// TaskKeys
-	lazy val dependencyCheckTask = TaskKey[Unit]("check", "Runs dependency-check against the project and generates a report.")
+	lazy val dependencyCheck = TaskKey[Unit]("check", "Runs dependency-check against the project and generates a report.")
 	lazy val dependencyCheckAggregate = TaskKey[Unit]("aggregate-check", "Runs dependency-check against the child projects and aggregates the results into a single report.")
 	lazy val dependencyCheckUpdateOnly = TaskKey[Unit]("update-only", "Updates the local cache of the NVD data from NIST.")
 	lazy val dependencyCheckPurge = TaskKey[Unit]("purge", "Deletes the local copy of the NVD. This is used to force a refresh of the data.")

@@ -1,7 +1,9 @@
 # sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
-The sbt dependency check plugin allows projects to monitor dependent libraries for known, published vulnerabilities (CVEs).
+The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
+(e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
+which already offers several integrations with other build and continuous integration systems.
 ## Getting started
-`sbt-dependency-check` is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
+sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0-SNAPSHOT")
 
@@ -16,6 +18,8 @@ The report will be written to the default location `crossTarget.value`. This can
 
     dependencyCheckOutputDirectory := Some(new File("./target"))
 
+**Note:** the first run might take a while as the full NVD data has to be downloaded and imported into the database.
+Later runs will only download change sets unless the last update was more than 7 days ago.
 #### aggregate-check
 Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report
  in the current project's output directory.
@@ -38,15 +42,23 @@ Prints all settings and their values for the project.
     $ sbt list-settings
 
 ### Configuration
-`sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override them in your `build.sbt` files.
-Use the task `list-settings` to print their values to the sbt console.
+`sbt-dependency-check` uses the default configuration of [OWASP DependencyCheck](https://github.com/jeremylong/DependencyCheck).
+You can override them in your `build.sbt` files.
+Use the task `list-settings` to print all available settings and their values to sbt console.
 
-#### Increasing Log Level
+The default values are identical to those of the [DependencyCheck Maven plugin](http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html).
 
-    logLevel in dependencyCheckAggregate := Level.Debug
+#### Changing Log Level
+Add the following to your `build.sbt` file to increase the log level from  default `info` to `debug`.
+```
+logLevel in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) := Level.Debug
+initialize in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) ~= { _ =>
+    sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
+}
+```
 ### Multi-Project setup
 
-Add all plugin settings to your commonSettings that you pass to your projects.
+Add all plugin settings to commonSettings that you pass to your projects.
 
 **build.sbt**
 ```Scala
@@ -81,7 +93,7 @@ lazy val core = project.dependsOn(util)
 
 ```
 
-The only settings, that are supported to work for `aggregate` and `dependOn` projects right now, are the scope skipping ones:
+The only settings, that are supported to work for `aggregate()` and `dependsOn()` projects, are the scope skipping ones:
 * `dependencyCheckSkip`
 * `dependencyCheckSkipTestScope`
 * `dependencyCheckSkipRuntimeScope`
@@ -101,11 +113,22 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         check
 
 ## Known issues
-* Check task runs forever, CVE database file size increases drastically
-  * SBT projects that have a H2 database version 1.4.x in the classpath (e.g. Play Framework projects) will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
+* Tasks fail with `org.owasp.dependencycheck.data.nvdcve.DatabaseException: Unable to connect to the database` when
+adding plugin to e.g. Play Framework projects.
+  * If the sbt project has a H2 Database version 1.4x in the classpath (as most Play applications have by default)
+  the default connection `jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;` string won't work as the file lock
+  mode `SERIALIZED` is not supported in H2 v1.4 anymore. As DependencyChecks maintenance task doesn't work well
+  with H2 v1.4.x (see next issue) the recommended way is to downgrade to H2 v1.3
+
+      ```
+         dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
+      ```
+* Check/Aggregate tasks runs forever, CVE database file size increases drastically if run with H2 v1.4.x
+  * SBT projects that have a specific H2 database version 1.4.x in the classpath (e.g. Play Framework 2.4.x projects)
+  will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
   * Current proposed workaround is to override the dependency to the latest 1.3.x release of H2 database in `project/plugins.sbt`.
 
-    ```sbt
+    ```
     dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
     ```
 
