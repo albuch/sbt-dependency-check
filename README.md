@@ -41,9 +41,14 @@ Prints all settings and their values for the project.
 `sbt-dependency-check` uses the default configuration of OWASP [DependencyCheck](https://github.com/jeremylong/DependencyCheck). You can override them in your `build.sbt` files.
 Use the task `list-settings` to print their values to the sbt console.
 
-#### Increasing Log Level
-
-    logLevel in dependencyCheckAggregate := Level.Debug
+#### Changing Log Level
+Add the following to your `build.sbt` file to increase the log level from the default `info` to `debug`
+```
+logLevel in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) := Level.Debug
+initialize in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) ~= { _ =>
+    sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
+}
+```
 ### Multi-Project setup
 
 Add all plugin settings to your commonSettings that you pass to your projects.

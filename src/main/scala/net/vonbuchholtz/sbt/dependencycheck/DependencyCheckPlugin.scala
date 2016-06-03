@@ -67,7 +67,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
-    dependencyCheckTask := checkTask.value,
+    dependencyCheck := checkTask.value,
     dependencyCheckAggregate := aggregateTask.value,
     dependencyCheckUpdateOnly := updateTask().value,
     dependencyCheckPurge := purgeTask.value,
