@@ -5,7 +5,7 @@ which already offers several integrations with other build and continuous integr
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.0-SNAPSHOT")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.0")
 
 ## Usage
 ### Tasks
