@@ -2,11 +2,9 @@
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-version := "1.0-SNAPSHOT"
 scalaVersion := "2.10.6"
 sbtPlugin := true
 
-publishMavenStyle := true
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 libraryDependencies ++= Seq(

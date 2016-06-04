@@ -5,7 +5,7 @@ which already offers several integrations with other build and continuous integr
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0-SNAPSHOT")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.0-SNAPSHOT")
 
 ## Usage
 ### Tasks
@@ -49,7 +49,7 @@ Use the task `list-settings` to print all available settings and their values to
 The default values are identical to those of the [DependencyCheck Maven plugin](http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html).
 
 #### Changing Log Level
-Add the following to your `build.sbt` file to increase the log level from  default `info` to `debug`.
+Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
 ```
 logLevel in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) := Level.Debug
 initialize in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) ~= { _ =>
