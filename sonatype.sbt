@@ -1,5 +1,5 @@
 publishMavenStyle := true
-sonatypeProfileName := "albuch"
+sonatypeProfileName := "net.vonbuchholtz"
 
 // To sync with Maven central, you need to supply the following information:
 pomExtra in Global := {
