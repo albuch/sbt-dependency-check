@@ -1,0 +1,9 @@
+sbt-dependency-check 
+Copyright (c) 2016 Alexander v. Buchholtz. All Rights Reserved.
+
+
+The licenses for the software listed below can be found in the META-INF/licenses/[dependency name].
+
+This product includes software developed by Jeremy Long (https://github.com/jeremylong/)
+
+This product includes software developed by QOS.ch (http://www.slf4j.org)
