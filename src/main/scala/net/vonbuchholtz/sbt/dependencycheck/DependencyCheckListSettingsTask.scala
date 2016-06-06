@@ -2,10 +2,8 @@ package net.vonbuchholtz.sbt.dependencycheck
 
 import java.io.File
 
-import net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.autoImport._
 import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
-import sbt.Keys._
 import sbt.Logger
 
 object DependencyCheckListSettingsTask {
