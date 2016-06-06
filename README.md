@@ -46,7 +46,61 @@ Prints all settings and their values for the project.
 You can override them in your `build.sbt` files.
 Use the task `list-settings` to print all available settings and their values to sbt console.
 
-The default values are identical to those of the [DependencyCheck Maven plugin](http://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html).
+Setting | Description | Default Value
+:-------|:------------|:-------------
+dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
+dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
+dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
+dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, ALL). This configuration option has no affect if using this within the Site plugin unless the externalReport is set to true. | ALL
+dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
+dependencyCheckSkip | Skips the dependency-check analysis |  false
+dependencyCheckSkipTestScope | Skips analysis for artifacts with Test Scope | true
+dependencyCheckSkipRuntimeScope | Skips analysis for artifacts with Runtime Scope | false
+dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Scope | false
+dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
+dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives |
+
+#### Analyzer Configuration
+The following properties are used to configure the various file type analyzers. These properties can be used to turn off specific analyzers if it is not needed. Note, that specific analyzers will automatically disable themselves if no file types that they support are detected - so specifically disabling them may not be needed.
+
+Setting | Description | Default Value
+:-------|:------------|:-------------
+dependencyCheckArchiveAnalyzerEnabled | Sets whether the Archive Analyzer will be used. | true
+dependencyCheckZipExtensions | A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. |
+dependencyCheckJarAnalyzer | Sets whether Jar Analyzer will be used.  | true
+dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below). | true
+dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
+dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
+dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
+dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the Python Distribution Analyzer will be used.  | true
+dependencyCheckPyPackageAnalyzerEnabled | Sets whether the Python Package Analyzer will be used. | true
+dependencyCheckRubygemsAnalyzerEnabled | Sets whether the Ruby Gemspec Analyzer will be used. | true
+dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
+dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the CMake Analyzer should be used. | true
+dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the autoconf Analyzer should be used. | true
+dependencyCheckComposerAnalyzerEnabled | Sets whether or not the PHP Composer Lock File Analyzer should be used. | true
+dependencyCheckNodeAnalyzerEnabled | Sets whether or not the Node.js Analyzer should be used. | true
+dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
+dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
+dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
+
+#### Advanced Configuration
+The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.
+
+Setting | Description | Default Value
+:-------|:------------|:-------------
+dependencyCheckCveUrl12Modified | URL for the modified CVE 1.2. | <https://nvd.nist.gov/download/nvdcve-Modified.xml.gz>
+dependencyCheckCveUrl20Modified | URL for the modified CVE 2.0. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-Modified.xml.gz>
+dependencyCheckCveUrl12Base | Base URL for each year’s CVE 1.2, the %d will be replaced with the year. | <https://nvd.nist.gov/download/nvdcve-%d.xml.gz>
+dependencyCheckCveUrl20Base | Base URL for each year’s CVE 2.0, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-%d.xml.gz>
+dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
+dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
+dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
+dependencyCheckDatabaseDriverPath | The path to the database driver JAR file; only used if the driver is not in the class path. |
+dependencyCheckConnectionString | The connection string used to connect to the database, the %s will be replace with a name for the database | jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;
+dependencyCheckDatabaseUser | The username used when connecting to the database. | dcuser
+dependencyCheckDatabasePassword | The password used when connecting to the database. |
+
 
 #### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
