@@ -7,7 +7,7 @@ trait DependencyCheckKeys {
 	// Configuration
 	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false.")
 	lazy val dependencyCheckCveValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
-	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Option[Float]]("Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail.")
+	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Float]("Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail.")
 	lazy val dependencyCheckFormat = settingKey[String]("The report format to be generated (HTML, XML, VULN, ALL). This configuration option has no affect if using this within the Site plugin unless the externalReport is set to true.")
 	lazy val dependencyCheckOutputDirectory = settingKey[Option[File]]("The location to write the report(s).")
 	lazy val dependencyCheckSkip = settingKey[Boolean]("Skips the dependency-check analysis ")

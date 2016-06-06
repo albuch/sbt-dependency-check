@@ -29,13 +29,13 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckFormat := "all",
     dependencyCheckAutoUpdate := None,
     dependencyCheckCveValidForHours := None,
-    dependencyCheckFailBuildOnCVSS := Some(11),
+    dependencyCheckFailBuildOnCVSS := 11,
     dependencyCheckOutputDirectory := Some(crossTarget.value),
     dependencyCheckSkip := false,
     dependencyCheckSkipTestScope := true,
     dependencyCheckSkipRuntimeScope := false,
-    dependencyCheckSkipProvidedScope := true,
-    dependencyCheckSkipOptionalScope := true,
+    dependencyCheckSkipProvidedScope := false,
+    dependencyCheckSkipOptionalScope := false,
     dependencyCheckSuppressionFile := None,
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
@@ -174,7 +174,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       val settings: Settings = initializeSettings.value
       val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
       val reportFormat: String = dependencyCheckFormat.value
-      val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
+      val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
 
       // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
       Settings.setInstance(settings)
@@ -211,7 +211,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val settings: Settings = initializeSettings.value
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
     val reportFormat: String = dependencyCheckFormat.value
-    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value.getOrElse(11)
+    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
 
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
     Settings.setInstance(settings)
@@ -299,7 +299,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val log: Logger = streams.value.log
     log.info(s"Running list-settings for ${name.value}")
     val settings: Settings = initializeSettings.value
-    DependencyCheckListSettingsTask.logSettings(settings, log)
+
+    DependencyCheckListSettingsTask.logSettings(settings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
+      dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckSkip.value, dependencyCheckSkipRuntimeScope.value,
+      dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value, dependencyCheckSkipOptionalScope.value, log)
   }
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {

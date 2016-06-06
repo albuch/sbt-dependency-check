@@ -6,4 +6,4 @@ libraryDependencies ++= Seq(
   "org.eclipse.jetty" % "jetty-runner" % "9.2.4.v20141103"
 )
 
-dependencyCheckFailBuildOnCVSS := Some(1)
+dependencyCheckFailBuildOnCVSS := 1

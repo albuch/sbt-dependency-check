@@ -9,15 +9,21 @@ import sbt.Keys._
 import sbt.Logger
 
 object DependencyCheckListSettingsTask {
-  def logSettings(settings: Settings, log: Logger): Unit = {
+  def logSettings(settings: Settings, failBuildOnCVSS: Float, format: String, outputDirectory: String, skip: Boolean,
+                  skipRuntime: Boolean, skipTest: Boolean, skipProvided: Boolean, skipOptional: Boolean, log: Logger): Unit = {
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
     Settings.setInstance(settings)
 
     logBooleanSetting(AUTO_UPDATE, "dependencyCheckAutoUpdate", log)
     logStringSetting(CVE_CHECK_VALID_FOR_HOURS, "dependencyCheckCveValidForHours", log)
-
-    logStringSetting(APPLICATION_VAME, "name", log)
-
+    log.info(s"\tdependencyCheckFailBuildOnCVSS: ${failBuildOnCVSS.toString}")
+    log.info(s"\tdependencyCheckFormat: $format")
+    log.info(s"\tdependencyCheckOutputDirectory: $outputDirectory")
+    log.info(s"\tdependencyCheckSkip: ${skip.toString}")
+    log.info(s"\tdependencyCheckSkipTestScope: ${skipTest.toString}")
+    log.info(s"\tdependencyCheckSkipRuntimeScope: ${skipRuntime.toString}")
+    log.info(s"\tdependencyCheckSkipProvidedScope: ${skipProvided.toString}")
+    log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
     logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile", log)
 
     // Analyzer Configuration
