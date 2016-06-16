@@ -63,7 +63,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
     dependencyCheckDatabaseDriverPath := None,
-    dependencyCheckConnectionString := None,
+    dependencyCheckConnectionString := Some("jdbc:h2:file:%s;AUTOCOMMIT=ON;MV_STORE=FALSE;"),
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),

@@ -51,7 +51,7 @@ Setting | Description | Default Value
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
 dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
-dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, ALL). This configuration option has no affect if using this within the Site plugin unless the externalReport is set to true. | ALL
+dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, ALL). | ALL
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
 dependencyCheckSkip | Skips the dependency-check analysis |  false
 dependencyCheckSkipTestScope | Skips analysis for artifacts with Test Scope | true
@@ -165,26 +165,6 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         -Dhttp.proxyPassword=password \
         -DnoProxyHosts="localhost|http://www.google.com" \
         check
-
-## Known issues
-* Tasks fail with `org.owasp.dependencycheck.data.nvdcve.DatabaseException: Unable to connect to the database` when
-adding plugin to e.g. Play Framework projects.
-  * If the sbt project has a H2 Database version 1.4x in the classpath (as most Play applications have by default)
-  the default connection `jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;` string won't work as the file lock
-  mode `SERIALIZED` is not supported in H2 v1.4 anymore. As DependencyChecks maintenance task doesn't work well
-  with H2 v1.4.x (see next issue) the recommended way is to downgrade to H2 v1.3
-
-      ```
-         dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
-      ```
-* Check/Aggregate tasks runs forever, CVE database file size increases drastically if run with H2 v1.4.x
-  * SBT projects that have a specific H2 database version 1.4.x in the classpath (e.g. Play Framework 2.4.x projects)
-  will have issues with the dependency check maintenance task that is run after fetching NVD data sets und inserting them in the database. For the initial data import the database file size will increase up to several GB and the task will run for more than 1 hour depending on the hardware resources.
-  * Current proposed workaround is to override the dependency to the latest 1.3.x release of H2 database in `project/plugins.sbt`.
-
-    ```
-    dependencyOverrides += "com.h2database" % "h2" % "1.3.176"
-    ```
 
 ## License
 Copyright 2016 Alexander v. Buchholtz
