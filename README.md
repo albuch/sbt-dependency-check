@@ -81,7 +81,7 @@ dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when dow
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
 dependencyCheckDatabaseDriverPath | The path to the database driver JAR file; only used if the driver is not in the class path. |
-dependencyCheckConnectionString | The connection string used to connect to the database, the %s will be replace with a name for the database | jdbc:h2:file:%s;FILE_LOCK=SERIALIZED;AUTOCOMMIT=ON;
+dependencyCheckConnectionString | The connection string used to connect to the database, the %s will be replace with a name for the database | jdbc:h2:file:%s;AUTOCOMMIT=ON;MV_STORE=FALSE;
 dependencyCheckDatabaseUser | The username used when connecting to the database. | dcuser
 dependencyCheckDatabasePassword | The password used when connecting to the database. |
 
