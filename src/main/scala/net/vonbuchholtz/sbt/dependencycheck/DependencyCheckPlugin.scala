@@ -37,6 +37,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSkipProvidedScope := false,
     dependencyCheckSkipOptionalScope := false,
     dependencyCheckSuppressionFile := None,
+    dependencyCheckEnableExperimental := None,
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzer := None,
@@ -90,6 +91,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.setStringIfNotEmpty(APPLICATION_VAME, name.value)
 
     setFileSetting(SUPPRESSION_FILE, dependencyCheckSuppressionFile.value)
+    setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
 
     // Analyzer Configuration
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)

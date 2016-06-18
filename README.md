@@ -2,6 +2,7 @@
 The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
 (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
 which already offers several integrations with other build and continuous integration systems.
+For more information on how OWASP DependencyCheck works and how to read the reports check the [project's documentation](https://jeremylong.github.io/DependencyCheck/index.html).
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
@@ -9,37 +10,19 @@ sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the p
 
 ## Usage
 ### Tasks
-#### check
-Runs dependency-check against the current project,its aggregate and dependencies and generates a report for each project.
+Task | Description | Command
+:-------|:------------|:-----
+check | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | `$ sbt check`
+aggregate-check | uns dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | `$ sbt aggregate-check`
+update-only | Updates the local cache of the NVD data from NIST. | `$ sbt update-only`
+purge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | `$ sbt purge`
+list-settings | Prints all settings and their values for the project. | `$ sbt list-settings`
 
-    $ sbt check
 
-The report will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`.
+The reports will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`. See Configuration for details.
 
-    dependencyCheckOutputDirectory := Some(new File("./target"))
-
-**Note:** the first run might take a while as the full NVD data has to be downloaded and imported into the database.
+**Note:** The first run might take a while as the full data from the National Vulnerability Database (NVD) hosted by NIST: <https://nvd.nist.gov> has to be downloaded and imported into the database.
 Later runs will only download change sets unless the last update was more than 7 days ago.
-#### aggregate-check
-Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report
- in the current project's output directory.
-
-    $ sbt aggregate-check
-
-#### update-only
-Updates the local cache of the NVD data from NIST.
-
-    $ sbt update-only
-
-#### purge
-Deletes the local copy of the NVD. This is used to force a refresh of the data.
-
-    $ sbt purge
-
-#### list-settings
-Prints all settings and their values for the project.
-
-    $ sbt list-settings
 
 ### Configuration
 `sbt-dependency-check` uses the default configuration of [OWASP DependencyCheck](https://github.com/jeremylong/DependencyCheck).
@@ -59,6 +42,7 @@ dependencyCheckSkipRuntimeScope | Skips analysis for artifacts with Runtime Scop
 dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Scope | false
 dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
 dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives |
+dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
 
 #### Analyzer Configuration
 The following properties are used to configure the various file type analyzers. These properties can be used to turn off specific analyzers if it is not needed. Note, that specific analyzers will automatically disable themselves if no file types that they support are detected - so specifically disabling them may not be needed.
@@ -72,14 +56,14 @@ dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be us
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
-dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the Python Distribution Analyzer will be used.  | true
-dependencyCheckPyPackageAnalyzerEnabled | Sets whether the Python Package Analyzer will be used. | true
-dependencyCheckRubygemsAnalyzerEnabled | Sets whether the Ruby Gemspec Analyzer will be used. | true
+dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the experimental Python Distribution Analyzer will be used.  | true
+dependencyCheckPyPackageAnalyzerEnabled | Sets whether the experimental Python Package Analyzer will be used. | true
+dependencyCheckRubygemsAnalyzerEnabled | Sets whether the experimental Ruby Gemspec Analyzer will be used. | true
 dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
-dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the CMake Analyzer should be used. | true
-dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the autoconf Analyzer should be used. | true
-dependencyCheckComposerAnalyzerEnabled | Sets whether or not the PHP Composer Lock File Analyzer should be used. | true
-dependencyCheckNodeAnalyzerEnabled | Sets whether or not the Node.js Analyzer should be used. | true
+dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the experimental CMake Analyzer should be used. | true
+dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the experimental autoconf Analyzer should be used. | true
+dependencyCheckComposerAnalyzerEnabled | Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. | true
+dependencyCheckNodeAnalyzerEnabled | Sets whether or not the experimental Node.js Analyzer should be used. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
@@ -105,8 +89,8 @@ dependencyCheckDatabasePassword | The password used when connecting to the datab
 #### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
 ```
-logLevel in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) := Level.Debug
-initialize in (dependencyCheck, dependencyCheckAggregate, dependencyCheckPurge, dependencyCheckUpdateOnly) ~= { _ =>
+logLevel := Level.Debug
+initialize ~= { _ =>
     sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
 }
 ```
@@ -167,7 +151,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         check
 
 ## License
-Copyright 2016 Alexander v. Buchholtz
+Copyright (c) 2016 Alexander v. Buchholtz
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

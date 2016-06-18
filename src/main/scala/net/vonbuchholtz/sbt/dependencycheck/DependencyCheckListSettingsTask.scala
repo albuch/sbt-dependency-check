@@ -23,6 +23,7 @@ object DependencyCheckListSettingsTask {
     log.info(s"\tdependencyCheckSkipProvidedScope: ${skipProvided.toString}")
     log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
     logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile", log)
+    logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
 
     // Analyzer Configuration
     logBooleanSetting(ANALYZER_ARCHIVE_ENABLED, "dependencyCheckArchiveAnalyzerEnabled", log)
