@@ -12,11 +12,11 @@ sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the p
 ### Tasks
 Task | Description | Command
 :-------|:------------|:-----
-check | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | `$ sbt check`
-aggregate-check | uns dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | `$ sbt aggregate-check`
-update-only | Updates the local cache of the NVD data from NIST. | `$ sbt update-only`
-purge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | `$ sbt purge`
-list-settings | Prints all settings and their values for the project. | `$ sbt list-settings`
+check | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | ```$ sbt check```
+aggregate-check | Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt aggregate-check```
+update-only | Updates the local cache of the NVD data from NIST. | ```$ sbt update-only```
+purge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | ```$ sbt purge```
+list-settings | Prints all settings and their values for the project. | ```$ sbt list-settings```
 
 
 The reports will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`. See Configuration for details.
