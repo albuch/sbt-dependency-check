@@ -18,3 +18,4 @@ project/plugins/project/
 
 # IDEA
 .idea/
+sbt.bat
