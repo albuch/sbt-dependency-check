@@ -12,11 +12,11 @@ sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the p
 ### Tasks
 Task | Description | Command
 :-------|:------------|:-----
-check | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | ```$ sbt check```
-aggregate-check | Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt aggregate-check```
-update-only | Updates the local cache of the NVD data from NIST. | ```$ sbt update-only```
-purge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | ```$ sbt purge```
-list-settings | Prints all settings and their values for the project. | ```$ sbt list-settings```
+dependencyCheck | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | ```$ sbt dependencyCheck```
+dependencyCheckAggregate | Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAggregate```
+dependencyCheckUpdateOnly | Updates the local cache of the NVD data from NIST. | ```$ sbt dependencyCheckUpdateOnly```
+dependencyCheckPurge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | ```$ sbt dependencyCheckPurge```
+dependencyCheckListSettings | Prints all settings and their values for the project. | ```$ sbt dependencyCheckListSettings```
 
 
 The reports will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`. See Configuration for details.
@@ -27,7 +27,7 @@ Later runs will only download change sets unless the last update was more than 7
 ### Configuration
 `sbt-dependency-check` uses the default configuration of [OWASP DependencyCheck](https://github.com/jeremylong/DependencyCheck).
 You can override them in your `build.sbt` files.
-Use the task `list-settings` to print all available settings and their values to sbt console.
+Use the task `dependencyCheckListSettings` to print all available settings and their values to sbt console.
 
 Setting | Description | Default Value
 :-------|:------------|:-------------
