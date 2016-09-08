@@ -88,7 +88,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(AUTO_UPDATE, dependencyCheckAutoUpdate.value)
     setIntSetting(CVE_CHECK_VALID_FOR_HOURS, dependencyCheckCveValidForHours.value)
 
-    Settings.setStringIfNotEmpty(APPLICATION_VAME, name.value)
+    Settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
 
     setFileSetting(SUPPRESSION_FILE, dependencyCheckSuppressionFile.value)
     setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
@@ -397,7 +397,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         cve.close()
       }
     }
-    val r: ReportGenerator = new ReportGenerator(Settings.getString(APPLICATION_VAME), engine.getDependencies, engine.getAnalyzers, prop)
+    val r: ReportGenerator = new ReportGenerator(Settings.getString(APPLICATION_NAME), engine.getDependencies, engine.getAnalyzers, prop)
     try {
       r.generateReports(outputDir.getAbsolutePath, format)
     } catch {
