@@ -41,7 +41,7 @@ dependencyCheckSkipTestScope | Skips analysis for artifacts with Test Scope | tr
 dependencyCheckSkipRuntimeScope | Skips analysis for artifacts with Runtime Scope | false
 dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Scope | false
 dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
-dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives |
+dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
 dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
 
 #### Analyzer Configuration
