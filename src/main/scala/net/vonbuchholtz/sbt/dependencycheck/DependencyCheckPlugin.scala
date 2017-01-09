@@ -77,9 +77,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     aggregate in dependencyCheckUpdateOnly := false,
     aggregate in dependencyCheckPurge := false,
     aggregate in dependencyCheckListSettings := false,
-    concurrentRestrictions in Global := Seq(
-      Tags.exclusive(NonParallel)
-    )
+    concurrentRestrictions in Global += Tags.exclusive(NonParallel)
   )
 
   private val NonParallel = Tags.Tag("NonParallel")
