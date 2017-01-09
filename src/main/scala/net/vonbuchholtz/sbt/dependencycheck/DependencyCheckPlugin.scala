@@ -130,6 +130,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.getInstance()
   }
 
+  private[this] lazy val engine: Engine = new Engine(classOf[Engine].getClassLoader)
+
   def initProxySettings(): Unit = {
     val httpsProxyHost = sys.props.get("https.proxyHost")
     val httpsProxyPort = sys.props.get("https.proxyPort")
@@ -357,11 +359,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, log: Logger): Engine = {
-    val engine: Engine = new Engine(classOf[Engine].getClassLoader)
-
     addDependencies(checkClasspath, engine, log)
     engine.analyzeDependencies()
-    writeReports(engine, outputDir, reportFormat, log)
+    writeReports(outputDir, reportFormat, log)
     engine
   }
 
@@ -380,7 +380,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     })
   })
 
-  def writeReports(engine: Engine, outputDir: File, format: String, log: Logger): Unit = {
+  def writeReports(outputDir: File, format: String, log: Logger): Unit = {
     log.info(s"Writing reports to ${outputDir.absolutePath}")
     var prop: DatabaseProperties = null
     var cve: CveDB = null
