@@ -23,7 +23,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   import autoImport._
 
   override def requires = JvmPlugin
-  override def trigger = allRequirements
+  override def trigger: PluginTrigger = allRequirements
 
   override lazy val projectSettings = Seq(
     dependencyCheckFormat := "all",
@@ -70,14 +70,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
     dependencyCheck := checkTask.value,
     dependencyCheckAggregate := aggregateTask.value,
-    dependencyCheckUpdateOnly := updateTask().value,
+    dependencyCheckUpdateOnly := updateTask.value,
     dependencyCheckPurge := purgeTask.value,
     dependencyCheckListSettings := listSettingsTask.value,
     aggregate in dependencyCheckAggregate := false,
     aggregate in dependencyCheckUpdateOnly := false,
     aggregate in dependencyCheckPurge := false,
-    aggregate in dependencyCheckListSettings := false
+    aggregate in dependencyCheckListSettings := false,
+    concurrentRestrictions in Global += Tags.exclusive(NonParallel)
   )
+
+  private val NonParallel = Tags.Tag("NonParallel")
 
   private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
     val log: Logger = streams.value.log
@@ -130,6 +133,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.getInstance()
   }
 
+  private[this] lazy val engine: Engine = new Engine(classOf[Engine].getClassLoader)
+
   def initProxySettings(): Unit = {
     val httpsProxyHost = sys.props.get("https.proxyHost")
     val httpsProxyPort = sys.props.get("https.proxyPort")
@@ -167,7 +172,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
   }
 
-  def checkTask = Def.task {
+  def checkTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
 
     if (!dependencyCheckSkip.value) {
@@ -203,10 +208,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     else {
       log.info(s"Skipping dependency check for ${name.value}")
     }
-  }
+  } tag NonParallel
 
 
-  def aggregateTask = Def.task {
+  def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running aggregate-check for ${name.value}")
 
@@ -281,7 +286,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     newClasspath
   }
 
-  def updateTask() = Def.task {
+  def updateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running update-only for ${name.value}")
     val settings: Settings = initializeSettings.value
@@ -289,7 +294,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     DependencyCheckUpdateTask.update(settings, log)
   }
 
-  def purgeTask = Def.task {
+  def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running purge for ${name.value}")
     val settings: Settings = initializeSettings.value
@@ -297,7 +302,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
   }
 
-  def listSettingsTask = Def.task {
+  def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running list-settings for ${name.value}")
     val settings: Settings = initializeSettings.value
@@ -357,11 +362,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, log: Logger): Engine = {
-    val engine: Engine = new Engine(classOf[Engine].getClassLoader)
-
     addDependencies(checkClasspath, engine, log)
     engine.analyzeDependencies()
-    writeReports(engine, outputDir, reportFormat, log)
+    writeReports(outputDir, reportFormat, log)
     engine
   }
 
@@ -380,7 +383,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     })
   })
 
-  def writeReports(engine: Engine, outputDir: File, format: String, log: Logger): Unit = {
+  def writeReports(outputDir: File, format: String, log: Logger): Unit = {
     log.info(s"Writing reports to ${outputDir.absolutePath}")
     var prop: DatabaseProperties = null
     var cve: CveDB = null
