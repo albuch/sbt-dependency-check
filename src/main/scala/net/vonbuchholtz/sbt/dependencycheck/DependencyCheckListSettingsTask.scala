@@ -23,6 +23,7 @@ object DependencyCheckListSettingsTask {
     log.info(s"\tdependencyCheckSkipProvidedScope: ${skipProvided.toString}")
     log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
     logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile", log)
+    logFileSetting(HINTS_FILE, "dependencyCheckHintsFile", log)
     logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
 
     // Analyzer Configuration
@@ -42,6 +43,10 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, "dependencyCheckComposerAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, "dependencyCheckNodeAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)
+    logBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, "dependencyCheckSwiftEnabled", log)
+    logBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, "dependencyCheckBundleAuditEnabled", log)
+    logFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, "dependencyCheckPathToBundleAudit", log)
     logBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, "dependencyCheckAssemblyAnalyzerEnabled", log)
     logFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, "dependencyCheckPathToMono", log)
     // Advanced Configuration

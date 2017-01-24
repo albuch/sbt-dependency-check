@@ -42,10 +42,12 @@ dependencyCheckSkipRuntimeScope | Skips analysis for artifacts with Runtime Scop
 dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Scope | false
 dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
 dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
+dependencyCheckHintsFile | The file path to the XML hints file - used to resolve [false negatives](https://jeremylong.github.io/DependencyCheck/general/hints.html). |
 dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
 
 #### Analyzer Configuration
 The following properties are used to configure the various file type analyzers. These properties can be used to turn off specific analyzers if it is not needed. Note, that specific analyzers will automatically disable themselves if no file types that they support are detected - so specifically disabling them may not be needed.
+For more information about the individual analyzers see the [DependencyCheck Analyzer documentation](https://jeremylong.github.io/DependencyCheck/analyzers/index.html).
 
 Setting | Description | Default Value
 :-------|:------------|:-------------
@@ -65,6 +67,10 @@ dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the experimental au
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the experimental Node.js Analyzer should be used. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
+dependencyCheckCocoapodsEnabled | Sets whether or not the experimental Cocoapods Analyzer should be used. | true
+dependencyCheckSwiftEnabled | Sets whether or not the experimental Swift Package Manager Analyzer should be used. | true
+dependencyCheckBundleAuditEnabled | Sets whether or not the experimental Ruby Bundle Audit Analyzer should be used. | true
+dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
 

@@ -16,6 +16,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckSkipProvidedScope = settingKey[Boolean]("Skips analysis for artifacts with Provided Scope ")
 	lazy val dependencyCheckSkipOptionalScope = settingKey[Boolean]("Skips analysis for artifacts with Optional Scope ")
 	lazy val dependencyCheckSuppressionFile = settingKey[Option[File]]("The file path to the XML suppression file - used to suppress false positives")
+	lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
 	lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
 	// Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used. ")
@@ -34,6 +35,10 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckComposerAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. ")
 	lazy val dependencyCheckNodeAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Node.js Analyzer should be used. ")
 	lazy val dependencyCheckNuspecAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Nuget Nuspec Analyzer will be used. ")
+	lazy val dependencyCheckCocoapodsEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Cocoapods Analyzer should be used. ")
+	lazy val dependencyCheckSwiftEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Swift Package Manager Analyzer should be used. ")
+	lazy val dependencyCheckBundleAuditEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Ruby Bundle Audit Analyzer should be used. ")
+	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to bundle audit. ")
 	lazy val dependencyCheckAssemblyAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Assembly Analyzer should be used. ")
 	lazy val dependencyCheckPathToMono = settingKey[Option[File]]("The path to Mono for .NET assembly analysis on non-windows systems. ")
 
