@@ -154,7 +154,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         -Dhttp.proxyUser=username \
         -Dhttp.proxyPassword=password \
         -DnoProxyHosts="localhost|http://www.google.com" \
-        check
+        dependencyCheck
 
 ## License
 Copyright (c) 2016 Alexander v. Buchholtz
