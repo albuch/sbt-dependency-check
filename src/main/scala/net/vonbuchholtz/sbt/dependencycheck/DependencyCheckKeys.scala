@@ -55,6 +55,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckDatabaseUser = settingKey[Option[String]]("The username used when connecting to the database. ")
 	lazy val dependencyCheckDatabasePassword = settingKey[Option[String]]("The password used when connecting to the database. ")
 	lazy val dependencyCheckMetaFileName = settingKey[Option[String]]("CURRENTLY NOT USED. Sets the name of the file to use for storing the metadata about the project. ")
+	lazy val dependencyCheckUseSbtModuleIdAsGav = settingKey[Option[Boolean]]("Uses the SBT ModuleId as GAV (reduces dependency on Maven Central for resolving)")
 
 	// TaskKeys
 	lazy val dependencyCheck = TaskKey[Unit]("dependencyCheck", "Runs dependency-check against the project and generates a report.")

@@ -44,6 +44,7 @@ dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Sc
 dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
 dependencyCheckHintsFile | The file path to the XML hints file - used to resolve [false negatives](https://jeremylong.github.io/DependencyCheck/general/hints.html). |
 dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
+dependencyCheckUseSbtModuleIdAsGav | Use the SBT ModuleId as GAV identifier. Ensures GAV is available even if Maven Central isn't. | false
 
 #### Analyzer Configuration
 The following properties are used to configure the various file type analyzers. These properties can be used to turn off specific analyzers if it is not needed. Note, that specific analyzers will automatically disable themselves if no file types that they support are detected - so specifically disabling them may not be needed.

@@ -73,6 +73,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
+    dependencyCheckUseSbtModuleIdAsGav := None,
     dependencyCheck := checkTask.value,
     dependencyCheckAggregate := aggregateTask.value,
     dependencyCheckUpdateOnly := updateTask.value,
@@ -192,6 +193,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
       val reportFormat: String = dependencyCheckFormat.value
       val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
+      val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
       // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
       Settings.setInstance(settings)
@@ -212,7 +214,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
       }
 
-      val engine: Engine = createReport(checkDependencies, outputDir, reportFormat, log)
+      val engine: Engine = createReport(checkDependencies, outputDir, reportFormat, useSbtModuleIdAsGav, log)
       determineTaskFailureStatus(cvssScore, engine)
     }
     else {
@@ -229,6 +231,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
     val reportFormat: String = dependencyCheckFormat.value
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
+    val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
     Settings.setInstance(settings)
@@ -246,7 +249,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
     try {
-      val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, log)
+      val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, useSbtModuleIdAsGav, log)
       determineTaskFailureStatus(cvssScore, engine)
     } catch {
       case e: Exception =>
@@ -322,7 +325,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value, dependencyCheckSkipOptionalScope.value, log)
   }
 
-  def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, log: Logger): Unit = {
+  def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     checkClasspath.foreach(
       attributed =>
         attributed.get(Keys.moduleID.key) match {
@@ -335,7 +338,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
               if (dependencies != null && !dependencies.isEmpty) {
                 val dependency: Dependency = dependencies.get(0)
                 if(dependency != null)
-                  addEvidence(moduleId, dependency)
+                  addEvidence(moduleId, dependency, useSbtModuleIdAsGav)
               }
             }
           case None =>
@@ -361,9 +364,14 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     classpath
   }
 
-  def addEvidence(moduleId: ModuleID, dependency: Dependency): Unit = {
+  def addEvidence(moduleId: ModuleID, dependency: Dependency, useSbtModuleIdAsGav: Boolean): Unit = {
     val artifact: MavenArtifact = new MavenArtifact(moduleId.organization, moduleId.name, moduleId.revision)
     dependency.addAsEvidence("sbt", artifact, Confidence.HIGHEST)
+    if (useSbtModuleIdAsGav) {
+      // unfortunately, for an identifier to act as a GAV, it needs to have the source 'maven' (hardcoded in owasp d-c)
+      dependency
+        .addIdentifier("maven", String.format("%s:%s:%s", moduleId.organization, moduleId.name, moduleId.revision), null, Confidence.HIGH)
+    }
     moduleId.configurations match {
       case Some(configurations) =>
         dependency.getVendorEvidence.addEvidence("sbt", "configuration", configurations, Confidence.HIGHEST)
@@ -371,8 +379,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, log: Logger): Engine = {
-    addDependencies(checkClasspath, engine, log)
+  def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
+    addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     engine.analyzeDependencies()
     writeReports(outputDir, reportFormat, log)
     engine
