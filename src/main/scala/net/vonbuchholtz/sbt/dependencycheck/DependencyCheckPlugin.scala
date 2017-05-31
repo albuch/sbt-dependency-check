@@ -261,19 +261,19 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   lazy val aggregateProvidedFilter = ScopeFilter(inAnyProject, inConfigurations(Provided))
   lazy val aggregateOptionalFilter = ScopeFilter(inAnyProject, inConfigurations(Optional))
   lazy val aggregateCompileTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value) Seq.empty else (dependencyClasspath in configuration).value)
+    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value) Seq.empty else (dependencyClasspath in configuration).value)
   }
   lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || dependencyCheckSkipRuntimeScope.value) Seq.empty else (dependencyClasspath in configuration).value)
+    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value) Seq.empty else (dependencyClasspath in configuration).value)
   }
   lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || dependencyCheckSkipTestScope.value) Seq.empty else (dependencyClasspath in configuration).value)
+    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value) Seq.empty else (dependencyClasspath in configuration).value)
   }
   lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || !dependencyCheckSkipProvidedScope.value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
   }
   lazy val aggregateOptionalTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if (dependencyCheckSkip.value || !dependencyCheckSkipOptionalScope.value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
   }
 
   def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
