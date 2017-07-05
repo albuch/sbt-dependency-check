@@ -10,7 +10,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"org.owasp" % "dependency-check-core" % "1.4.5",
-	"org.slf4j" % "slf4j-simple" % "1.7.22"
+	"org.slf4j" % "slf4j-simple" % "1.7.25"
 )
 
 dependencyUpdatesExclusions := moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
