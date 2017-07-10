@@ -4,9 +4,7 @@ import java.util
 
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
-import org.owasp.dependencycheck.data.nvdcve.{CveDB, DatabaseException, DatabaseProperties}
 import org.owasp.dependencycheck.dependency.{Confidence, Dependency, Vulnerability}
-import org.owasp.dependencycheck.reporting.ReportGenerator
 import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
@@ -26,7 +24,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   override def trigger: PluginTrigger = allRequirements
 
   override lazy val projectSettings = Seq(
-    dependencyCheckFormat := "all",
+    dependencyCheckFormat := "html",
     dependencyCheckAutoUpdate := None,
     dependencyCheckCveValidForHours := None,
     dependencyCheckFailBuildOnCVSS := 11,
@@ -36,7 +34,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSkipRuntimeScope := false,
     dependencyCheckSkipProvidedScope := false,
     dependencyCheckSkipOptionalScope := false,
-    dependencyCheckSuppressionFile := None,
+    dependencyCheckSuppressionFiles := Seq(),
     dependencyCheckHintsFile := None,
     dependencyCheckEnableExperimental := None,
     dependencyCheckArchiveAnalyzerEnabled := None,
@@ -54,6 +52,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckAutoconfAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
+    dependencyCheckNSPAnalyzerEnabled := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
     dependencyCheckSwiftEnabled := None,
@@ -99,7 +98,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     Settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
 
-    setFileSetting(SUPPRESSION_FILE, dependencyCheckSuppressionFile.value)
+    setFileSequenceSetting(SUPPRESSION_FILE, dependencyCheckSuppressionFiles.value)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
     setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
 
@@ -119,6 +118,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_AUTOCONF_ENABLED, dependencyCheckAutoconfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_NSP_PACKAGE_ENABLED, dependencyCheckNSPAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, dependencyCheckPathToMono.value)
@@ -177,6 +177,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   private[this] def setFileSetting(key: String, file: Option[File]) = {
     Settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
+  }
+
+  private[this] def setFileSequenceSetting(key: String, files: Seq[File]) = {
+    val filePaths: Seq[String] = files map { file => file.getAbsolutePath}
+    Settings.setArrayIfNotEmpty(key, filePaths.toArray)
   }
 
   private[this] def setUrlSetting(key: String, url: Option[URL]) = {
@@ -382,7 +387,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     engine.analyzeDependencies()
-    writeReports(outputDir, reportFormat, log)
+    engine.writeReports(Settings.getString(APPLICATION_NAME), outputDir , reportFormat)
+    //writeReports(outputDir, reportFormat, log)
     engine
   }
 
@@ -400,32 +406,5 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       v.getCvssScore >= cvssScore
     })
   })
-
-  def writeReports(outputDir: File, format: String, log: Logger): Unit = {
-    log.info(s"Writing reports to ${outputDir.absolutePath}")
-    var prop: DatabaseProperties = null
-    var cve: CveDB = null
-    try {
-      cve = new CveDB()
-      cve.open()
-      prop = cve.getDatabaseProperties
-    } catch {
-      case ex: DatabaseException =>
-        log.error(s"Error opening CVE Database: ${ex.getLocalizedMessage}")
-        throw ex
-    } finally {
-      if (cve != null) {
-        cve.close()
-      }
-    }
-    val r: ReportGenerator = new ReportGenerator(Settings.getString(APPLICATION_NAME), engine.getDependencies, engine.getAnalyzers, prop)
-    try {
-      r.generateReports(outputDir.getAbsolutePath, format)
-    } catch {
-      case ex: Exception =>
-        log.error(s"Error generating report: ${ex.getLocalizedMessage}")
-        throw ex
-    }
-  }
 
 }

@@ -34,14 +34,14 @@ Setting | Description | Default Value
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
 dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
-dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, ALL). | ALL
+dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, CSV, JSON, ALL). | HTML
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
 dependencyCheckSkip | Skips the dependency-check analysis |  false
 dependencyCheckSkipTestScope | Skips analysis for artifacts with Test Scope | true
 dependencyCheckSkipRuntimeScope | Skips analysis for artifacts with Runtime Scope | false
 dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Scope | false
 dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
-dependencyCheckSuppressionFile | The file path to the XML suppression file - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
+dependencyCheckSuppressionFiles | The sequence of file paths to the XML suppression files - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
 dependencyCheckHintsFile | The file path to the XML hints file - used to resolve [false negatives](https://jeremylong.github.io/DependencyCheck/general/hints.html). |
 dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
 dependencyCheckUseSbtModuleIdAsGav | Use the SBT ModuleId as GAV identifier. Ensures GAV is available even if Maven Central isn't. | false
@@ -67,6 +67,7 @@ dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the experimental CMake
 dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the experimental autoconf Analyzer should be used. | true
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the experimental Node.js Analyzer should be used. | true
+dependencyCheckNSPAnalyzerEnabled | Sets whether or not the Node Security Platform (NSP) Analyzer should be used. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckCocoapodsEnabled | Sets whether or not the experimental Cocoapods Analyzer should be used. | true
 dependencyCheckSwiftEnabled | Sets whether or not the experimental Swift Package Manager Analyzer should be used. | true
@@ -158,7 +159,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         dependencyCheck
 
 ## License
-Copyright (c) 2016 Alexander v. Buchholtz
+Copyright (c) 2017 Alexander v. Buchholtz
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
