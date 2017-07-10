@@ -11,10 +11,10 @@ sbtPlugin := true
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
 	"org.owasp" % "dependency-check-core" % "2.0.1",
-	"org.slf4j" % "slf4j-simple" % "1.7.22"
+	"org.slf4j" % "slf4j-simple" % "1.7.25"
 )
 
-dependencyUpdatesExclusions := moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
+dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
 dependencyUpdatesFailBuild := true
 
 ScriptedPlugin.scriptedSettings
