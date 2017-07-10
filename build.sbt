@@ -9,7 +9,8 @@ scalaVersion := "2.10.6"
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
-	"org.owasp" % "dependency-check-core" % "1.4.5",
+	"commons-collections" % "commons-collections" % "3.2.2",
+	"org.owasp" % "dependency-check-core" % "2.0.1",
 	"org.slf4j" % "slf4j-simple" % "1.7.25"
 )
 
