@@ -71,7 +71,7 @@ dependencyCheckNSPAnalyzerEnabled | Sets whether or not the Node Security Platfo
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckCocoapodsEnabled | Sets whether or not the experimental Cocoapods Analyzer should be used. | true
 dependencyCheckSwiftEnabled | Sets whether or not the experimental Swift Package Manager Analyzer should be used. | true
-dependencyCheckBundleAuditEnabled | Sets whether or not the experimental Ruby Bundle Audit Analyzer should be used. | true
+dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
