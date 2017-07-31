@@ -34,6 +34,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSkipRuntimeScope := false,
     dependencyCheckSkipProvidedScope := false,
     dependencyCheckSkipOptionalScope := false,
+    dependencyCheckSuppressionFile := None,
     dependencyCheckSuppressionFiles := Seq(),
     dependencyCheckHintsFile := None,
     dependencyCheckEnableExperimental := None,
@@ -97,8 +98,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setIntSetting(CVE_CHECK_VALID_FOR_HOURS, dependencyCheckCveValidForHours.value)
 
     Settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
-
-    setFileSequenceSetting(SUPPRESSION_FILE, dependencyCheckSuppressionFiles.value)
+    val suppressionFiles = dependencyCheckSuppressionFiles.value ++ Seq(dependencyCheckSuppressionFile.value).flatten
+    setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
     setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
 
