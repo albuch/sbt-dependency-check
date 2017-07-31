@@ -9,7 +9,7 @@ import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import sbt.{File, ScopeFilter, _}
+import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
 
@@ -29,6 +29,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckCveValidForHours := None,
     dependencyCheckFailBuildOnCVSS := 11,
     dependencyCheckOutputDirectory := Some(crossTarget.value),
+    dependencyCheckScanSet := Seq(baseDirectory.value / "src/main/resources"),
     dependencyCheckSkip := false,
     dependencyCheckSkipTestScope := true,
     dependencyCheckSkipRuntimeScope := false,
@@ -220,8 +221,16 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
       }
 
-      val engine: Engine = createReport(checkDependencies, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-      determineTaskFailureStatus(cvssScore, engine)
+      val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
+
+      try {
+        val engine: Engine = createReport(checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
+        determineTaskFailureStatus(cvssScore, engine)
+      } catch {
+        case e: Exception =>
+          log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+          throw e
+      }
     }
     else {
       log.info(s"Skipping dependency check for ${name.value}")
@@ -254,8 +263,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
+    // TODO: How do we get the pathfinders for every sub-module?
+    val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
     try {
-      val engine: Engine = createReport(aggregatedDependencies, outputDir, reportFormat, useSbtModuleIdAsGav, log)
+      val engine: Engine = createReport(aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
       determineTaskFailureStatus(cvssScore, engine)
     } catch {
       case e: Exception =>
@@ -385,8 +396,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def createReport(checkClasspath: Set[Attributed[File]], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
+  def createReport(checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
+    scanSet.foreach(file => engine.scan(file))
+
     engine.analyzeDependencies()
     engine.writeReports(Settings.getString(APPLICATION_NAME), outputDir , reportFormat)
     //writeReports(outputDir, reportFormat, log)

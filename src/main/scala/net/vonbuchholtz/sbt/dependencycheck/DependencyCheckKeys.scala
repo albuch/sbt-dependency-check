@@ -10,6 +10,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckFailBuildOnCVSS: SettingKey[Float] = settingKey[Float]("Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail.")
 	lazy val dependencyCheckFormat: SettingKey[String] = settingKey[String]("The report format to be generated (HTML, XML, CSV, JSON, VULN, ALL).")
 	lazy val dependencyCheckOutputDirectory: SettingKey[Option[File]] = settingKey[Option[File]]("The location to write the report(s).")
+	lazy val dependencyCheckScanSet: SettingKey[Seq[File]] = settingKey[Seq[File]]("An optional sequence of files that specify additional files and/or directories to analyze as part of the scan. If not specified, defaults to standard scala conventions.")
 	lazy val dependencyCheckSkip: SettingKey[Boolean] = settingKey[Boolean]("Skips the dependency-check analysis ")
 	lazy val dependencyCheckSkipTestScope: SettingKey[Boolean] = settingKey[Boolean]("Skips analysis for artifacts with Test Scope ")
 	lazy val dependencyCheckSkipRuntimeScope: SettingKey[Boolean] = settingKey[Boolean]("Skips analysis for artifacts with Runtime Scope ")
