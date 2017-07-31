@@ -10,7 +10,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "2.0.1",
+	"org.owasp" % "dependency-check-core" % "2.1.0",
 	"org.slf4j" % "slf4j-simple" % "1.7.25"
 )
 
