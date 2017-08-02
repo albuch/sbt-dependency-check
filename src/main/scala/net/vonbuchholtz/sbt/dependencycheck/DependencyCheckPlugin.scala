@@ -263,7 +263,6 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
-    // TODO: How do we get the pathfinders for every sub-module?
     val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
     try {
       val engine: Engine = createReport(aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
