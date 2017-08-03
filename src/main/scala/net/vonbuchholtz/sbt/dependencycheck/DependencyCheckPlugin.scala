@@ -190,50 +190,64 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     Settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
   }
 
-  def checkTask: Def.Initialize[Task[Unit]] = Def.task {
+  def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
     val log: Logger = streams.value.log
 
     if (!dependencyCheckSkip.value) {
-      log.info(s"Running check for ${name.value}")
+      Def.task {
+        log.info(s"Running check for ${name.value}")
 
-      val settings: Settings = initializeSettings.value
-      val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
-      val reportFormat: String = dependencyCheckFormat.value
-      val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
-      val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
+        val settings: Settings = initializeSettings.value
+        val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
+        val reportFormat: String = dependencyCheckFormat.value
+        val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
+        val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
-      // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-      Settings.setInstance(settings)
+        // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
+        Settings.setInstance(settings)
 
-      var checkDependencies = Set[Attributed[File]]()
-      checkDependencies ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
+        var checkDependencies = Set[Attributed[File]]()
+        checkDependencies ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
 
-      if (!dependencyCheckSkipRuntimeScope.value) {
-        checkDependencies ++= logAddDependencies((dependencyClasspath in Runtime).value, Runtime, log)
-      }
-      if (!dependencyCheckSkipTestScope.value) {
-        checkDependencies ++= logAddDependencies((dependencyClasspath in Test).value, Test, log)
-      }
-      if (dependencyCheckSkipProvidedScope.value) {
-        checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypes.value, update.value), Provided, log)
-      }
-      if (dependencyCheckSkipOptionalScope.value) {
-        checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypes.value, update.value), Optional, log)
-      }
+        val skipRuntimeScope = dependencyCheckSkipRuntimeScope.value
+        val skipTestScope = dependencyCheckSkipTestScope.value
+        val skipProvidedScope = dependencyCheckSkipProvidedScope.value
+        val skipOptionalScope = dependencyCheckSkipOptionalScope.value
 
-      val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
+        val runtimeClasspath = (dependencyClasspath in Runtime).value
+        val testClasspath = (dependencyClasspath in Test).value
+        val classpathTypeValue = classpathTypes.value
+        val updateValue = update.value
 
-      try {
-        val engine: Engine = createReport(checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-        determineTaskFailureStatus(cvssScore, engine)
-      } catch {
-        case e: Exception =>
-          log.error(s"Failed creating report: ${e.getLocalizedMessage}")
-          throw e
-      }
+        if (!skipRuntimeScope) {
+          checkDependencies ++= logAddDependencies(runtimeClasspath, Runtime, log)
+        }
+        if (!skipTestScope) {
+          checkDependencies ++= logAddDependencies(testClasspath, Test, log)
+        }
+        if (skipProvidedScope) {
+          checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypeValue, updateValue), Provided, log)
+        }
+        if (skipOptionalScope) {
+          checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypeValue, updateValue), Optional, log)
+        }
+
+        val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
+
+        try {
+          val engine: Engine = createReport(checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
+          determineTaskFailureStatus(cvssScore, engine)
+        } catch {
+          case e: Exception =>
+            log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+            throw e
+        }
+      } tag NonParallel
     }
     else {
-      log.info(s"Skipping dependency check for ${name.value}")
+      Def.task {
+        log.info(s"Skipping dependency check for ${name.value}")
+      }
     }
   } tag NonParallel
 
@@ -279,20 +293,35 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   lazy val aggregateTestFilter = ScopeFilter(inAnyProject, inConfigurations(Test))
   lazy val aggregateProvidedFilter = ScopeFilter(inAnyProject, inConfigurations(Provided))
   lazy val aggregateOptionalFilter = ScopeFilter(inAnyProject, inConfigurations(Optional))
-  lazy val aggregateCompileTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value) Seq.empty else (dependencyClasspath in configuration).value)
+  lazy val aggregateCompileTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
+    if ((dependencyCheckSkip ?? false).value)
+      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+    else
+      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
   }
-  lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value) Seq.empty else (dependencyClasspath in configuration).value)
+  lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
+    if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
+      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+    else
+      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
   }
-  lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value) Seq.empty else (dependencyClasspath in configuration).value)
+  lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
+    if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
+      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+    else
+      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
   }
-  lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+  lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
+    if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
+      Def.task {(thisProjectRef.value, configuration.value, Seq.empty) }
+    else
+      Def.task {(thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))}
   }
-  lazy val aggregateOptionalTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.task {
-    (thisProjectRef.value, configuration.value, if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value) Seq.empty else Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+  lazy val aggregateOptionalTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
+    if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
+      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+    else
+      Def.task {(thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))}
   }
 
   def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
