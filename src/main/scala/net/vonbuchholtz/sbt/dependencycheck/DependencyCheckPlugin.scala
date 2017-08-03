@@ -55,6 +55,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
     dependencyCheckNSPAnalyzerEnabled := None,
+    dependencyCheckNSPAnalyzerUrl := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
     dependencyCheckSwiftEnabled := None,
@@ -121,6 +122,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NSP_PACKAGE_ENABLED, dependencyCheckNSPAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_NSP_URL, dependencyCheckNSPAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, dependencyCheckPathToMono.value)
@@ -366,8 +368,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val settings: Settings = initializeSettings.value
 
     DependencyCheckListSettingsTask.logSettings(settings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
-      dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckSkip.value, dependencyCheckSkipRuntimeScope.value,
-      dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value, dependencyCheckSkipOptionalScope.value, log)
+      dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckScanSet.value, dependencyCheckSkip.value,
+      dependencyCheckSkipRuntimeScope.value, dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value,
+      dependencyCheckSkipOptionalScope.value, dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false), log)
   }
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {

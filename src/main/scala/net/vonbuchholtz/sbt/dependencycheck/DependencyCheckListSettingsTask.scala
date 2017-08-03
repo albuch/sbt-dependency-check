@@ -7,8 +7,9 @@ import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Logger
 
 object DependencyCheckListSettingsTask {
-  def logSettings(settings: Settings, failBuildOnCVSS: Float, format: String, outputDirectory: String, skip: Boolean,
-                  skipRuntime: Boolean, skipTest: Boolean, skipProvided: Boolean, skipOptional: Boolean, log: Logger): Unit = {
+  def logSettings(settings: Settings, failBuildOnCVSS: Float, format: String, outputDirectory: String, scanSet: Seq[sbt.File],
+                  skip: Boolean, skipRuntime: Boolean, skipTest: Boolean, skipProvided: Boolean, skipOptional: Boolean,
+                  useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
     Settings.setInstance(settings)
 
@@ -17,12 +18,13 @@ object DependencyCheckListSettingsTask {
     log.info(s"\tdependencyCheckFailBuildOnCVSS: ${failBuildOnCVSS.toString}")
     log.info(s"\tdependencyCheckFormat: $format")
     log.info(s"\tdependencyCheckOutputDirectory: $outputDirectory")
+    log.info(s"\tdependencyCheckScanSet: ${scanSet.map(f => f.getAbsolutePath).mkString(", ")}")
     log.info(s"\tdependencyCheckSkip: ${skip.toString}")
     log.info(s"\tdependencyCheckSkipTestScope: ${skipTest.toString}")
     log.info(s"\tdependencyCheckSkipRuntimeScope: ${skipRuntime.toString}")
     log.info(s"\tdependencyCheckSkipProvidedScope: ${skipProvided.toString}")
     log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
-    logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile", log)
+    logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile/s", log)
     logFileSetting(HINTS_FILE, "dependencyCheckHintsFile", log)
     logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
 
@@ -42,6 +44,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_AUTOCONF_ENABLED, "dependencyCheckAutoconfAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, "dependencyCheckComposerAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, "dependencyCheckNodeAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_NSP_PACKAGE_ENABLED, "dependencyCheckNSPAnalyzerEnabled", log)
+    logUrlSetting(ANALYZER_NSP_URL, "dependencyCheckNSPAnalyzerUrl", log)
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)
     logBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, "dependencyCheckSwiftEnabled", log)
@@ -61,6 +65,8 @@ object DependencyCheckListSettingsTask {
     logStringSetting(DB_CONNECTION_STRING, "dependencyCheckConnectionString", log)
     logStringSetting(DB_USER, "dependencyCheckDatabaseUser", log)
     logStringSetting(DB_PASSWORD, "dependencyCheckDatabasePassword", log)
+    log.info(s"\tdependencyCheckUseSbtModuleIdAsGav: ${useSbtModuleIdAsGav.toString}")
+
   }
 
   def logBooleanSetting(key: String, setting: String, log: Logger): Unit = {
