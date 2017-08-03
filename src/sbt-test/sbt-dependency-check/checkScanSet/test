@@ -1,0 +1,2 @@
+-> dependencyCheck
+$ exists target/scala-2.10/dependency-check-report.html

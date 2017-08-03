@@ -12,7 +12,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "2.0.1"
+	"org.owasp" % "dependency-check-core" % "2.1.0"
 )
 libraryDependencies += {
 	appConfiguration.value.provider.id.version match {
