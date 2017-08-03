@@ -2,17 +2,23 @@ import sbt.{Project, _}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
 
+val sbtDependencyCheck = project in file(".")
+
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-scalaVersion := "2.10.6"
+crossSbtVersions := Vector("0.13.16", "1.0.0-RC3")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "2.0.1",
-	"org.slf4j" % "slf4j-simple" % "1.7.25"
+	"org.owasp" % "dependency-check-core" % "2.0.1"
 )
+libraryDependencies += {
+	appConfiguration.value.provider.id.version match {
+		case sv if sv.startsWith("0.13") => "org.slf4j" % "slf4j-simple" % "1.7.25"
+	}
+}
 
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
 dependencyUpdatesFailBuild := true
