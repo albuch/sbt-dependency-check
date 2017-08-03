@@ -1,6 +1,7 @@
 import sbt.{Project, _}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
+import sbtrelease.ReleaseStateTransformations.setNextVersion
 
 val sbtDependencyCheck = project in file(".")
 
@@ -56,16 +57,16 @@ releaseProcess := Seq[ReleaseStep](
 	checkSnapshotDependencies,
 	inquireVersions,
 	runClean,
-	runTest,
-	releaseStepInputTask(scripted),
+	releaseStepCommandAndRemaining("^ test"),
+	releaseStepCommandAndRemaining("^ scripted"),
 	setReleaseVersion,
 	commitReleaseVersion,
 	setReleaseVersionInReadme,
 	tagRelease,
-	ReleaseStep(action = Command.process("publishSigned", _)),
+	releaseStepCommandAndRemaining("^ publishSigned"),
+	releaseStepCommandAndRemaining("sonatypeReleaseAll"),
 	setNextVersion,
-	commitNextVersion,
-	ReleaseStep(action = Command.process("sonatypeReleaseAll", _))
+	commitNextVersion
 	//,pushChanges
 )
 
