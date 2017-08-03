@@ -1,9 +1,18 @@
 language: scala
-scala:
-  - 2.10.6
-jdk:
-  - oraclejdk8
-  - oraclejdk7
-script: "sbt clean test scripted"
+matrix:
+  include:
+  - env: SBT_VERSION="0.13.16"
+    jdk: oraclejdk7
+  - env: SBT_VERSION="1.0.0-RC3"
+    jdk: oraclejdk8
+script:
+  - sbt "^^ ${SBT_VERSION}" clean test scripted
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/launchers"
+before_cache:
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+sudo: false
 # commented out until sbt-coveralls plugin is fixed
 #after_success: "sbt coveralls"
