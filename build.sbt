@@ -45,7 +45,7 @@ pomExtra in Global := {
 		<scm>
 			<connection>scm:git:github.com/albuch/sbt-dependency-check</connection>
 			<developerConnection>scm:git:git@github.com:albuch/sbt-dependency-check</developerConnection>
-			<url>github.com/albuch/sbt-dependency-check</url>
+			<url>https://github.com/albuch/sbt-dependency-check</url>
 		</scm>
 		<developers>
 			<developer>
