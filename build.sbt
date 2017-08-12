@@ -25,6 +25,7 @@ dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | modul
 dependencyUpdatesFailBuild := true
 
 dependencyCheckFailBuildOnCVSS := 0
+dependencyCheckSkipProvidedScope := true
 
 ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
