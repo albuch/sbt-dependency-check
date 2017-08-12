@@ -6,7 +6,7 @@ matrix:
   - env: SBT_VERSION="1.0.0-RC3"
     jdk: oraclejdk8
 script:
-  - sbt "^^ ${SBT_VERSION}" clean test scripted
+  - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck
 cache:
   directories:
   - "$HOME/.ivy2/cache"

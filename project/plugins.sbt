@@ -5,20 +5,6 @@ addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.1")
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
 
 unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "scala"
-//libraryDependencies in Runtime ++= Def.settingDyn {
-//  val proj = buildDependencies.value.classpath.keys.head
-//  Def.setting {
-//    (libraryDependencies in proj).value
-//  }
-//}.value
-//
-//libraryDependencies in Runtime ++= Def.settingDyn {
-//  val projectRef = thisProjectRef.value
-//  Def.setting {
-//    (libraryDependencies in projectRef).value
-//  }
-//}.value
-
 libraryDependencies ++= Seq(
   "commons-collections" % "commons-collections" % "3.2.2",
   "org.owasp" % "dependency-check-core" % "2.1.0",
