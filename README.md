@@ -8,7 +8,7 @@ sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the p
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.10")
 
-For sbt 1.0.0 use version `0.1.10`.
+For sbt 1.0.0+ use version `0.1.10` or higher.
 
 ## Usage
 ### Tasks
