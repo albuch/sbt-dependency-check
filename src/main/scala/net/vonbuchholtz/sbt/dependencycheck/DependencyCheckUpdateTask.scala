@@ -5,12 +5,8 @@ import org.owasp.dependencycheck.utils.Settings
 import sbt.Logger
 
 object DependencyCheckUpdateTask {
-
   def update(settings: Settings, log: Logger): Unit = {
-    // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-    Settings.setInstance(settings)
-
-    val engine: Engine = new Engine(classOf[Engine].getClassLoader)
+    val engine: Engine = new Engine(classOf[Engine].getClassLoader, settings)
     try {
       engine.doUpdates()
     } catch {
@@ -18,8 +14,8 @@ object DependencyCheckUpdateTask {
         log.error(s"An exception occurred connecting to the local database: ${e.getLocalizedMessage}")
         throw e
     } finally {
-      engine.cleanup()
-      Settings.cleanup()
+      engine.close()
+      settings.cleanup()
     }
   }
 }
