@@ -344,7 +344,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     log.info(s"Running update-only for ${name.value}")
 
     withEngine(initializeSettings.value) { engine =>
-      DependencyCheckUpdateTask.update(engine.getSettings, log)
+      DependencyCheckUpdateTask.update(engine, log)
     }
   }
 
