@@ -87,32 +87,30 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   private val NonParallel = Tags.Tag("NonParallel")
 
-  private[this] val settings = new Settings()
-
   private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
     def setBooleanSetting(key: String, b: Option[Boolean]) = {
-      settings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
+      engine.getSettings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
     }
 
     def setIntSetting(key: String, i: Option[Int]) = {
-      settings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
+      engine.getSettings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
     }
 
     def setStringSetting(key: String, s: Option[String]) = {
-      settings.setStringIfNotEmpty(key, s.orNull)
+      engine.getSettings.setStringIfNotEmpty(key, s.orNull)
     }
 
     def setFileSetting(key: String, file: Option[File]) = {
-      settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
+      engine.getSettings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
     }
 
     def setFileSequenceSetting(key: String, files: Seq[File]) = {
       val filePaths: Seq[String] = files map { file => file.getAbsolutePath}
-      settings.setArrayIfNotEmpty(key, filePaths.toArray)
+      engine.getSettings.setArrayIfNotEmpty(key, filePaths.toArray)
     }
 
     def setUrlSetting(key: String, url: Option[URL]) = {
-      settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
+      engine.getSettings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
     }
 
     def initProxySettings(): Unit = {
@@ -139,7 +137,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(AUTO_UPDATE, dependencyCheckAutoUpdate.value)
     setIntSetting(CVE_CHECK_VALID_FOR_HOURS, dependencyCheckCveValidForHours.value)
 
-    settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
+    engine.getSettings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
     val suppressionFiles = dependencyCheckSuppressionFiles.value ++ Seq(dependencyCheckSuppressionFile.value).flatten
     setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
@@ -185,10 +183,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     initProxySettings()
 
-    settings
+    engine.getSettings
   }
 
-  private[this] lazy val engine: Engine = new Engine(classOf[Engine].getClassLoader, settings)
+  private[this] lazy val engine: Engine = new Engine(classOf[Engine].getClassLoader, new Settings())
 
   def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
     val log: Logger = streams.value.log
@@ -196,7 +194,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     if (!dependencyCheckSkip.value) {
       Def.task {
         log.info(s"Running check for ${name.value}")
-
+        val settings: Settings = initializeSettings.value
         val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
         val reportFormat: String = dependencyCheckFormat.value
         val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
@@ -251,6 +249,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running aggregate-check for ${name.value}")
+    val settings: Settings = initializeSettings.value
 
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
     val reportFormat: String = dependencyCheckFormat.value
@@ -340,21 +339,23 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val log: Logger = streams.value.log
     log.info(s"Running update-only for ${name.value}")
 
-    DependencyCheckUpdateTask.update(settings, log)
+    DependencyCheckUpdateTask.update(engine.getSettings, log)
   }
 
   def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running purge for ${name.value}")
+    val settings: Settings = initializeSettings.value
 
-    DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
+    DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, engine.getSettings, log)
   }
 
   def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running list-settings for ${name.value}")
+    val settings: Settings = initializeSettings.value
 
-    DependencyCheckListSettingsTask.logSettings(settings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
+    DependencyCheckListSettingsTask.logSettings(engine.getSettings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
       dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckScanSet.value, dependencyCheckSkip.value,
       dependencyCheckSkipRuntimeScope.value, dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value,
       dependencyCheckSkipOptionalScope.value, dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false), log)
@@ -417,16 +418,16 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def createReport(checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     scanSet.foreach(file => engine.scan(file))
-
+    
     engine.analyzeDependencies()
-    engine.writeReports(settings.getString(APPLICATION_NAME), outputDir , reportFormat)
+    engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir , reportFormat)
     //writeReports(outputDir, reportFormat, log)
     engine
   }
 
   def determineTaskFailureStatus(failCvssScore: Float, engine: Engine): Unit = {
     engine.close()
-    settings.cleanup()
+    engine.getSettings.cleanup()
 
     if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
       throw new IllegalStateException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
