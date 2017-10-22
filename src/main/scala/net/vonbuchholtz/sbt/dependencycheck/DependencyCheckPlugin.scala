@@ -1,10 +1,8 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
-import java.util
-
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
-import org.owasp.dependencycheck.dependency.{Confidence, Dependency, Vulnerability}
+import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType, Vulnerability}
 import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
@@ -12,7 +10,6 @@ import sbt.plugins.JvmPlugin
 import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
-
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
@@ -91,15 +88,58 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   private val NonParallel = Tags.Tag("NonParallel")
 
   private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
+    val settings = new Settings()
+
+    def setBooleanSetting(key: String, b: Option[Boolean]) = {
+      settings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
+    }
+
+    def setIntSetting(key: String, i: Option[Int]) = {
+      settings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
+    }
+
+    def setStringSetting(key: String, s: Option[String]) = {
+      settings.setStringIfNotEmpty(key, s.orNull)
+    }
+
+    def setFileSetting(key: String, file: Option[File]) = {
+      settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
+    }
+
+    def setFileSequenceSetting(key: String, files: Seq[File]) = {
+      val filePaths: Seq[String] = files map { file => file.getAbsolutePath}
+      settings.setArrayIfNotEmpty(key, filePaths.toArray)
+    }
+
+    def setUrlSetting(key: String, url: Option[URL]) = {
+      settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
+    }
+
+    def initProxySettings(): Unit = {
+      val httpsProxyHost = sys.props.get("https.proxyHost")
+      val httpsProxyPort = sys.props.get("https.proxyPort")
+      if (httpsProxyHost.isDefined && httpsProxyPort.isDefined) {
+        setStringSetting(PROXY_SERVER, httpsProxyHost)
+        setIntSetting(PROXY_PORT, httpsProxyPort.map(_.toInt))
+        setStringSetting(PROXY_USERNAME, sys.props.get("https.proxyUser"))
+        setStringSetting(PROXY_PASSWORD, sys.props.get("https.proxyPassword"))
+      } else {
+        setStringSetting(PROXY_SERVER, sys.props.get("http.proxyHost"))
+        setIntSetting(PROXY_PORT, sys.props.get("http.proxyPort").map(_.toInt))
+        setStringSetting(PROXY_USERNAME, sys.props.get("http.proxyUser"))
+        setStringSetting(PROXY_PASSWORD, sys.props.get("http.proxyPassword"))
+      }
+      setStringSetting(PROXY_NON_PROXY_HOSTS, sys.props.get("nonProxyHosts"))
+    }
+
     val log: Logger = streams.value.log
-    Settings.initialize()
 
     log.info("Applying project settings to DependencyCheck settings")
 
     setBooleanSetting(AUTO_UPDATE, dependencyCheckAutoUpdate.value)
     setIntSetting(CVE_CHECK_VALID_FOR_HOURS, dependencyCheckCveValidForHours.value)
 
-    Settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
+    settings.setStringIfNotEmpty(APPLICATION_NAME, name.value)
     val suppressionFiles = dependencyCheckSuppressionFiles.value ++ Seq(dependencyCheckSuppressionFile.value).flatten
     setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
@@ -145,51 +185,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     initProxySettings()
 
-    Settings.getInstance()
-  }
-
-  private[this] lazy val engine: Engine = new Engine(classOf[Engine].getClassLoader)
-
-  def initProxySettings(): Unit = {
-    val httpsProxyHost = sys.props.get("https.proxyHost")
-    val httpsProxyPort = sys.props.get("https.proxyPort")
-    if (httpsProxyHost.isDefined && httpsProxyPort.isDefined) {
-      setStringSetting(PROXY_SERVER, httpsProxyHost)
-      setIntSetting(PROXY_PORT, httpsProxyPort.map(_.toInt))
-      setStringSetting(PROXY_USERNAME, sys.props.get("https.proxyUser"))
-      setStringSetting(PROXY_PASSWORD, sys.props.get("https.proxyPassword"))
-    } else {
-      setStringSetting(PROXY_SERVER, sys.props.get("http.proxyHost"))
-      setIntSetting(PROXY_PORT, sys.props.get("http.proxyPort").map(_.toInt))
-      setStringSetting(PROXY_USERNAME, sys.props.get("http.proxyUser"))
-      setStringSetting(PROXY_PASSWORD, sys.props.get("http.proxyPassword"))
-    }
-    setStringSetting(PROXY_NON_PROXY_HOSTS, sys.props.get("nonProxyHosts"))
-  }
-
-  private[this] def setBooleanSetting(key: String, b: Option[Boolean]) = {
-    Settings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
-  }
-
-  private[this] def setIntSetting(key: String, i: Option[Int]) = {
-    Settings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
-  }
-
-  private[this] def setStringSetting(key: String, s: Option[String]) = {
-    Settings.setStringIfNotEmpty(key, s.orNull)
-  }
-
-  private[this] def setFileSetting(key: String, file: Option[File]) = {
-    Settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
-  }
-
-  private[this] def setFileSequenceSetting(key: String, files: Seq[File]) = {
-    val filePaths: Seq[String] = files map { file => file.getAbsolutePath}
-    Settings.setArrayIfNotEmpty(key, filePaths.toArray)
-  }
-
-  private[this] def setUrlSetting(key: String, url: Option[URL]) = {
-    Settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
+    settings
   }
 
   def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
@@ -199,14 +195,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       Def.task {
         log.info(s"Running check for ${name.value}")
 
-        val settings: Settings = initializeSettings.value
         val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
         val reportFormat: String = dependencyCheckFormat.value
         val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
         val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
-
-        // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-        Settings.setInstance(settings)
 
         var checkDependencies = Set[Attributed[File]]()
         checkDependencies ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
@@ -236,14 +228,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
         val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
 
-        try {
-          val engine: Engine = createReport(checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-          determineTaskFailureStatus(cvssScore, engine)
-        } catch {
-          case e: Exception =>
-            log.error(s"Failed creating report: ${e.getLocalizedMessage}")
-            throw e
+        withEngine(initializeSettings.value) { engine =>
+          try {
+            createReport(engine, checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
+            determineTaskFailureStatus(cvssScore, engine)
+          } catch {
+            case e: Exception =>
+              log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+              throw e
+          }
         }
+
       } tag NonParallel
     }
     else {
@@ -258,14 +253,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val log: Logger = streams.value.log
     log.info(s"Running aggregate-check for ${name.value}")
 
-    val settings: Settings = initializeSettings.value
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
     val reportFormat: String = dependencyCheckFormat.value
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
     val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
-
-    // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-    Settings.setInstance(settings)
 
     var aggregatedDependencies = Set[Attributed[File]]()
     val compileDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateCompileTask.all(aggregateCompileFilter).value
@@ -280,13 +271,15 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
     val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
-    try {
-      val engine: Engine = createReport(aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-      determineTaskFailureStatus(cvssScore, engine)
-    } catch {
-      case e: Exception =>
-        log.error(s"Failed creating report: ${e.getLocalizedMessage}")
-        throw e
+    withEngine(initializeSettings.value) { engine =>
+      try {
+        createReport(engine, aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
+        determineTaskFailureStatus(cvssScore, engine)
+      } catch {
+        case e: Exception =>
+          log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+          throw e
+      }
     }
   }
 
@@ -349,28 +342,30 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def updateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running update-only for ${name.value}")
-    val settings: Settings = initializeSettings.value
 
-    DependencyCheckUpdateTask.update(settings, log)
+    withEngine(initializeSettings.value) { engine =>
+      DependencyCheckUpdateTask.update(engine, log)
+    }
   }
 
   def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running purge for ${name.value}")
-    val settings: Settings = initializeSettings.value
-
-    DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, settings, log)
+    withEngine(initializeSettings.value) { engine =>
+      DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, engine.getSettings, log)
+    }
   }
 
   def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     log.info(s"Running list-settings for ${name.value}")
-    val settings: Settings = initializeSettings.value
 
-    DependencyCheckListSettingsTask.logSettings(settings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
-      dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckScanSet.value, dependencyCheckSkip.value,
-      dependencyCheckSkipRuntimeScope.value, dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value,
-      dependencyCheckSkipOptionalScope.value, dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false), log)
+    withEngine(initializeSettings.value) { engine =>
+      DependencyCheckListSettingsTask.logSettings(engine.getSettings, dependencyCheckFailBuildOnCVSS.value, dependencyCheckFormat.value,
+        dependencyCheckOutputDirectory.value.getOrElse(new File(".")).getPath, dependencyCheckScanSet.value, dependencyCheckSkip.value,
+        dependencyCheckSkipRuntimeScope.value, dependencyCheckSkipTestScope.value, dependencyCheckSkipProvidedScope.value,
+        dependencyCheckSkipOptionalScope.value, dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false), log)
+    }
   }
 
   def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
@@ -422,34 +417,41 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
     moduleId.configurations match {
       case Some(configurations) =>
-        dependency.getVendorEvidence.addEvidence("sbt", "configuration", configurations, Confidence.HIGHEST)
+        dependency.addEvidence(EvidenceType.VENDOR, "sbt", "configuration", configurations, Confidence.HIGHEST)
       case None =>
     }
   }
 
-  def createReport(checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Engine = {
+  def createReport(engine: Engine, checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     scanSet.foreach(file => engine.scan(file))
-
+    
     engine.analyzeDependencies()
-    engine.writeReports(Settings.getString(APPLICATION_NAME), outputDir , reportFormat)
+    engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir , reportFormat)
     //writeReports(outputDir, reportFormat, log)
-    engine
   }
 
   def determineTaskFailureStatus(failCvssScore: Float, engine: Engine): Unit = {
-    engine.cleanup()
-    Settings.cleanup()
-
     if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
       throw new IllegalStateException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
     }
   }
 
-  def failBuildOnCVSS(dependencies: util.List[Dependency], cvssScore: Float): Boolean = dependencies.asScala.exists(p => {
+  def failBuildOnCVSS(dependencies: Array[Dependency], cvssScore: Float): Boolean = dependencies.exists(p => {
     p.getVulnerabilities.asInstanceOf[java.util.Set[Vulnerability]].asScala.exists(v => {
       v.getCvssScore >= cvssScore
     })
   })
+
+  private[this] def withEngine(settings: Settings)(fn: Engine => Any): Unit = {
+    val engine: Engine = new Engine(classOf[Engine].getClassLoader, settings)
+    try {
+      fn(engine)
+      ()
+    } finally {
+      engine.close()
+      engine.getSettings.cleanup(true)
+    }
+  }
 
 }

@@ -13,7 +13,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "2.1.0"
+	"org.owasp" % "dependency-check-core" % "3.0.1"
 )
 libraryDependencies += {
 	appConfiguration.value.provider.id.version match {
@@ -99,4 +99,3 @@ def write(path: String, txt: String): Unit = {
 
 def read(path: String): String =
 	scala.io.Source.fromFile(path, "UTF-8").mkString
-

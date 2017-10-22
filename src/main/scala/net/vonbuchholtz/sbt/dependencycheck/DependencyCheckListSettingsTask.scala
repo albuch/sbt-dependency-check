@@ -10,8 +10,23 @@ object DependencyCheckListSettingsTask {
   def logSettings(settings: Settings, failBuildOnCVSS: Float, format: String, outputDirectory: String, scanSet: Seq[sbt.File],
                   skip: Boolean, skipRuntime: Boolean, skipTest: Boolean, skipProvided: Boolean, skipOptional: Boolean,
                   useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
-    // working around threadlocal issue with DependencyCheck's Settings and sbt task dependency system.
-    Settings.setInstance(settings)
+    def logBooleanSetting(key: String, setting: String, log: Logger): Unit = {
+      log.info(s"\t$setting: ${settings.getBoolean(key)}")
+    }
+
+    def logStringSetting(key: String, setting: String, log: Logger): Unit = {
+
+      log.info(s"\t$setting: ${if(key.contains("assword")) "******" else settings.getString(key)}")
+    }
+
+    def logFileSetting(key: String, setting: String, log: Logger): Unit = {
+      val someFile: Option[File] = Option(settings.getFile(key))
+      log.info(s"\t$setting: ${if(someFile.isDefined) someFile.get.getPath else ""}")
+    }
+
+    def logUrlSetting(key: String, setting: String, log: Logger): Unit = {
+      log.info(s"\t$setting: ${settings.getString(key)}")
+    }
 
     logBooleanSetting(AUTO_UPDATE, "dependencyCheckAutoUpdate", log)
     logStringSetting(CVE_CHECK_VALID_FOR_HOURS, "dependencyCheckCveValidForHours", log)
@@ -66,24 +81,5 @@ object DependencyCheckListSettingsTask {
     logStringSetting(DB_USER, "dependencyCheckDatabaseUser", log)
     logStringSetting(DB_PASSWORD, "dependencyCheckDatabasePassword", log)
     log.info(s"\tdependencyCheckUseSbtModuleIdAsGav: ${useSbtModuleIdAsGav.toString}")
-
-  }
-
-  def logBooleanSetting(key: String, setting: String, log: Logger): Unit = {
-    log.info(s"\t$setting: ${Settings.getBoolean(key)}")
-  }
-
-  def logStringSetting(key: String, setting: String, log: Logger): Unit = {
-
-    log.info(s"\t$setting: ${if(key.contains("assword")) "******" else Settings.getString(key)}")
-  }
-
-  def logFileSetting(key: String, setting: String, log: Logger): Unit = {
-    val someFile: Option[File] = Option(Settings.getFile(key))
-    log.info(s"\t$setting: ${if(someFile.isDefined) someFile.get.getPath else ""}")
-  }
-
-  def logUrlSetting(key: String, setting: String, log: Logger): Unit = {
-    log.info(s"\t$setting: ${Settings.getString(key)}")
   }
 }
