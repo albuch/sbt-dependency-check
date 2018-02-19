@@ -34,6 +34,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSkipOptionalScope := false,
     dependencyCheckSuppressionFile := None,
     dependencyCheckSuppressionFiles := Seq(),
+    dependencyCheckCpeStartsWith := None,
     dependencyCheckHintsFile := None,
     dependencyCheckEnableExperimental := None,
     dependencyCheckArchiveAnalyzerEnabled := None,

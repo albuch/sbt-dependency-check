@@ -79,6 +79,7 @@ dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit An
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
+dependencyCheckCpeStartsWIth | The starting String to identify the CPEs that are qualified to be imported. | 
 
 #### Advanced Configuration
 The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.
