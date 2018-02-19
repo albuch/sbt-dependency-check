@@ -183,6 +183,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(DB_CONNECTION_STRING, dependencyCheckConnectionString.value)
     setStringSetting(DB_USER, dependencyCheckDatabaseUser.value)
     setStringSetting(DB_PASSWORD, dependencyCheckDatabasePassword.value)
+    setStringSetting(CVE_CPE_STARTS_WITH_FILTER, dependencyCheckCpeStartsWith.value)
 
     initProxySettings()
 
