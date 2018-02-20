@@ -18,6 +18,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckSkipOptionalScope = settingKey[Boolean]("Skips analysis for artifacts with Optional Scope ")
 	lazy val dependencyCheckSuppressionFile = settingKey[Option[File]]("The file path to the XML suppression file - used to suppress false positives. If you want to add multiple files use dependencyCheckSuppressionFiles instead.")
 	lazy val dependencyCheckSuppressionFiles = settingKey[Seq[File]]("The sequence of file paths to the XML suppression files - used to suppress false positives")
+	lazy val dependencyCheckCpeStartsWith = settingKey[Option[String]]("The starting String to identify the CPEs that are qualified to be imported.")
 	lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
 	lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
 	// Analyzer configuration
