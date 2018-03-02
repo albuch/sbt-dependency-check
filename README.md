@@ -35,7 +35,7 @@ Setting | Description | Default Value
 :-------|:------------|:-------------
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
-dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
+dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
 dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, CSV, JSON, ALL). | HTML
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
 dependencyCheckScanSet | An optional sequence of files that specify additional files and/or directories to analyze as part of the scan. If not specified, defaults to standard scala conventions (see [SBT documentation](http://www.scala-sbt.org/0.13/docs/Directories.html#Source+code) for details). | `/src/main/resources`
