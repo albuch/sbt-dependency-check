@@ -39,8 +39,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckEnableExperimental := None,
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
-    dependencyCheckJarAnalyzer := None,
-    dependencyCheckCentralAnalyzerEnabled := false,
+    dependencyCheckJarAnalyzerEnabled := None,
+    dependencyCheckCentralAnalyzerEnabled := Some(false),
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
@@ -149,7 +149,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     // Analyzer Configuration
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)
     setStringSetting(ADDITIONAL_ZIP_EXTENSIONS, dependencyCheckZipExtensions.value)
-    setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzer.value)
+    setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NEXUS_ENABLED, dependencyCheckNexusAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_NEXUS_URL, dependencyCheckNexusUrl.value)

@@ -24,7 +24,7 @@ trait DependencyCheckKeys {
 	// Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used. ")
 	lazy val dependencyCheckZipExtensions = settingKey[Option[String]]("A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. ")
-	lazy val dependencyCheckJarAnalyzer = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used. ")
+	lazy val dependencyCheckJarAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used. ")
 	lazy val dependencyCheckCentralAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below). ")
 	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. ")
 	lazy val dependencyCheckNexusUrl = settingKey[Option[URL]]("Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. ")
