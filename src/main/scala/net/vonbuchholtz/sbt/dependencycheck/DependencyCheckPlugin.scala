@@ -40,7 +40,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzer := None,
-    dependencyCheckCentralAnalyzerEnabled := None,
+    dependencyCheckCentralAnalyzerEnabled := false,
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
