@@ -203,15 +203,15 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
         var checkDependencies = Set[Attributed[File]]()
-        checkDependencies ++= logAddDependencies((dependencyClasspath in Compile).value, Compile, log)
+        checkDependencies ++= logAddDependencies((externalDependencyClasspath in Compile).value, Compile, log)
 
         val skipRuntimeScope = dependencyCheckSkipRuntimeScope.value
         val skipTestScope = dependencyCheckSkipTestScope.value
         val skipProvidedScope = dependencyCheckSkipProvidedScope.value
         val skipOptionalScope = dependencyCheckSkipOptionalScope.value
 
-        val runtimeClasspath = (dependencyClasspath in Runtime).value
-        val testClasspath = (dependencyClasspath in Test).value
+        val runtimeClasspath = (externalDependencyClasspath in Runtime).value
+        val testClasspath = (externalDependencyClasspath in Test).value
         val classpathTypeValue = classpathTypes.value
         val updateValue = update.value
 
@@ -294,19 +294,19 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     if ((dependencyCheckSkip ?? false).value)
       Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
     else
-      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
+      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
   }
   lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
       Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
     else
-      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
+      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
   }
   lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
       Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
     else
-      Def.task {(thisProjectRef.value, configuration.value, (dependencyClasspath in configuration).value)}
+      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
   }
   lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
