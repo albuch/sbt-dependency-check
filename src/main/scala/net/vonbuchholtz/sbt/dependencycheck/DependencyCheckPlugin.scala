@@ -36,7 +36,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSuppressionFiles := Seq(),
     dependencyCheckCpeStartsWith := None,
     dependencyCheckHintsFile := None,
+    dependencyCheckAnalysisTimeout := None,
     dependencyCheckEnableExperimental := None,
+    dependencyCheckEnableRetired := None,
+
+    // Analyzer configuration
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
@@ -61,6 +65,20 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
     dependencyCheckPathToMono := None,
+    dependencyCheckRetireJSAnalyzerEnabled := None,
+    dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
+    dependencyCheckRetireJsAnalyzerRepoValidFor := None,
+    dependencyCheckRetireJsAnalyzerFilters := Seq(),
+    dependencyCheckRetireJsAnalyzerFilterNonVulnerable := None,
+    dependencyCheckArtifactoryAnalyzerEnabled := None,
+    dependencyCheckArtifactoryAnalyzerUrl := None,
+    dependencyCheckArtifactoryAnalyzerUseProxy := None,
+    dependencyCheckArtifactoryAnalyzerParallelAnalysis := None,
+    dependencyCheckArtifactoryAnalyzerUsername := None,
+    dependencyCheckArtifactoryAnalyzerApiToken := None,
+    dependencyCheckArtifactoryAnalyzerBearerToken := None,
+
+    // Advanced configuration
     dependencyCheckCveUrl12Modified := None,
     dependencyCheckCveUrl20Modified := None,
     dependencyCheckCveUrl12Base := None,
@@ -144,7 +162,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val suppressionFiles = dependencyCheckSuppressionFiles.value ++ Seq(dependencyCheckSuppressionFile.value).flatten
     setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
+    setIntSetting(ANALYSIS_TIMEOUT, dependencyCheckAnalysisTimeout.value)
     setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
+    setBooleanSetting(ANALYZER_RETIRED_ENABLED, dependencyCheckEnableRetired.value)
 
     // Analyzer Configuration
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)
@@ -171,6 +191,19 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
+    setBooleanSetting(ANALYZER_RETIREJS_ENABLED, dependencyCheckRetireJSAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, dependencyCheckRetireJSAnalyzerRepoJSUrl.value)
+    setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
+    settings.setArrayIfNotEmpty(ANALYZER_RETIREJS_FILTERS, dependencyCheckRetireJsAnalyzerFilters.value.toArray)
+    setBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, dependencyCheckRetireJsAnalyzerFilterNonVulnerable.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_ENABLED, dependencyCheckArtifactoryAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_ARTIFACTORY_URL, dependencyCheckArtifactoryAnalyzerUrl.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_USES_PROXY, dependencyCheckArtifactoryAnalyzerUseProxy.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_PARALLEL_ANALYSIS, dependencyCheckArtifactoryAnalyzerParallelAnalysis.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_API_USERNAME, dependencyCheckArtifactoryAnalyzerUsername.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_API_TOKEN, dependencyCheckArtifactoryAnalyzerApiToken.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, dependencyCheckArtifactoryAnalyzerBearerToken.value)
+
     // Advanced Configuration
     setUrlSetting(CVE_MODIFIED_12_URL, dependencyCheckCveUrl12Modified.value)
     setUrlSetting(CVE_MODIFIED_20_URL, dependencyCheckCveUrl20Modified.value)

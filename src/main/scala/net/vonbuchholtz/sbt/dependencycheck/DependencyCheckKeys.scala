@@ -20,8 +20,11 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckSuppressionFiles = settingKey[Seq[File]]("The sequence of file paths to the XML suppression files - used to suppress false positives")
 	lazy val dependencyCheckCpeStartsWith = settingKey[Option[String]]("The starting String to identify the CPEs that are qualified to be imported.")
 	lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
-	lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
-	// Analyzer configuration
+  lazy val dependencyCheckAnalysisTimeout = settingKey[Option[Int]]("Set the analysis timeout in minutes.")
+  lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
+	lazy val dependencyCheckEnableRetired = settingKey[Option[Boolean]]("Enable the retired analyzers. If not enabled retired analyzers will not be loaded or used. ")
+
+  // Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used. ")
 	lazy val dependencyCheckZipExtensions = settingKey[Option[String]]("A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. ")
 	lazy val dependencyCheckJarAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used. ")
@@ -46,6 +49,18 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to bundle audit. ")
 	lazy val dependencyCheckAssemblyAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Assembly Analyzer should be used. ")
 	lazy val dependencyCheckPathToMono = settingKey[Option[File]]("The path to Mono for .NET assembly analysis on non-windows systems. ")
+	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental RetireJS Analyzer should be used. ")
+	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. ")
+	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer. ")
+	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
+	lazy val dependencyCheckRetireJsAnalyzerFilterNonVulnerable = settingKey[Option[Boolean]]("Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies. ")
+	lazy val dependencyCheckArtifactoryAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not teh JFrog Artifactory Analyzer will be used. ")
+	lazy val dependencyCheckArtifactoryAnalyzerUrl = settingKey[Option[URL]]("The Artifactory server URL.")
+	lazy val dependencyCheckArtifactoryAnalyzerUseProxy = settingKey[Option[Boolean]]("Sets whether Artifactory should be accessed through a proxy or not.")
+	lazy val dependencyCheckArtifactoryAnalyzerParallelAnalysis = settingKey[Option[Boolean]]("Sets whether the Artifactory analyzer should be run in parallel or not. ")
+	lazy val dependencyCheckArtifactoryAnalyzerUsername = settingKey[Option[String]]("The user name (only used with API token) to connect to Artifactory instance. ")
+	lazy val dependencyCheckArtifactoryAnalyzerApiToken = settingKey[Option[String]]("The API token to connect to Artifactory instance. ")
+	lazy val dependencyCheckArtifactoryAnalyzerBearerToken = settingKey[Option[String]]("he bearer token to connect to Artifactory instance. ")
 
 	// Advanced configuration
 	lazy val dependencyCheckCveUrl12Modified = settingKey[Option[URL]]("URL for the modified CVE 1.2. ")

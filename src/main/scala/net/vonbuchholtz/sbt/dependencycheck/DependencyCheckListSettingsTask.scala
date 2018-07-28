@@ -41,7 +41,9 @@ object DependencyCheckListSettingsTask {
     log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
     logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile/s", log)
     logFileSetting(HINTS_FILE, "dependencyCheckHintsFile", log)
+    logStringSetting(ANALYSIS_TIMEOUT, "dependencyCheckAnalysisTimeout", log)
     logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
+    logBooleanSetting(ANALYZER_RETIRED_ENABLED, "dependencyCheckEnableRetired", log)
 
     // Analyzer Configuration
     logBooleanSetting(ANALYZER_ARCHIVE_ENABLED, "dependencyCheckArchiveAnalyzerEnabled", log)
@@ -69,6 +71,19 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, "dependencyCheckAssemblyAnalyzerEnabled", log)
     logFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, "dependencyCheckPathToMono", log)
     logStringSetting(CVE_CPE_STARTS_WITH_FILTER, "dependencyCheckCpeStartsWith", log)
+    logStringSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)
+    logUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, "dependencyCheckRetireJSAnalyzerRepoJSUrl", log)
+    logStringSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, "dependencyCheckRetireJsAnalyzerRepoValidFor", log)
+    logStringSetting(ANALYZER_RETIREJS_FILTERS, "dependencyCheckRetireJsAnalyzerFilters", log)
+    logBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, "dependencyCheckRetireJsAnalyzerFilterNonVulnerable", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_ENABLED, "dependencyCheckArtifactoryAnalyzerEnabled", log)
+    logUrlSetting(ANALYZER_ARTIFACTORY_URL, "dependencyCheckArtifactoryAnalyzerUrl", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_USES_PROXY, "dependencyCheckArtifactoryAnalyzerUseProxy", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_PARALLEL_ANALYSIS, "dependencyCheckArtifactoryAnalyzerParallelAnalysis", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_API_USERNAME, "dependencyCheckArtifactoryAnalyzerUsername", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_API_TOKEN, "dependencyCheckArtifactoryAnalyzerApiToken", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, "dependencyCheckArtifactoryAnalyzerBearerToken", log)
+
     // Advanced Configuration
     logUrlSetting(CVE_MODIFIED_12_URL, "dependencyCheckCveUrl12Modified", log)
     logUrlSetting(CVE_MODIFIED_20_URL, "dependencyCheckCveUrl20Modified", log)
