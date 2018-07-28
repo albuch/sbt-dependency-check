@@ -80,7 +80,7 @@ dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit An
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
-dependencyCheckCpeStartsWIth | The starting String to identify the CPEs that are qualified to be imported. | 
+
 
 #### Advanced Configuration
 The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.
@@ -98,7 +98,7 @@ dependencyCheckDatabaseDriverPath | The path to the database driver JAR file; on
 dependencyCheckConnectionString | The connection string used to connect to the database, the %s will be replace with a name for the database | jdbc:h2:file:%s;AUTOCOMMIT=ON;MV_STORE=FALSE;
 dependencyCheckDatabaseUser | The username used when connecting to the database. | dcuser
 dependencyCheckDatabasePassword | The password used when connecting to the database. |
-
+dependencyCheckCpeStartsWith | The starting String to identify the CPEs that are qualified to be imported. | 
 
 #### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
