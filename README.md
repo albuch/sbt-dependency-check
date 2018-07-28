@@ -85,7 +85,13 @@ dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repositor
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
 dependencyCheckRetireJsAnalyzerFilters | Set one or more filters for the RetireJS analyzer. | 
 dependencyCheckRetireJsAnalyzerFilterNonVulnerable | Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies | false
-
+dependencyCheckArtifactoryAnalyzerEnabled | Sets whether or not the JFrog Artifactory analyzer will be used | false
+dependencyCheckArtifactoryAnalyzerUrl | The Artifactory server URL. | 
+dependencyCheckArtifactoryAnalyzerUseProxy | Sets whether Artifactory should be accessed through a proxy or not. | false
+dependencyCheckArtifactoryAnalyzerParallelAnalysis | Sets whether the Artifactory analyzer should be run in parallel or not. | true 
+dependencyCheckArtifactoryAnalyzerUsername | The user name (only used with API token) to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead  | 
+dependencyCheckArtifactoryAnalyzerApiToken | The API token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead  | 
+dependencyCheckArtifactoryAnalyzerBearerToken | The bearer token to connect to Artifactory instance | 
 
 #### Advanced Configuration
 The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.

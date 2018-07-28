@@ -52,7 +52,14 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. ")
 	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer. ")
 	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
-	lazy val dependencyCheckRetireJsAnalyzerFilterNonVulnerable =  settingKey[Option[Boolean]]("Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies. ")
+	lazy val dependencyCheckRetireJsAnalyzerFilterNonVulnerable = settingKey[Option[Boolean]]("Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies. ")
+	lazy val dependencyCheckArtifactoryAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not teh JFrog Artifactory Analyzer will be used. ")
+	lazy val dependencyCheckArtifactoryAnalyzerUrl = settingKey[Option[URL]]("The Artifactory server URL.")
+	lazy val dependencyCheckArtifactoryAnalyzerUseProxy = settingKey[Option[Boolean]]("Sets whether Artifactory should be accessed through a proxy or not.")
+	lazy val dependencyCheckArtifactoryAnalyzerParallelAnalysis = settingKey[Option[Boolean]]("Sets whether the Artifactory analyzer should be run in parallel or not. ")
+	lazy val dependencyCheckArtifactoryAnalyzerUsername = settingKey[Option[String]]("The user name (only used with API token) to connect to Artifactory instance. ")
+	lazy val dependencyCheckArtifactoryAnalyzerApiToken = settingKey[Option[String]]("The API token to connect to Artifactory instance. ")
+	lazy val dependencyCheckArtifactoryAnalyzerBearerToken = settingKey[Option[String]]("he bearer token to connect to Artifactory instance. ")
 
 	// Advanced configuration
 	lazy val dependencyCheckCveUrl12Modified = settingKey[Option[URL]]("URL for the modified CVE 1.2. ")

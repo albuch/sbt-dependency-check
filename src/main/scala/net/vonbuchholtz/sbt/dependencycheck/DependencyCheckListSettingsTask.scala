@@ -75,6 +75,13 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, "dependencyCheckRetireJsAnalyzerRepoValidFor", log)
     logStringSetting(ANALYZER_RETIREJS_FILTERS, "dependencyCheckRetireJsAnalyzerFilters", log)
     logBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, "dependencyCheckRetireJsAnalyzerFilterNonVulnerable", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_ENABLED, "dependencyCheckArtifactoryAnalyzerEnabled", log)
+    logUrlSetting(ANALYZER_ARTIFACTORY_URL, "dependencyCheckArtifactoryAnalyzerUrl", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_USES_PROXY, "dependencyCheckArtifactoryAnalyzerUseProxy", log)
+    logBooleanSetting(ANALYZER_ARTIFACTORY_PARALLEL_ANALYSIS, "dependencyCheckArtifactoryAnalyzerParallelAnalysis", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_API_USERNAME, "dependencyCheckArtifactoryAnalyzerUsername", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_API_TOKEN, "dependencyCheckArtifactoryAnalyzerApiToken", log)
+    logStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, "dependencyCheckArtifactoryAnalyzerBearerToken", log)
 
     // Advanced Configuration
     logUrlSetting(CVE_MODIFIED_12_URL, "dependencyCheckCveUrl12Modified", log)

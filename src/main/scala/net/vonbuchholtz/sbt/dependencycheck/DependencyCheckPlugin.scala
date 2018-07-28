@@ -69,6 +69,13 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckRetireJsAnalyzerRepoValidFor := None,
     dependencyCheckRetireJsAnalyzerFilters := Seq(),
     dependencyCheckRetireJsAnalyzerFilterNonVulnerable := None,
+    dependencyCheckArtifactoryAnalyzerEnabled := None,
+    dependencyCheckArtifactoryAnalyzerUrl := None,
+    dependencyCheckArtifactoryAnalyzerUseProxy := None,
+    dependencyCheckArtifactoryAnalyzerParallelAnalysis := None,
+    dependencyCheckArtifactoryAnalyzerUsername := None,
+    dependencyCheckArtifactoryAnalyzerApiToken := None,
+    dependencyCheckArtifactoryAnalyzerBearerToken := None,
 
     // Advanced configuration
     dependencyCheckCveUrl12Modified := None,
@@ -187,6 +194,13 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
     settings.setArrayIfNotEmpty(ANALYZER_RETIREJS_FILTERS, dependencyCheckRetireJsAnalyzerFilters.value.toArray)
     setBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, dependencyCheckRetireJsAnalyzerFilterNonVulnerable.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_ENABLED, dependencyCheckArtifactoryAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_ARTIFACTORY_URL, dependencyCheckArtifactoryAnalyzerUrl.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_USES_PROXY, dependencyCheckArtifactoryAnalyzerUseProxy.value)
+    setBooleanSetting(ANALYZER_ARTIFACTORY_PARALLEL_ANALYSIS, dependencyCheckArtifactoryAnalyzerParallelAnalysis.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_API_USERNAME, dependencyCheckArtifactoryAnalyzerUsername.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_API_TOKEN, dependencyCheckArtifactoryAnalyzerApiToken.value)
+    setStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, dependencyCheckArtifactoryAnalyzerBearerToken.value)
 
     // Advanced Configuration
     setUrlSetting(CVE_MODIFIED_12_URL, dependencyCheckCveUrl12Modified.value)
