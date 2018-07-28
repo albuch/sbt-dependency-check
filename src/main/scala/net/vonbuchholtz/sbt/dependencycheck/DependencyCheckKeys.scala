@@ -20,8 +20,10 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckSuppressionFiles = settingKey[Seq[File]]("The sequence of file paths to the XML suppression files - used to suppress false positives")
 	lazy val dependencyCheckCpeStartsWith = settingKey[Option[String]]("The starting String to identify the CPEs that are qualified to be imported.")
 	lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
-	lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
-	// Analyzer configuration
+  lazy val dependencyCheckAnalysisTimeout = settingKey[Option[Int]]("Set the analysis timeout in minutes.")
+  lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
+
+  // Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used. ")
 	lazy val dependencyCheckZipExtensions = settingKey[Option[String]]("A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. ")
 	lazy val dependencyCheckJarAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used. ")

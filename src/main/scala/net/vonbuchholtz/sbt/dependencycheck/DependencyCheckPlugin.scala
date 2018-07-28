@@ -36,7 +36,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSuppressionFiles := Seq(),
     dependencyCheckCpeStartsWith := None,
     dependencyCheckHintsFile := None,
+    dependencyCheckAnalysisTimeout := None,
     dependencyCheckEnableExperimental := None,
+
+    // Analyzer configuration
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
@@ -61,6 +64,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
     dependencyCheckPathToMono := None,
+
+    // Advanced configuration
     dependencyCheckCveUrl12Modified := None,
     dependencyCheckCveUrl20Modified := None,
     dependencyCheckCveUrl12Base := None,
@@ -145,6 +150,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
     setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
+    setIntSetting(ANALYSIS_TIMEOUT, dependencyCheckAnalysisTimeout.value)
 
     // Analyzer Configuration
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)

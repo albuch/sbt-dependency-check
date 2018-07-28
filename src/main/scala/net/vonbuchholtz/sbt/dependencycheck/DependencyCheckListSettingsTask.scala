@@ -41,6 +41,7 @@ object DependencyCheckListSettingsTask {
     log.info(s"\tdependencyCheckSkipOptionalScope: ${skipOptional.toString}")
     logFileSetting(SUPPRESSION_FILE, "dependencyCheckSuppressionFile/s", log)
     logFileSetting(HINTS_FILE, "dependencyCheckHintsFile", log)
+    logStringSetting(ANALYSIS_TIMEOUT, "dependencyCheckAnalysisTimeout", log)
     logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
 
     // Analyzer Configuration
