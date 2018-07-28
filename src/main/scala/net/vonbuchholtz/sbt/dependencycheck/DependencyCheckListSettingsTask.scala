@@ -43,6 +43,7 @@ object DependencyCheckListSettingsTask {
     logFileSetting(HINTS_FILE, "dependencyCheckHintsFile", log)
     logStringSetting(ANALYSIS_TIMEOUT, "dependencyCheckAnalysisTimeout", log)
     logBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, "dependencyCheckEnableExperimental", log)
+    logBooleanSetting(ANALYZER_RETIRED_ENABLED, "dependencyCheckEnableRetired", log)
 
     // Analyzer Configuration
     logBooleanSetting(ANALYZER_ARCHIVE_ENABLED, "dependencyCheckArchiveAnalyzerEnabled", log)

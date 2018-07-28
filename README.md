@@ -46,9 +46,10 @@ dependencyCheckSkipProvidedScope | Skips analysis for artifacts with Provided Sc
 dependencyCheckSkipOptionalScope | Skips analysis for artifacts with Optional Scope | false
 dependencyCheckSuppressionFiles | The sequence of file paths to the XML suppression files - used to suppress false positives. See [Suppressing False Positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html) for the file syntax. |
 dependencyCheckHintsFile | The file path to the XML hints file - used to resolve [false negatives](https://jeremylong.github.io/DependencyCheck/general/hints.html). |
-dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
 dependencyCheckUseSbtModuleIdAsGav | Use the SBT ModuleId as GAV identifier. Ensures GAV is available even if Maven Central isn't. | false
 dependencyCheckAnalysisTimeout | Set the analysis timeout in minutes | 20 
+dependencyCheckEnableExperimental | Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. | false
+dependencyCheckEnableRetired | Enable the retired analyzers. If not enabled retired analyzers will not be loaded or used. | false
 
 #### Analyzer Configuration
 The following properties are used to configure the various file type analyzers. These properties can be used to turn off specific analyzers if it is not needed. Note, that specific analyzers will automatically disable themselves if no file types that they support are detected - so specifically disabling them may not be needed.
@@ -63,24 +64,24 @@ dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be us
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
-dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the experimental Python Distribution Analyzer will be used.  | true
-dependencyCheckPyPackageAnalyzerEnabled | Sets whether the experimental Python Package Analyzer will be used. | true
-dependencyCheckRubygemsAnalyzerEnabled | Sets whether the experimental Ruby Gemspec Analyzer will be used. | true
+dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the _experimental_ Python Distribution Analyzer will be used.  | true
+dependencyCheckPyPackageAnalyzerEnabled | Sets whether the _experimental_ Python Package Analyzer will be used. | true
+dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Gemspec Analyzer will be used. | true
 dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
-dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the experimental CMake Analyzer should be used. | true
-dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the experimental autoconf Analyzer should be used. | true
-dependencyCheckComposerAnalyzerEnabled | Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. | true
-dependencyCheckNodeAnalyzerEnabled | Sets whether or not the experimental Node.js Analyzer should be used. | true
+dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMake Analyzer should be used. | true
+dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. | true
+dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
+dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNSPAnalyzerEnabled | Sets whether or not the Node Security Platform (NSP) Analyzer should be used. | true
 dependencyCheckNSPAnalyzerUrl | Sets the URL to the Node Security Platform (NSP) API. If not set uses default URL. | 
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
-dependencyCheckCocoapodsEnabled | Sets whether or not the experimental Cocoapods Analyzer should be used. | true
-dependencyCheckSwiftEnabled | Sets whether or not the experimental Swift Package Manager Analyzer should be used. | true
+dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
+dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
-dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the experimental RetireJS Analyzer should be used. | true
+dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the _experimental_ RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
 dependencyCheckRetireJsAnalyzerFilters | Set one or more filters for the RetireJS analyzer. | 

@@ -38,6 +38,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckHintsFile := None,
     dependencyCheckAnalysisTimeout := None,
     dependencyCheckEnableExperimental := None,
+    dependencyCheckEnableRetired := None,
 
     // Analyzer configuration
     dependencyCheckArchiveAnalyzerEnabled := None,
@@ -161,8 +162,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val suppressionFiles = dependencyCheckSuppressionFiles.value ++ Seq(dependencyCheckSuppressionFile.value).flatten
     setFileSequenceSetting(SUPPRESSION_FILE, suppressionFiles)
     setFileSetting(HINTS_FILE, dependencyCheckHintsFile.value)
-    setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
     setIntSetting(ANALYSIS_TIMEOUT, dependencyCheckAnalysisTimeout.value)
+    setBooleanSetting(ANALYZER_EXPERIMENTAL_ENABLED, dependencyCheckEnableExperimental.value)
+    setBooleanSetting(ANALYZER_RETIRED_ENABLED, dependencyCheckEnableRetired.value)
 
     // Analyzer Configuration
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)

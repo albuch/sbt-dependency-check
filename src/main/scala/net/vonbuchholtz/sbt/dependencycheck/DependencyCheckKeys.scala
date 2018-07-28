@@ -22,6 +22,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
   lazy val dependencyCheckAnalysisTimeout = settingKey[Option[Int]]("Set the analysis timeout in minutes.")
   lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used. ")
+	lazy val dependencyCheckEnableRetired = settingKey[Option[Boolean]]("Enable the retired analyzers. If not enabled retired analyzers will not be loaded or used. ")
 
   // Analyzer configuration
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used. ")
