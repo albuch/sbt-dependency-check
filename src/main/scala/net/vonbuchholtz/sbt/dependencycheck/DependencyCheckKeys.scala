@@ -48,6 +48,11 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to bundle audit. ")
 	lazy val dependencyCheckAssemblyAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Assembly Analyzer should be used. ")
 	lazy val dependencyCheckPathToMono = settingKey[Option[File]]("The path to Mono for .NET assembly analysis on non-windows systems. ")
+	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental RetireJS Analyzer should be used. ")
+	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. ")
+	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer. ")
+	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
+	lazy val dependencyCheckRetireJsAnalyzerFilterNonVulnerable =  settingKey[Option[Boolean]]("Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies. ")
 
 	// Advanced configuration
 	lazy val dependencyCheckCveUrl12Modified = settingKey[Option[URL]]("URL for the modified CVE 1.2. ")

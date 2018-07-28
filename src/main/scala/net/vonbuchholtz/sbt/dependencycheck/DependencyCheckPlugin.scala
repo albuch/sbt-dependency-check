@@ -64,6 +64,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
     dependencyCheckPathToMono := None,
+    dependencyCheckRetireJSAnalyzerEnabled := None,
+    dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
+    dependencyCheckRetireJsAnalyzerRepoValidFor := None,
+    dependencyCheckRetireJsAnalyzerFilters := Seq(),
+    dependencyCheckRetireJsAnalyzerFilterNonVulnerable := None,
 
     // Advanced configuration
     dependencyCheckCveUrl12Modified := None,
@@ -177,6 +182,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
+    setBooleanSetting(ANALYZER_RETIREJS_ENABLED, dependencyCheckRetireJSAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, dependencyCheckRetireJSAnalyzerRepoJSUrl.value)
+    setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
+    settings.setArrayIfNotEmpty(ANALYZER_RETIREJS_FILTERS, dependencyCheckRetireJsAnalyzerFilters.value.toArray)
+    setBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, dependencyCheckRetireJsAnalyzerFilterNonVulnerable.value)
+
     // Advanced Configuration
     setUrlSetting(CVE_MODIFIED_12_URL, dependencyCheckCveUrl12Modified.value)
     setUrlSetting(CVE_MODIFIED_20_URL, dependencyCheckCveUrl20Modified.value)
