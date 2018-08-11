@@ -43,6 +43,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckNSPAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the Node Security Platform (NSP) Analyzer should be used. ")
 	lazy val dependencyCheckNSPAnalyzerUrl = settingKey[Option[URL]]("Sets the URL to the Node Security Platform (NSP) API. If not set uses default URL.")
 	lazy val dependencyCheckNuspecAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Nuget Nuspec Analyzer will be used. ")
+	lazy val dependencyCheckNugetConfAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental .NET Nuget packages.config Analyzer will be used. ")
 	lazy val dependencyCheckCocoapodsEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Cocoapods Analyzer should be used. ")
 	lazy val dependencyCheckSwiftEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Swift Package Manager Analyzer should be used. ")
 	lazy val dependencyCheckBundleAuditEnabled = settingKey[Option[Boolean]]("Sets whether or not the Ruby Bundle Audit Analyzer should be used. ")
