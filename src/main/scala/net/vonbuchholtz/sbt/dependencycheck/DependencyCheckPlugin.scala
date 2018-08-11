@@ -59,6 +59,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNSPAnalyzerEnabled := None,
     dependencyCheckNSPAnalyzerUrl := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
+    dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
     dependencyCheckSwiftEnabled := None,
     dependencyCheckBundleAuditEnabled := None,
@@ -185,6 +186,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NSP_PACKAGE_ENABLED, dependencyCheckNSPAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_NSP_URL, dependencyCheckNSPAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, dependencyCheckPathToMono.value)
     setBooleanSetting(ANALYZER_COCOAPODS_ENABLED, dependencyCheckCocoapodsEnabled.value)

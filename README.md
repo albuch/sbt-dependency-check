@@ -75,6 +75,7 @@ dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js A
 dependencyCheckNSPAnalyzerEnabled | Sets whether or not the Node Security Platform (NSP) Analyzer should be used. | true
 dependencyCheckNSPAnalyzerUrl | Sets the URL to the Node Security Platform (NSP) API. If not set uses default URL. | 
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
+dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
 dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
