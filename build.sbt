@@ -8,7 +8,7 @@ val sbtDependencyCheck = project in file(".")
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-crossSbtVersions := Vector("0.13.17", "1.1.6")
+crossSbtVersions := Vector("0.13.17", "1.2.3")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
