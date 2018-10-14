@@ -5,9 +5,9 @@ matrix:
     jdk: oraclejdk7
   - env: SBT_VERSION="0.13.17"
     jdk: oraclejdk8
-  - env: SBT_VERSION="1.2.3"
+  - env: SBT_VERSION="1.2.4"
     jdk: oraclejdk8
-  - env: SBT_VERSION="1.2.3"
+  - env: SBT_VERSION="1.2.4"
     jdk: openjdk11
 script:
   - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck
