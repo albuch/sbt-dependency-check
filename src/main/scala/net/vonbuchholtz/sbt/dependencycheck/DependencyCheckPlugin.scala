@@ -56,8 +56,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckAutoconfAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
-    dependencyCheckNSPAnalyzerEnabled := None,
-    dependencyCheckNSPAnalyzerUrl := None,
+    dependencyCheckNodeAuditAnalyzerEnabled := None,
+    dependencyCheckNodeAuditAnalyzerUrl := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -183,8 +183,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_AUTOCONF_ENABLED, dependencyCheckAutoconfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
-    setBooleanSetting(ANALYZER_NSP_PACKAGE_ENABLED, dependencyCheckNSPAnalyzerEnabled.value)
-    setUrlSetting(ANALYZER_NSP_URL, dependencyCheckNSPAnalyzerUrl.value)
+    setBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, dependencyCheckNodeAuditAnalyzerEnabled.value)
+    setUrlSetting(ANALYZER_NODE_AUDIT_URL, dependencyCheckNodeAuditAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)

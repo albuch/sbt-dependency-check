@@ -72,8 +72,8 @@ dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMa
 dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. | true
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
-dependencyCheckNSPAnalyzerEnabled | Sets whether or not the Node Security Platform (NSP) Analyzer should be used. | true
-dependencyCheckNSPAnalyzerUrl | Sets the URL to the Node Security Platform (NSP) API. If not set uses default URL. | 
+dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
+dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
