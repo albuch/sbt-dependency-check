@@ -167,6 +167,21 @@ The only settings, that are supported to work for `aggregate()` and `dependsOn()
 
 You can set these individually for each project.
 
+### Global Plugin Configuration
+If you want to apply some configuration for all your SBT projects you can add them as Global Settings:
+
+1. Add the plugin to `~/sbt/1.0/plugins/sbt-dependency-check.sbt`
+    ```Scala
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.8")
+    ```
+
+1. Add settings at `~/.sbt/1.0/global.sbt` using their fully qualified name (including package and nested object structure). E.g.
+    ```Scala
+    net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.autoImport.dependencyCheckFormat := "All"
+    ```
+
+For further information about global settings and plugins check the sbt documentation: https://www.scala-sbt.org/1.x/docs/Global-Settings.html
+
 ### Running behind a proxy
 SBT and `sbt-dependency-check` both honor the standard http and https proxy settings for the JVM.
 
