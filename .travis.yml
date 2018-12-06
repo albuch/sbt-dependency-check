@@ -2,7 +2,7 @@ language: scala
 matrix:
   include:
   - env: SBT_VERSION="0.13.17"
-    jdk: oraclejdk7
+    jdk: openjdk7
   - env: SBT_VERSION="0.13.17"
     jdk: oraclejdk8
   - env: SBT_VERSION="1.2.4"
@@ -11,6 +11,8 @@ matrix:
     jdk: openjdk11
 script:
   - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck
+after_failure:
+  - if [ -f target/scala-2.10/sbt-0.13/dependency-check-report.json ]; then cat target/scala-2.10/sbt-0.13/dependency-check-report.json; fi
 cache:
   directories:
   - "$HOME/.ivy2/cache"

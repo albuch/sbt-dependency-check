@@ -26,6 +26,7 @@ dependencyUpdatesFailBuild := true
 
 dependencyCheckFailBuildOnCVSS := 0
 dependencyCheckSkipProvidedScope := true
+dependencyCheckFormat := "ALL"
 
 ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
