@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+    <suppress>
+        <notes><![CDATA[
+   file name: slf4j-simple-1.7.25.jar
+   ]]></notes>
+        <gav regex="true">^org\.slf4j:slf4j-(?:simple|api):.*$</gav>
+        <cve>CVE-2018-8088</cve>
+    </suppress>
+</suppressions>

@@ -27,6 +27,7 @@ dependencyUpdatesFailBuild := true
 dependencyCheckFailBuildOnCVSS := 0
 dependencyCheckSkipProvidedScope := true
 dependencyCheckFormat := "ALL"
+dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
 
 ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
