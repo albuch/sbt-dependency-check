@@ -2,8 +2,6 @@ language: scala
 matrix:
   include:
   - env: SBT_VERSION="0.13.18"
-    jdk: openjdk7
-  - env: SBT_VERSION="0.13.18"
     jdk: oraclejdk8
   - env: SBT_VERSION="1.2.7"
     jdk: oraclejdk8
