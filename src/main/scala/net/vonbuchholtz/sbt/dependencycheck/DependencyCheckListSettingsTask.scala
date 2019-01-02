@@ -53,6 +53,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_NEXUS_ENABLED, "dependencyCheckNexusAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_NEXUS_URL, "dependencyCheckNexusUrl", log)
     logBooleanSetting(ANALYZER_NEXUS_USES_PROXY, "dependencyCheckNexusUsesProxy", log)
+    logStringSetting(ANALYZER_NEXUS_USER, "dependencyCheckNexusUser", log)
+    logStringSetting(ANALYZER_NEXUS_PASSWORD, "dependencyCheckNexusPassword", log)
     logBooleanSetting(ANALYZER_PYTHON_DISTRIBUTION_ENABLED, "dependencyCheckPyDistributionAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_PYTHON_PACKAGE_ENABLED, "dependencyCheckPyPackageAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_RUBY_GEMSPEC_ENABLED, "dependencyCheckRubygemsAnalyzerEnabled", log)

@@ -32,6 +32,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. ")
 	lazy val dependencyCheckNexusUrl = settingKey[Option[URL]]("Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. ")
 	lazy val dependencyCheckNexusUsesProxy = settingKey[Option[Boolean]]("Whether or not the defined proxy should be used when connecting to Nexus. ")
+	lazy val dependencyCheckNexusUser = settingKey[Option[String]]("The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. ")
+	lazy val dependencyCheckNexusPassword = settingKey[Option[String]]("The password to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. ")
 	lazy val dependencyCheckPyDistributionAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental Python Distribution Analyzer will be used. ")
 	lazy val dependencyCheckPyPackageAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental Python Package Analyzer will be used. ")
 	lazy val dependencyCheckRubygemsAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental Ruby Gemspec Analyzer will be used. ")
