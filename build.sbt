@@ -8,12 +8,12 @@ val sbtDependencyCheck = project in file(".")
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-crossSbtVersions := Vector("0.13.18", "1.2.4")
+crossSbtVersions := Vector("0.13.18", "1.2.8")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "3.3.4"
+	"org.owasp" % "dependency-check-core" % "4.0.2"
 )
 libraryDependencies += {
 	appConfiguration.value.provider.id.version match {
@@ -27,6 +27,7 @@ dependencyUpdatesFailBuild := true
 dependencyCheckFailBuildOnCVSS := 0
 dependencyCheckSkipProvidedScope := true
 dependencyCheckFormat := "ALL"
+dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
 
 ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++

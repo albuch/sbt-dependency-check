@@ -1,13 +1,15 @@
 language: scala
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 matrix:
   include:
   - env: SBT_VERSION="0.13.18"
-    jdk: openjdk7
-  - env: SBT_VERSION="0.13.18"
     jdk: oraclejdk8
-  - env: SBT_VERSION="1.2.4"
+  - env: SBT_VERSION="1.2.8"
     jdk: oraclejdk8
-  - env: SBT_VERSION="1.2.4"
+  - env: SBT_VERSION="1.2.8"
     jdk: openjdk11
 script:
   - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck

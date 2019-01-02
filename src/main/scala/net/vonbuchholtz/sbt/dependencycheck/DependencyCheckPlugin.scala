@@ -48,6 +48,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
+    dependencyCheckNexusUser := None,
+    dependencyCheckNexusPassword := None,
     dependencyCheckPyDistributionAnalyzerEnabled := None,
     dependencyCheckPyPackageAnalyzerEnabled := None,
     dependencyCheckRubygemsAnalyzerEnabled := None,
@@ -174,6 +176,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NEXUS_ENABLED, dependencyCheckNexusAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_NEXUS_URL, dependencyCheckNexusUrl.value)
+    setStringSetting(ANALYZER_NEXUS_USER, dependencyCheckNexusUser.value)
+    setStringSetting(ANALYZER_NEXUS_PASSWORD, dependencyCheckNexusPassword.value)
     setBooleanSetting(ANALYZER_NEXUS_USES_PROXY, dependencyCheckNexusUsesProxy.value)
     setBooleanSetting(ANALYZER_PYTHON_DISTRIBUTION_ENABLED, dependencyCheckPyDistributionAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PYTHON_PACKAGE_ENABLED, dependencyCheckPyPackageAnalyzerEnabled.value)

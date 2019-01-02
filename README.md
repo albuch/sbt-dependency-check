@@ -64,6 +64,8 @@ dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be us
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
+dependencyCheckNexusUser | The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. | 
+dependencyCheckNexusPassword | The password to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. |
 dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the _experimental_ Python Distribution Analyzer will be used.  | true
 dependencyCheckPyPackageAnalyzerEnabled | Sets whether the _experimental_ Python Package Analyzer will be used. | true
 dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Gemspec Analyzer will be used. | true
