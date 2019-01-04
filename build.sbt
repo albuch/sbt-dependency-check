@@ -35,6 +35,7 @@ scriptedLaunchOpts := { scriptedLaunchOpts.value ++
 }
 scriptedBufferLog := false
 
+publishTo := sonatypePublishTo.value
 publishMavenStyle := true
 sonatypeProfileName := "net.vonbuchholtz"
 
