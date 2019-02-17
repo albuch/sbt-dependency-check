@@ -2,6 +2,7 @@ package net.vonbuchholtz.sbt.dependencycheck
 
 import com.github.packageurl.MalformedPackageURLException
 import org.owasp.dependencycheck.Engine
+import org.owasp.dependencycheck.agent.DependencyCheckScanAgent
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
 import org.owasp.dependencycheck.dependency.naming.{GenericIdentifier, Identifier, PurlIdentifier}
 import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType}
@@ -91,7 +92,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
     dependencyCheckDatabaseDriverPath := None,
-    dependencyCheckConnectionString := Some("jdbc:h2:file:%s;AUTOCOMMIT=ON;MV_STORE=FALSE;"),
+    dependencyCheckConnectionString := Some("jdbc:h2:file:%s;AUTOCOMMIT=ON;LOG=0;CACHE_SIZE=65536;"),
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
@@ -275,7 +276,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         withEngine(initializeSettings.value) { engine =>
           try {
             createReport(engine, checkDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-            determineTaskFailureStatus(cvssScore, engine)
+            determineTaskFailureStatus(cvssScore, engine, name.value)
           } catch {
             case e: Exception =>
               log.error(s"Failed creating report: ${e.getLocalizedMessage}")
@@ -322,7 +323,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     withEngine(initializeSettings.value) { engine =>
       try {
         createReport(engine, aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
-        determineTaskFailureStatus(cvssScore, engine)
+        determineTaskFailureStatus(cvssScore, engine, name.value)
       } catch {
         case e: Exception =>
           log.error(s"Failed creating report: ${e.getLocalizedMessage}")
@@ -504,18 +505,18 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     engine.analyzeDependencies()
     engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat)
-    //writeReports(outputDir, reportFormat, log)
   }
 
-  def determineTaskFailureStatus(failCvssScore: Float, engine: Engine): Unit = {
+  def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
     if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
+      DependencyCheckScanAgent.showSummary(name, engine.getDependencies)
       throw new IllegalStateException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
     }
   }
 
   def failBuildOnCVSS(dependencies: Array[Dependency], cvssScore: Float): Boolean = dependencies.exists(p => {
     p.getVulnerabilities.asScala.exists(v => {
-      v.getCvssV2.getScore >= cvssScore
+      (v.getCvssV2 != null && v.getCvssV2.getScore >= cvssScore) || (v.getCvssV3 != null && v.getCvssV3.getBaseScore >= cvssScore)
     })
   })
 

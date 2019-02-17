@@ -91,6 +91,8 @@ object DependencyCheckListSettingsTask {
     logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
     logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
+    logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
+    logStringSetting(DB_VERSION, "dependencyCheckDatabaseVersion", log)
     logFileSetting(DATA_DIRECTORY, "dependencyCheckDataDirectory", log)
     logStringSetting(DB_DRIVER_NAME, "dependencyCheckDatabaseDriverName", log)
     logFileSetting(DB_DRIVER_PATH, "dependencyCheckDatabaseDriverPath", log)
