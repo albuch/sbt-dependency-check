@@ -1,8 +1,10 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
+import com.github.packageurl.MalformedPackageURLException
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
-import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType, Vulnerability}
+import org.owasp.dependencycheck.dependency.naming.{GenericIdentifier, Identifier, PurlIdentifier}
+import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType}
 import org.owasp.dependencycheck.utils.Settings
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
@@ -18,6 +20,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   import autoImport._
 
   override def requires = JvmPlugin
+
   override def trigger: PluginTrigger = allRequirements
 
   override lazy val projectSettings = Seq(
@@ -82,10 +85,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArtifactoryAnalyzerBearerToken := None,
 
     // Advanced configuration
-    dependencyCheckCveUrl12Modified := None,
-    dependencyCheckCveUrl20Modified := None,
-    dependencyCheckCveUrl12Base := None,
-    dependencyCheckCveUrl20Base := None,
+    dependencyCheckCveUrlModified := None,
+    dependencyCheckCveUrlBase := None,
     dependencyCheckConnectionTimeout := None,
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
@@ -112,28 +113,28 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   private[this] lazy val initializeSettings: Def.Initialize[Task[Settings]] = Def.task {
     val settings = new Settings()
 
-    def setBooleanSetting(key: String, b: Option[Boolean]) = {
+    def setBooleanSetting(key: String, b: Option[Boolean]): Unit = {
       settings.setBooleanIfNotNull(key, b.map(b => b: java.lang.Boolean).orNull)
     }
 
-    def setIntSetting(key: String, i: Option[Int]) = {
+    def setIntSetting(key: String, i: Option[Int]): Unit = {
       settings.setIntIfNotNull(key, i.map(i => i: java.lang.Integer).orNull)
     }
 
-    def setStringSetting(key: String, s: Option[String]) = {
+    def setStringSetting(key: String, s: Option[String]): Unit = {
       settings.setStringIfNotEmpty(key, s.orNull)
     }
 
-    def setFileSetting(key: String, file: Option[File]) = {
+    def setFileSetting(key: String, file: Option[File]): Unit = {
       settings.setStringIfNotEmpty(key, file match { case Some(f) => f.getAbsolutePath case None => null })
     }
 
-    def setFileSequenceSetting(key: String, files: Seq[File]) = {
-      val filePaths: Seq[String] = files map { file => file.getAbsolutePath}
+    def setFileSequenceSetting(key: String, files: Seq[File]): Unit = {
+      val filePaths: Seq[String] = files map { file => file.getAbsolutePath }
       settings.setArrayIfNotEmpty(key, filePaths.toArray)
     }
 
-    def setUrlSetting(key: String, url: Option[URL]) = {
+    def setUrlSetting(key: String, url: Option[URL]): Unit = {
       settings.setStringIfNotEmpty(key, url match { case Some(u) => u.toExternalForm case None => null })
     }
 
@@ -211,10 +212,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, dependencyCheckArtifactoryAnalyzerBearerToken.value)
 
     // Advanced Configuration
-    setUrlSetting(CVE_MODIFIED_12_URL, dependencyCheckCveUrl12Modified.value)
-    setUrlSetting(CVE_MODIFIED_20_URL, dependencyCheckCveUrl20Modified.value)
-    setStringSetting(CVE_SCHEMA_1_2, dependencyCheckCveUrl12Base.value)
-    setStringSetting(CVE_SCHEMA_2_0, dependencyCheckCveUrl20Base.value)
+    setUrlSetting(CVE_MODIFIED_JSON, dependencyCheckCveUrlModified.value)
+    setStringSetting(CVE_BASE_JSON, dependencyCheckCveUrlBase.value)
     setIntSetting(CONNECTION_TIMEOUT, dependencyCheckConnectionTimeout.value)
     setFileSetting(DATA_DIRECTORY, dependencyCheckDataDirectory.value)
     setStringSetting(DB_DRIVER_NAME, dependencyCheckDatabaseDriverName.value)
@@ -267,7 +266,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypeValue, updateValue), Optional, log)
         }
 
-        val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
+        val scanSet: Seq[File] = (dependencyCheckScanSet.value.map {
+          _ ** "*"
+        } reduceLeft (_ +++ _) filter {
+          _.isFile
+        }).get
 
         withEngine(initializeSettings.value) { engine =>
           try {
@@ -311,7 +314,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
     aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
 
-    val scanSet: Seq[File] = (dependencyCheckScanSet.value.map { _ ** "*" } reduceLeft( _ +++ _) filter {_.isFile}).get
+    val scanSet: Seq[File] = (dependencyCheckScanSet.value.map {
+      _ ** "*"
+    } reduceLeft (_ +++ _) filter {
+      _.isFile
+    }).get
     withEngine(initializeSettings.value) { engine =>
       try {
         createReport(engine, aggregatedDependencies, scanSet, outputDir, reportFormat, useSbtModuleIdAsGav, log)
@@ -331,33 +338,53 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   lazy val aggregateOptionalFilter = ScopeFilter(inAnyProject, inConfigurations(Optional))
   lazy val aggregateCompileTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value)
-      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Seq.empty)
+      }
     else
-      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)
+      }
   }
   lazy val aggregateRuntimeTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
-      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Seq.empty)
+      }
     else
-      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)
+      }
   }
   lazy val aggregateTestTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
-      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Seq.empty)
+      }
     else
-      Def.task {(thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, (externalDependencyClasspath in configuration).value)
+      }
   }
   lazy val aggregateProvidedTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
-      Def.task {(thisProjectRef.value, configuration.value, Seq.empty) }
+      Def.task {
+        (thisProjectRef.value, configuration.value, Seq.empty)
+      }
     else
-      Def.task {(thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+      }
   }
   lazy val aggregateOptionalTask: Def.Initialize[Task[(ProjectRef, Configuration, Seq[Attributed[File]])]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
-      Def.task {(thisProjectRef.value, configuration.value, Seq.empty)}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Seq.empty)
+      }
     else
-      Def.task {(thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))}
+      Def.task {
+        (thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
+      }
   }
 
   def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
@@ -421,7 +448,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
               }
               if (dependencies != null && !dependencies.isEmpty) {
                 val dependency: Dependency = dependencies.get(0)
-                if(dependency != null)
+                if (dependency != null)
                   addEvidence(moduleId, dependency, useSbtModuleIdAsGav)
               }
             }
@@ -452,9 +479,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val artifact: MavenArtifact = new MavenArtifact(moduleId.organization, moduleId.name, moduleId.revision)
     dependency.addAsEvidence("sbt", artifact, Confidence.HIGHEST)
     if (useSbtModuleIdAsGav) {
-      // unfortunately, for an identifier to act as a GAV, it needs to have the source 'maven' (hardcoded in owasp d-c)
-      dependency
-        .addIdentifier("maven", String.format("%s:%s:%s", moduleId.organization, moduleId.name, moduleId.revision), null, Confidence.HIGH)
+
+      var id: Identifier = null
+      try
+        id = new PurlIdentifier("sbt", artifact.getGroupId, artifact.getArtifactId, artifact.getVersion, Confidence.HIGHEST)
+      catch {
+        case _: MalformedPackageURLException =>
+          val key = String.format("%s:%s:%s", moduleId.organization, moduleId.name, moduleId.revision)
+          id = new GenericIdentifier("sbt:" + key, Confidence.HIGHEST)
+      }
+      dependency.addSoftwareIdentifier(id)
+
     }
     moduleId.configurations match {
       case Some(configurations) =>
@@ -466,9 +501,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def createReport(engine: Engine, checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormat: String, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     scanSet.foreach(file => engine.scan(file))
-    
+
     engine.analyzeDependencies()
-    engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir , reportFormat)
+    engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat)
     //writeReports(outputDir, reportFormat, log)
   }
 
@@ -479,8 +514,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   def failBuildOnCVSS(dependencies: Array[Dependency], cvssScore: Float): Boolean = dependencies.exists(p => {
-    p.getVulnerabilities.asInstanceOf[java.util.Set[Vulnerability]].asScala.exists(v => {
-      v.getCvssScore >= cvssScore
+    p.getVulnerabilities.asScala.exists(v => {
+      v.getCvssV2.getScore >= cvssScore
     })
   })
 

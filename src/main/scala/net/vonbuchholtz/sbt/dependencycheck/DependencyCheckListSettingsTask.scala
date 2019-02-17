@@ -88,10 +88,8 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, "dependencyCheckArtifactoryAnalyzerBearerToken", log)
 
     // Advanced Configuration
-    logUrlSetting(CVE_MODIFIED_12_URL, "dependencyCheckCveUrl12Modified", log)
-    logUrlSetting(CVE_MODIFIED_20_URL, "dependencyCheckCveUrl20Modified", log)
-    logStringSetting(CVE_SCHEMA_1_2, "dependencyCheckCveUrl12Base", log)
-    logStringSetting(CVE_SCHEMA_2_0, "dependencyCheckCveUrl20Base", log)
+    logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
+    logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
     logFileSetting(DATA_DIRECTORY, "dependencyCheckDataDirectory", log)
     logStringSetting(DB_DRIVER_NAME, "dependencyCheckDatabaseDriverName", log)

@@ -66,10 +66,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckArtifactoryAnalyzerBearerToken = settingKey[Option[String]]("he bearer token to connect to Artifactory instance. ")
 
 	// Advanced configuration
-	lazy val dependencyCheckCveUrl12Modified = settingKey[Option[URL]]("URL for the modified CVE 1.2. ")
-	lazy val dependencyCheckCveUrl20Modified = settingKey[Option[URL]]("URL for the modified CVE 2.0. ")
-	lazy val dependencyCheckCveUrl12Base = settingKey[Option[String]]("Base URL for each year’s CVE 1.2, the %d will be replaced with the year. ")
-	lazy val dependencyCheckCveUrl20Base = settingKey[Option[String]]("Base URL for each year’s CVE 2.0, the %d will be replaced with the year. ")
+	lazy val dependencyCheckCveUrlModified = settingKey[Option[URL]]("URL for the modified CVE JSON data feed. ")
+	lazy val dependencyCheckCveUrlBase = settingKey[Option[String]]("Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. ")
 	lazy val dependencyCheckConnectionTimeout = settingKey[Option[Int]]("Sets the URL Connection Timeout used when downloading external data. ")
 	lazy val dependencyCheckDataDirectory = settingKey[Option[File]]("Sets the data directory to hold SQL CVEs contents. This should generally not be changed. ")
 	lazy val dependencyCheckDatabaseDriverName = settingKey[Option[String]]("The name of the database driver. Example: org.h2.Driver. ")

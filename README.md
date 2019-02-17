@@ -102,10 +102,8 @@ The following properties can be configured in the plugin. However, they are less
 
 Setting | Description | Default Value
 :-------|:------------|:-------------
-dependencyCheckCveUrl12Modified | URL for the modified CVE 1.2. | <https://nvd.nist.gov/download/nvdcve-Modified.xml.gz>
-dependencyCheckCveUrl20Modified | URL for the modified CVE 2.0. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-Modified.xml.gz>
-dependencyCheckCveUrl12Base | Base URL for each year’s CVE 1.2, the %d will be replaced with the year. | <https://nvd.nist.gov/download/nvdcve-%d.xml.gz>
-dependencyCheckCveUrl20Base | Base URL for each year’s CVE 2.0, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-%d.xml.gz>
+dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. | <https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-modified.json.gz>
+dependencyCheckCveUrlBase | Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-%d.json.gz>
 dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
