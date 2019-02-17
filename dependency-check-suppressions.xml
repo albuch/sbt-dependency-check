@@ -7,4 +7,11 @@
         <gav regex="true">^org\.slf4j:slf4j-(?:simple|api):.*$</gav>
         <cve>CVE-2018-8088</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: javax.json-1.0.4.jar
+   ]]></notes>
+        <gav regex="true">^org\.glassfish:javax\.json:.*$</gav>
+        <cve>CVE-2018-1000840</cve>
+    </suppress>
 </suppressions>
