@@ -51,7 +51,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckBundleAuditEnabled = settingKey[Option[Boolean]]("Sets whether or not the Ruby Bundle Audit Analyzer should be used. ")
 	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to bundle audit. ")
 	lazy val dependencyCheckAssemblyAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Assembly Analyzer should be used. ")
-	lazy val dependencyCheckPathToMono = settingKey[Option[File]]("The path to Mono for .NET assembly analysis on non-windows systems. ")
+	lazy val dependencyCheckPathToDotNETCore = settingKey[Option[File]]("The path to Core for .NET assembly analysis on non-windows systems. ")
 	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental RetireJS Analyzer should be used. ")
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. ")
 	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer. ")

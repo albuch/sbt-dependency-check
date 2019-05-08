@@ -83,7 +83,7 @@ dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Packa
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
-dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
+dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the _experimental_ RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
