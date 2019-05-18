@@ -1,0 +1,4 @@
+> dependencyCheck
+$ exists target/scala-2.10/dependency-check-report.json
+$ exists target/scala-2.10/dependency-check-report.xml
+-$ exists target/scala-2.10/dependency-check-report.html
