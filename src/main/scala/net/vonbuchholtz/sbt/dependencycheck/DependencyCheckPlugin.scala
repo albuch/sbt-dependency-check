@@ -290,6 +290,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
             createReport(engine, checkDependencies, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
             determineTaskFailureStatus(cvssScore, engine, name.value)
           } catch {
+            case e: VulnerabilityFoundException =>
+              log.error(s"${e.getLocalizedMessage}")
+              throw e
             case e: Exception =>
               log.error(s"Failed creating report: ${e.getLocalizedMessage}")
               throw e
@@ -338,6 +341,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         createReport(engine, aggregatedDependencies, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
         determineTaskFailureStatus(cvssScore, engine, name.value)
       } catch {
+        case e: VulnerabilityFoundException =>
+          log.error(s"${e.getLocalizedMessage}")
+          throw e
         case e: Exception =>
           log.error(s"Failed creating report: ${e.getLocalizedMessage}")
           throw e
@@ -524,7 +530,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
     if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
       DependencyCheckScanAgent.showSummary(name, engine.getDependencies)
-      throw new IllegalStateException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
+      throw new VulnerabilityFoundException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
     }
   }
 
