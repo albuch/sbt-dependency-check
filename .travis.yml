@@ -12,7 +12,8 @@ matrix:
   - env: SBT_VERSION="1.2.8"
     jdk: openjdk11
 script:
-  - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck
+  - sbt "^^ ${SBT_VERSION}" clean test scripted
+  - sbt "^^ ${SBT_VERSION}" dependencyCheck
 after_failure:
   - if [ -f target/scala-2.10/sbt-0.13/dependency-check-report.json ]; then cat target/scala-2.10/sbt-0.13/dependency-check-report.json; fi
 cache:
