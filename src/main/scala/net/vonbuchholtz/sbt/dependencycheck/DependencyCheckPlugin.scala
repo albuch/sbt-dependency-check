@@ -51,8 +51,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
     dependencyCheckCentralAnalyzerEnabled := Some(false),
+    dependencyCheckCentralAnalyzerUseCache := None,
     dependencyCheckOSSIndexAnalyzerEnabled := None,
     dependencyCheckOSSIndexAnalyzerUrl := None,
+    dependencyCheckOSSIndexAnalyzerUseCache := None,
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
@@ -68,6 +70,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNodeAnalyzerEnabled := None,
     dependencyCheckNodeAuditAnalyzerEnabled := None,
     dependencyCheckNodeAuditAnalyzerUrl := None,
+    dependencyCheckNodeAuditAnalyzerUseCache := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -185,8 +188,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(ADDITIONAL_ZIP_EXTENSIONS, dependencyCheckZipExtensions.value)
     setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, dependencyCheckCentralAnalyzerUseCache.value)
     setBooleanSetting(ANALYZER_OSSINDEX_ENABLED, dependencyCheckOSSIndexAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_OSSINDEX_URL, dependencyCheckOSSIndexAnalyzerUrl.value)
+    setBooleanSetting(ANALYZER_OSSINDEX_USE_CACHE, dependencyCheckOSSIndexAnalyzerUseCache.value)
     setBooleanSetting(ANALYZER_NEXUS_ENABLED, dependencyCheckNexusAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_NEXUS_URL, dependencyCheckNexusUrl.value)
     setStringSetting(ANALYZER_NEXUS_USER, dependencyCheckNexusUser.value)
@@ -201,6 +206,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, dependencyCheckNodeAuditAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_NODE_AUDIT_USE_CACHE, dependencyCheckNodeAuditAnalyzerUseCache.value)
     setUrlSetting(ANALYZER_NODE_AUDIT_URL, dependencyCheckNodeAuditAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)

@@ -63,8 +63,10 @@ dependencyCheckArchiveAnalyzerEnabled | Sets whether the Archive Analyzer will b
 dependencyCheckZipExtensions | A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. |
 dependencyCheckJarAnalyzerEnabled | Sets whether Jar Analyzer will be used.  | true
 dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below). | false
+dependencyCheckCentralAnalyzerUseCache | Sets whether the Central Analyer will cache results. Cached results expire after 30 days. | true
 dependencyCheckOSSIndexAnalyzerEnabled | Sets whether the OSS Index Analyzer will be enabled. | true
 dependencyCheckOSSIndexAnalyzerUrl | URL of the Sonatype OSS Index service. | https://ossindex.sonatype.org
+dependencyCheckOSSIndexAnalyzerUseCache | Sets whether the OSS Index Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
@@ -80,6 +82,7 @@ dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ 
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
+dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
