@@ -7,15 +7,18 @@ import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Logger
 
 object DependencyCheckListSettingsTask {
-  def logSettings(settings: Settings, failBuildOnCVSS: Float, format: String, outputDirectory: String, scanSet: Seq[sbt.File],
+  def logSettings(settings: Settings, failBuildOnCVSS: Float, formats: Seq[String], outputDirectory: String, scanSet: Seq[sbt.File],
                   skip: Boolean, skipRuntime: Boolean, skipTest: Boolean, skipProvided: Boolean, skipOptional: Boolean,
                   useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     def logBooleanSetting(key: String, setting: String, log: Logger): Unit = {
       log.info(s"\t$setting: ${settings.getBoolean(key)}")
     }
 
-    def logStringSetting(key: String, setting: String, log: Logger): Unit = {
+    def logFloatSetting(key: String, setting: String, log: Logger): Unit = {
+      log.info(s"\t$setting: ${settings.getFloat(key, 0)}")
+    }
 
+    def logStringSetting(key: String, setting: String, log: Logger): Unit = {
       log.info(s"\t$setting: ${if(key.contains("assword")) "******" else settings.getString(key)}")
     }
 
@@ -31,7 +34,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(AUTO_UPDATE, "dependencyCheckAutoUpdate", log)
     logStringSetting(CVE_CHECK_VALID_FOR_HOURS, "dependencyCheckCveValidForHours", log)
     log.info(s"\tdependencyCheckFailBuildOnCVSS: ${failBuildOnCVSS.toString}")
-    log.info(s"\tdependencyCheckFormat: $format")
+    logFloatSetting(JUNIT_FAIL_ON_CVSS, "dependencyCheckJUnitFailBuildOnCVSS", log)
+    log.info(s"\tdependencyCheckFormats (combined with dependencyCheckFormat): ${formats.mkString(", ")}")
     log.info(s"\tdependencyCheckOutputDirectory: $outputDirectory")
     log.info(s"\tdependencyCheckScanSet: ${scanSet.map(f => f.getAbsolutePath).mkString(", ")}")
     log.info(s"\tdependencyCheckSkip: ${skip.toString}")
@@ -50,6 +54,10 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ADDITIONAL_ZIP_EXTENSIONS, "dependencyCheckZipExtensions", log)
     logBooleanSetting(ANALYZER_JAR_ENABLED, "dependencyCheckJarAnalyzer", log)
     logBooleanSetting(ANALYZER_CENTRAL_ENABLED, "dependencyCheckCentralAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, "dependencyCheckCentralAnalyzerUseCache", log)
+    logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)
+    logUrlSetting(ANALYZER_OSSINDEX_URL, "dependencyCheckOSSIndexAnalyzerUrl", log)
+    logBooleanSetting(ANALYZER_OSSINDEX_USE_CACHE, "dependencyCheckOSSIndexAnalyzerUseCache", log)
     logBooleanSetting(ANALYZER_NEXUS_ENABLED, "dependencyCheckNexusAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_NEXUS_URL, "dependencyCheckNexusUrl", log)
     logBooleanSetting(ANALYZER_NEXUS_USES_PROXY, "dependencyCheckNexusUsesProxy", log)
@@ -65,6 +73,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, "dependencyCheckNodeAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, "dependencyCheckNodeAuditAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_NODE_AUDIT_URL, "dependencyCheckNodeAuditAnalyzerUrl", log)
+    logBooleanSetting(ANALYZER_NODE_AUDIT_USE_CACHE, "dependencyCheckNodeAuditAnalyzerUseCache", log)
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUGETCONF_ENABLED, "dependencyCheckNugetConfAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)
@@ -72,7 +81,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, "dependencyCheckBundleAuditEnabled", log)
     logFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, "dependencyCheckPathToBundleAudit", log)
     logBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, "dependencyCheckAssemblyAnalyzerEnabled", log)
-    logFileSetting(ANALYZER_ASSEMBLY_MONO_PATH, "dependencyCheckPathToMono", log)
+    logFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, "dependencyCheckPathToDotNETCore", log)
     logStringSetting(CVE_CPE_STARTS_WITH_FILTER, "dependencyCheckCpeStartsWith", log)
     logStringSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, "dependencyCheckRetireJSAnalyzerRepoJSUrl", log)
@@ -88,11 +97,11 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, "dependencyCheckArtifactoryAnalyzerBearerToken", log)
 
     // Advanced Configuration
-    logUrlSetting(CVE_MODIFIED_12_URL, "dependencyCheckCveUrl12Modified", log)
-    logUrlSetting(CVE_MODIFIED_20_URL, "dependencyCheckCveUrl20Modified", log)
-    logStringSetting(CVE_SCHEMA_1_2, "dependencyCheckCveUrl12Base", log)
-    logStringSetting(CVE_SCHEMA_2_0, "dependencyCheckCveUrl20Base", log)
+    logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
+    logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
+    logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
+    logStringSetting(DB_VERSION, "dependencyCheckDatabaseVersion", log)
     logFileSetting(DATA_DIRECTORY, "dependencyCheckDataDirectory", log)
     logStringSetting(DB_DRIVER_NAME, "dependencyCheckDatabaseDriverName", log)
     logFileSetting(DB_DRIVER_PATH, "dependencyCheckDatabaseDriverPath", log)

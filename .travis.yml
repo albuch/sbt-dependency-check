@@ -1,18 +1,16 @@
+dist: xenial
 language: scala
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 matrix:
   include:
   - env: SBT_VERSION="0.13.18"
-    jdk: oraclejdk8
+    jdk: openjdk8
   - env: SBT_VERSION="1.2.8"
-    jdk: oraclejdk8
+    jdk: openjdk8
   - env: SBT_VERSION="1.2.8"
     jdk: openjdk11
 script:
-  - sbt "^^ ${SBT_VERSION}" clean test scripted dependencyCheck
+  - sbt "^^ ${SBT_VERSION}" clean test scripted
+  - sbt "^^ ${SBT_VERSION}" dependencyCheck
 after_failure:
   - if [ -f target/scala-2.10/sbt-0.13/dependency-check-report.json ]; then cat target/scala-2.10/sbt-0.13/dependency-check-report.json; fi
 cache:
@@ -21,6 +19,8 @@ cache:
   - "$HOME/.sbt/launchers"
 before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+before_script:
+  - rm -rf $HOME/.ivy2/cache/org.owasp/dependency-check-utils/jars/data
 sudo: false
 # commented out until sbt-coveralls plugin is fixed
 #after_success: "sbt coveralls"

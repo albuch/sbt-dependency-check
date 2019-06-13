@@ -36,7 +36,9 @@ Setting | Description | Default Value
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
 dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
-dependencyCheckFormat | The report format to be generated (HTML, XML, VULN, CSV, JSON, ALL). | HTML
+dependencyCheckJUnitFailOnCVSS | If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure. The default value is 0 - all vulnerabilities are considered a failure.| 0
+dependencyCheckFormat | The report format to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). This setting is ignored if dependencyCheckReportFormats is set. | HTML
+dependencyCheckFormats | A sequence of report formats to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). | 
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
 dependencyCheckScanSet | An optional sequence of files that specify additional files and/or directories to analyze as part of the scan. If not specified, defaults to standard scala conventions (see [SBT documentation](http://www.scala-sbt.org/0.13/docs/Directories.html#Source+code) for details). | `/src/main/resources`
 dependencyCheckSkip | Skips the dependency-check analysis |  false
@@ -61,7 +63,11 @@ dependencyCheckArchiveAnalyzerEnabled | Sets whether the Archive Analyzer will b
 dependencyCheckZipExtensions | A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed. |
 dependencyCheckJarAnalyzerEnabled | Sets whether Jar Analyzer will be used.  | true
 dependencyCheckCentralAnalyzerEnabled | Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below). | false
-dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
+dependencyCheckCentralAnalyzerUseCache | Sets whether the Central Analyer will cache results. Cached results expire after 30 days. | true
+dependencyCheckOSSIndexAnalyzerEnabled | Sets whether the OSS Index Analyzer will be enabled. | true
+dependencyCheckOSSIndexAnalyzerUrl | URL of the Sonatype OSS Index service. | https://ossindex.sonatype.org
+dependencyCheckOSSIndexAnalyzerUseCache | Sets whether the OSS Index Analyzer will cache results. Cached results expire after 24 hours. | true
+dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
 dependencyCheckNexusUser | The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. | 
@@ -76,6 +82,7 @@ dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ 
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
+dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
@@ -83,8 +90,8 @@ dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Packa
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to bundle audit. |
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
-dependencyCheckPathToMono | The path to Mono for .NET assembly analysis on non-windows systems. |
-dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the _experimental_ RetireJS Analyzer should be used. | true
+dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
+dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
 dependencyCheckRetireJsAnalyzerFilters | Set one or more filters for the RetireJS analyzer. | 
@@ -102,10 +109,8 @@ The following properties can be configured in the plugin. However, they are less
 
 Setting | Description | Default Value
 :-------|:------------|:-------------
-dependencyCheckCveUrl12Modified | URL for the modified CVE 1.2. | <https://nvd.nist.gov/download/nvdcve-Modified.xml.gz>
-dependencyCheckCveUrl20Modified | URL for the modified CVE 2.0. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-Modified.xml.gz>
-dependencyCheckCveUrl12Base | Base URL for each year’s CVE 1.2, the %d will be replaced with the year. | <https://nvd.nist.gov/download/nvdcve-%d.xml.gz>
-dependencyCheckCveUrl20Base | Base URL for each year’s CVE 2.0, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-%d.xml.gz>
+dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. When mirroring the NVD you must mirror the *.json.gz and the *.meta files. | <https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-modified.json.gz>
+dependencyCheckCveUrlBase | Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-%d.json.gz>
 dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
