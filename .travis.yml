@@ -20,7 +20,7 @@ cache:
 before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
 before_script:
-  - rm -r $HOME/.ivy2/cache/org.owasp/dependency-check-utils/jars/data
+  - rm -rf $HOME/.ivy2/cache/org.owasp/dependency-check-utils/jars/data
 sudo: false
 # commented out until sbt-coveralls plugin is fixed
 #after_success: "sbt coveralls"
