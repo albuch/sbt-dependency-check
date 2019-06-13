@@ -1,6 +1,5 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
-import com.github.packageurl.MalformedPackageURLException
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.agent.DependencyCheckScanAgent
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
@@ -13,6 +12,7 @@ import sbt.plugins.JvmPlugin
 import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
@@ -506,22 +506,22 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val artifact: MavenArtifact = new MavenArtifact(moduleId.organization, moduleId.name, moduleId.revision)
     dependency.addAsEvidence("sbt", artifact, Confidence.HIGHEST)
     if (useSbtModuleIdAsGav) {
-
-      var id: Identifier = null
-      try
-        id = new PurlIdentifier("sbt", artifact.getGroupId, artifact.getArtifactId, artifact.getVersion, Confidence.HIGHEST)
-      catch {
-        case _: MalformedPackageURLException =>
-          val key = String.format("%s:%s:%s", moduleId.organization, moduleId.name, moduleId.revision)
-          id = new GenericIdentifier("sbt:" + key, Confidence.HIGHEST)
-      }
+      val id = getIdentifier(artifact, moduleId)
       dependency.addSoftwareIdentifier(id)
-
     }
     moduleId.configurations match {
       case Some(configurations) =>
         dependency.addEvidence(EvidenceType.VENDOR, "sbt", "configuration", configurations, Confidence.HIGHEST)
       case None =>
+    }
+  }
+
+  private def getIdentifier(artifact: MavenArtifact, moduleId: ModuleID): Identifier = {
+    Try {
+      new PurlIdentifier("sbt", artifact.getGroupId, artifact.getArtifactId, artifact.getVersion, Confidence.HIGHEST)
+    } match {
+      case Success(id) => id
+      case Failure(_) => new GenericIdentifier(String.format("sbt:%s:%s:%s", moduleId.organization, moduleId.name, moduleId.revision), Confidence.HIGHEST)
     }
   }
 
@@ -558,9 +558,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   private[this] def getFormats(format: Option[String], formats: Seq[String]): Seq[String] = {
-    var newFormats: Seq[String] = formats.map(f => f.toUpperCase)
-    format.filter(_ => newFormats.isEmpty ).foreach(f => newFormats :+= f.toUpperCase)
-    newFormats
+    val upperCaseFormats: Seq[String] = formats.map(f => f.toUpperCase)
+    (upperCaseFormats /: format.filter(_ => upperCaseFormats.isEmpty ))(_ :+ _)
   }
 
 }
