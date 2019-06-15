@@ -3,6 +3,20 @@ The sbt-dependency-check plugin allows projects to monitor dependent libraries f
 (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
 which already offers several integrations with other build and continuous integration systems.
 For more information on how OWASP DependencyCheck works and how to read the reports check the [project's documentation](https://jeremylong.github.io/DependencyCheck/index.html).
+
+## Table of contents
+* [Getting started](#getting-started)
+* [Usage](#usage)
+   * [Tasks](#tasks)
+   * [Configuration](#configuration)
+      * [Analyzer Configuration](#analyzer-configuration)
+      * [Advanced Configuration](#advanced-configuration)
+   * [Multi-Project setup](#multi-project-setup)
+   * [Changing Log Level](#changing-log-level)
+   * [Global Plugin Configuration](#global-plugin-configuration)
+   * [Running behind a proxy](#running-behind-a-proxy)
+* [License](#license)
+
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
@@ -120,23 +134,6 @@ dependencyCheckDatabaseUser | The username used when connecting to the database.
 dependencyCheckDatabasePassword | The password used when connecting to the database. |
 dependencyCheckCpeStartsWith | The starting String to identify the CPEs that are qualified to be imported. | 
 
-#### Changing Log Level
-Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
-##### SBT >= v1.0.0
-```
-logLevel in dependencyCheck := Level.Debug
-```
-and add `-Dlog4j2.level=debug` when running a check:
-```
-sbt -Dlog4j2.level=debug dependencyCheck
-```
-##### SBT <= v0.13.x
-```
-logLevel := Level.Debug
-initialize ~= { _ =>
-    sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
-}
-```
 ### Multi-Project setup
 
 Add all plugin settings to commonSettings that you pass to your projects.
@@ -182,6 +179,24 @@ The only settings, that are supported to work for `aggregate()` and `dependsOn()
 * `dependencyCheckSkipOptionalScope`
 
 You can set these individually for each project.
+
+### Changing Log Level
+Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
+#### SBT >= v1.0.0
+```
+logLevel in dependencyCheck := Level.Debug
+```
+and add `-Dlog4j2.level=debug` when running a check:
+```
+sbt -Dlog4j2.level=debug dependencyCheck
+```
+#### SBT <= v0.13.x
+```
+logLevel := Level.Debug
+initialize ~= { _ =>
+    sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
+}
+```
 
 ### Global Plugin Configuration
 If you want to apply some configuration for all your SBT projects you can add them as Global Settings:
