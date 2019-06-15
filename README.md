@@ -122,6 +122,15 @@ dependencyCheckCpeStartsWith | The starting String to identify the CPEs that are
 
 #### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
+##### SBT >= v1.0.0
+```
+logLevel in dependencyCheck := Level.Debug
+```
+and add `-Dlog4j2.level=debug` when running a check:
+```
+sbt -Dlog4j2.level=debug dependencyCheck
+```
+##### SBT <= v0.13.x
 ```
 logLevel := Level.Debug
 initialize ~= { _ =>
