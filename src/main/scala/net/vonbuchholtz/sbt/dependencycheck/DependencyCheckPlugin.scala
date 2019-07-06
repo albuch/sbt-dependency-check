@@ -55,6 +55,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOSSIndexAnalyzerEnabled := None,
     dependencyCheckOSSIndexAnalyzerUrl := None,
     dependencyCheckOSSIndexAnalyzerUseCache := None,
+    dependencyCheckOSSIndexAnalyzerUsername := None,
+    dependencyCheckOSSIndexAnalyzerPassword := None,
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
@@ -91,6 +93,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArtifactoryAnalyzerUsername := None,
     dependencyCheckArtifactoryAnalyzerApiToken := None,
     dependencyCheckArtifactoryAnalyzerBearerToken := None,
+    dependencyCheckGolangDepEnabled := None,
+    dependencyCheckGolangModEnabled := None,
+    dependencyCheckPathToGo := None,
 
     // Advanced configuration
     dependencyCheckCveUrlModified := None,

@@ -58,6 +58,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_OSSINDEX_URL, "dependencyCheckOSSIndexAnalyzerUrl", log)
     logBooleanSetting(ANALYZER_OSSINDEX_USE_CACHE, "dependencyCheckOSSIndexAnalyzerUseCache", log)
+    logStringSetting(ANALYZER_OSSINDEX_USER, "dependencyCheckOSSIndexAnalyzerUsername", log)
+    logStringSetting(ANALYZER_OSSINDEX_PASSWORD, "dependencyCheckOSSIndexAnalyzerPassword", log)
     logBooleanSetting(ANALYZER_NEXUS_ENABLED, "dependencyCheckNexusAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_NEXUS_URL, "dependencyCheckNexusUrl", log)
     logBooleanSetting(ANALYZER_NEXUS_USES_PROXY, "dependencyCheckNexusUsesProxy", log)
@@ -95,6 +97,9 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ANALYZER_ARTIFACTORY_API_USERNAME, "dependencyCheckArtifactoryAnalyzerUsername", log)
     logStringSetting(ANALYZER_ARTIFACTORY_API_TOKEN, "dependencyCheckArtifactoryAnalyzerApiToken", log)
     logStringSetting(ANALYZER_ARTIFACTORY_BEARER_TOKEN, "dependencyCheckArtifactoryAnalyzerBearerToken", log)
+    logBooleanSetting(ANALYZER_GOLANG_DEP_ENABLED, "dependencyCheckGolangDepEnabled", log)
+    logBooleanSetting(ANALYZER_GOLANG_MOD_ENABLED, "dependencyCheckGolangModEnabled", log)
+    logFileSetting(ANALYZER_GOLANG_PATH, "dependencyCheckPathToGo", log)
 
     // Advanced Configuration
     logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
