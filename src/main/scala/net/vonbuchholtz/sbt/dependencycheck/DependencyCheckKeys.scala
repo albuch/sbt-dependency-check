@@ -35,7 +35,9 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckOSSIndexAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the OSS Index Analyzer should be used.")
 	lazy val dependencyCheckOSSIndexAnalyzerUrl = settingKey[Option[URL]]("Sets the URL to the OSS Index repository.")
 	lazy val dependencyCheckOSSIndexAnalyzerUseCache = settingKey[Option[Boolean]]("Sets whether the OSS Index  Analyzer will cache results.")
-	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superceded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation.")
+	lazy val dependencyCheckOSSIndexAnalyzerUsername = settingKey[Option[String]]("The username to use for the Sonatype OSS Index service.")
+	lazy val dependencyCheckOSSIndexAnalyzerPassword = settingKey[Option[String]]("The password to use for the Sonatype OSS Index service.")
+	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation.")
 	lazy val dependencyCheckNexusUrl = settingKey[Option[URL]]("Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled.")
 	lazy val dependencyCheckNexusUsesProxy = settingKey[Option[Boolean]]("Whether or not the defined proxy should be used when connecting to Nexus.")
 	lazy val dependencyCheckNexusUser = settingKey[Option[String]]("The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection.")
@@ -71,6 +73,9 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckArtifactoryAnalyzerUsername = settingKey[Option[String]]("The user name (only used with API token) to connect to Artifactory instance.")
 	lazy val dependencyCheckArtifactoryAnalyzerApiToken = settingKey[Option[String]]("The API token to connect to Artifactory instance.")
 	lazy val dependencyCheckArtifactoryAnalyzerBearerToken = settingKey[Option[String]]("he bearer token to connect to Artifactory instance.")
+	lazy val dependencyCheckGolangDepEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Golang Dependency Analyzer should be used.")
+	lazy val dependencyCheckGolangModEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Golang Module Analyzer should be used. Requires `go` to be installed.")
+	lazy val dependencyCheckPathToGo = settingKey[Option[File]]("The path to the \"go\" runtime.")
 
 	// Advanced configuration
 	lazy val dependencyCheckCveUrlModified = settingKey[Option[URL]]("URL for the modified CVE JSON data feed. ")

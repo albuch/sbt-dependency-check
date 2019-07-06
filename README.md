@@ -81,6 +81,8 @@ dependencyCheckCentralAnalyzerUseCache | Sets whether the Central Analyer will c
 dependencyCheckOSSIndexAnalyzerEnabled | Sets whether the OSS Index Analyzer will be enabled. | true
 dependencyCheckOSSIndexAnalyzerUrl | URL of the Sonatype OSS Index service. | https://ossindex.sonatype.org
 dependencyCheckOSSIndexAnalyzerUseCache | Sets whether the OSS Index Analyzer will cache results. Cached results expire after 24 hours. | true
+dependencyCheckOSSIndexAnalyzerUsername | The optional username to use for the Sonatype OSS Index service. Note: an account with OSS Index is not required. | 
+dependencyCheckOSSIndexAnalyzerPassword | The optional password to use for the Sonatype OSS Index service. | 
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
@@ -117,6 +119,9 @@ dependencyCheckArtifactoryAnalyzerParallelAnalysis | Sets whether the Artifactor
 dependencyCheckArtifactoryAnalyzerUsername | The user name (only used with API token) to connect to Artifactory instance. | 
 dependencyCheckArtifactoryAnalyzerApiToken | The API token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead  | 
 dependencyCheckArtifactoryAnalyzerBearerToken | The bearer token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead | 
+dependencyCheckGolangDepEnabled | Sets whether or not the experimental Golang Dependency Analyzer should be used. | true
+dependencyCheckGolangModEnabled | Sets whether or not the experimental Golang Module Analyzer should be used. Requires `go` to be installed. | true
+dependencyCheckPathToGo | The path to the "go" runtime. | 
 
 #### Advanced Configuration
 The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.
