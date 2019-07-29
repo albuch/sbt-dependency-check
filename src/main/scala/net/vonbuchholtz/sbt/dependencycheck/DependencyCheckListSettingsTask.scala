@@ -82,6 +82,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, "dependencyCheckSwiftEnabled", log)
     logBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, "dependencyCheckBundleAuditEnabled", log)
     logFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, "dependencyCheckPathToBundleAudit", log)
+    logStringSetting(ANALYZER_BUNDLE_AUDIT_WORKING_DIRECTORY, "dependencyCheckBundleAuditWorkingDirectory", log)
     logBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, "dependencyCheckAssemblyAnalyzerEnabled", log)
     logFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, "dependencyCheckPathToDotNETCore", log)
     logStringSetting(CVE_CPE_STARTS_WITH_FILTER, "dependencyCheckCpeStartsWith", log)
