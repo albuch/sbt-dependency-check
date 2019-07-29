@@ -537,7 +537,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     scanSet.foreach(file => engine.scan(file))
 
     engine.analyzeDependencies()
-    reportFormats.foreach(reportFormat => engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat))
+    reportFormats.foreach(reportFormat => engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat, null))
   }
 
   def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
