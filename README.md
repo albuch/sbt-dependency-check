@@ -1,4 +1,4 @@
-# sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/25bd3b5e4f8e4ee78cfbdca62de31ca7)](https://app.codacy.com/app/albuch/sbt-dependency-check?utm_source=github.com&utm_medium=referral&utm_content=albuch/sbt-dependency-check&utm_campaign=Badge_Grade_Dashboard) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+# sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/25bd3b5e4f8e4ee78cfbdca62de31ca7)](https://app.codacy.com/app/albuch/sbt-dependency-check?utm_source=github.com&utm_medium=referral&utm_content=albuch/sbt-dependency-check&utm_campaign=Badge_Grade_Dashboard) [![Known Vulnerabilities](https://snyk.io/test/github/albuch/sbt-dependency-check/badge.svg)](https://snyk.io/test/github/albuch/sbt-dependency-check) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt) 
 The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
 (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
 which already offers several integrations with other build and continuous integration systems.
@@ -20,7 +20,7 @@ For more information on how OWASP DependencyCheck works and how to read the repo
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0.0")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.0")
 
 For sbt 1.0.0+ use version `0.1.10` or higher.
 
@@ -50,7 +50,7 @@ Setting | Description | Default Value
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
 dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
-dependencyCheckJUnitFailOnCVSS | If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure. The default value is 0 - all vulnerabilities are considered a failure.| 0
+dependencyCheckJUnitFailBuildOnCVSS | If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure. The default value is 0 - all vulnerabilities are considered a failure.| 0
 dependencyCheckFormat | The report format to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). This setting is ignored if dependencyCheckReportFormats is set. | HTML
 dependencyCheckFormats | A sequence of report formats to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). | 
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
@@ -81,6 +81,8 @@ dependencyCheckCentralAnalyzerUseCache | Sets whether the Central Analyer will c
 dependencyCheckOSSIndexAnalyzerEnabled | Sets whether the OSS Index Analyzer will be enabled. | true
 dependencyCheckOSSIndexAnalyzerUrl | URL of the Sonatype OSS Index service. | https://ossindex.sonatype.org
 dependencyCheckOSSIndexAnalyzerUseCache | Sets whether the OSS Index Analyzer will cache results. Cached results expire after 24 hours. | true
+dependencyCheckOSSIndexAnalyzerUsername | The optional username to use for the Sonatype OSS Index service. Note: an account with OSS Index is not required. | 
+dependencyCheckOSSIndexAnalyzerPassword | The optional password to use for the Sonatype OSS Index service. | 
 dependencyCheckNexusAnalyzerEnabled | Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation. | false
 dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled. | <https://repository.sonatype.org/service/local/>
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
@@ -102,7 +104,8 @@ dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET N
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
 dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
-dependencyCheckPathToBundleAudit| The path to bundle audit. |
+dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
+dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
@@ -117,6 +120,9 @@ dependencyCheckArtifactoryAnalyzerParallelAnalysis | Sets whether the Artifactor
 dependencyCheckArtifactoryAnalyzerUsername | The user name (only used with API token) to connect to Artifactory instance. | 
 dependencyCheckArtifactoryAnalyzerApiToken | The API token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead  | 
 dependencyCheckArtifactoryAnalyzerBearerToken | The bearer token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead | 
+dependencyCheckGolangDepEnabled | Sets whether or not the experimental Golang Dependency Analyzer should be used. | true
+dependencyCheckGolangModEnabled | Sets whether or not the experimental Golang Module Analyzer should be used. Requires `go` to be installed. | true
+dependencyCheckPathToGo | The path to the "go" runtime. | 
 
 #### Advanced Configuration
 The following properties can be configured in the plugin. However, they are less frequently changed. One exception may be the cvedUrl properties, which can be used to host a mirror of the NVD within an enterprise environment.
@@ -203,7 +209,7 @@ If you want to apply some configuration for all your SBT projects you can add th
 
 1. Add the plugin to `~/sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.0.0")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.0")
     ```
 
 1. Add settings at `~/.sbt/1.0/global.sbt` using their fully qualified name (including package and nested object structure). E.g.

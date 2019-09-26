@@ -55,6 +55,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOSSIndexAnalyzerEnabled := None,
     dependencyCheckOSSIndexAnalyzerUrl := None,
     dependencyCheckOSSIndexAnalyzerUseCache := None,
+    dependencyCheckOSSIndexAnalyzerUsername := None,
+    dependencyCheckOSSIndexAnalyzerPassword := None,
     dependencyCheckNexusAnalyzerEnabled := None,
     dependencyCheckNexusUrl := None,
     dependencyCheckNexusUsesProxy := None,
@@ -77,6 +79,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckSwiftEnabled := None,
     dependencyCheckBundleAuditEnabled := None,
     dependencyCheckPathToBundleAudit := None,
+    dependencyCheckBundleAuditWorkingDirectory := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
     dependencyCheckPathToDotNETCore := None,
     dependencyCheckRetireJSAnalyzerEnabled := None,
@@ -91,6 +94,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArtifactoryAnalyzerUsername := None,
     dependencyCheckArtifactoryAnalyzerApiToken := None,
     dependencyCheckArtifactoryAnalyzerBearerToken := None,
+    dependencyCheckGolangDepEnabled := None,
+    dependencyCheckGolangModEnabled := None,
+    dependencyCheckPathToGo := None,
 
     // Advanced configuration
     dependencyCheckCveUrlModified := None,
@@ -216,6 +222,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
+    setFileSetting(ANALYZER_BUNDLE_AUDIT_WORKING_DIRECTORY, dependencyCheckBundleAuditWorkingDirectory.value)
     setBooleanSetting(ANALYZER_RETIREJS_ENABLED, dependencyCheckRetireJSAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, dependencyCheckRetireJSAnalyzerRepoJSUrl.value)
     setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
@@ -530,7 +537,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     scanSet.foreach(file => engine.scan(file))
 
     engine.analyzeDependencies()
-    reportFormats.foreach(reportFormat => engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat))
+    reportFormats.foreach(reportFormat => engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat, null))
   }
 
   def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
