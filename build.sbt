@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
 )
 libraryDependencies += {
 	appConfiguration.value.provider.id.version match {
-		case sv if sv.startsWith("0.13") => "org.slf4j" % "slf4j-simple" % "1.7.25"
+		case sv if sv.startsWith("0.13") => "org.slf4j" % "slf4j-simple" % "1.7.28"
 	}
 }
 
