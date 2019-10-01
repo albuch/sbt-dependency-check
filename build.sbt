@@ -12,7 +12,7 @@ crossSbtVersions := Vector("0.13.18", "1.3.2")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
-	"commons-collections" % "commons-collections" % "3.2.2",
+	"commons-collections" % "commons-collections" % "20040102.233541",
 	"org.owasp" % "dependency-check-core" % "5.2.2"
 )
 libraryDependencies += {
