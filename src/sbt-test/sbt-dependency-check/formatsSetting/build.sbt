@@ -11,3 +11,4 @@ libraryDependencies ++= Seq(
 )
 
 dependencyCheckFormats := Seq("XML", "JSON")
+dependencyCheckFormat := "HTML"

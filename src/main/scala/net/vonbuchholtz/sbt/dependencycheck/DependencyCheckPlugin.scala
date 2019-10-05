@@ -570,7 +570,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   private[this] def getFormats(format: Option[String], formats: Seq[String]): Seq[String] = {
     val upperCaseFormats: Seq[String] = formats.map(f => f.toUpperCase)
-    (upperCaseFormats /: format.filter(_ => upperCaseFormats.isEmpty ))(_ :+ _)
+    format.filter(_ => upperCaseFormats.isEmpty ).foldLeft(upperCaseFormats)(_ :+ _)
   }
 
 }

@@ -3,21 +3,23 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations.setNextVersion
 
-val sbtDependencyCheck = project in file(".")
+val sbtDependencyCheck = (project in file("."))
+	.enablePlugins(SbtPlugin)
 
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-crossSbtVersions := Vector("0.13.18", "1.3.2")
+crossSbtVersions := Vector("0.13.18", "1.2.8")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
 	"org.owasp" % "dependency-check-core" % "5.2.2"
 )
-libraryDependencies += {
+libraryDependencies ++= {
 	appConfiguration.value.provider.id.version match {
-		case sv if sv.startsWith("0.13") => "org.slf4j" % "slf4j-simple" % "1.7.28"
+		case sv if sv.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.28")
+		case _ => Seq.empty
 	}
 }
 
@@ -29,7 +31,6 @@ dependencyCheckSkipProvidedScope := true
 dependencyCheckFormat := "ALL"
 dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
 
-ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := { scriptedLaunchOpts.value ++
 	Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
 }
@@ -88,7 +89,7 @@ lazy val setReleaseVersionInReadme: ReleaseStep = ReleaseStep(action = { st: Sta
 	st.log.info("Setting version to '%s' in README." format currentV)
 	val file: String = "README.md"
 	var readme: String = read(file)
-	readme = readme.replaceAll("(addSbtPlugin\\(\"net.vonbuchholtz\" % \"sbt-dependency-check\" % \")[^\\\"]+", "$1" + currentV)
+	readme = readme.replaceAll("(addSbtPlugin\\(\"net.vonbuchholtz\" % \"sbt-dependency-check\" % \")[^\"]+", "$1" + currentV)
 	write(file, readme)
 	st
 })
