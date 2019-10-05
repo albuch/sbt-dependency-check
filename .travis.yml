@@ -6,9 +6,7 @@ matrix:
     jdk: openjdk8
   - env: SBT_VERSION="1.2.8"
     jdk: openjdk8
-  - env: SBT_VERSION="1.3.2"
-    jdk: openjdk8
-  - env: SBT_VERSION="1.3.2"
+  - env: SBT_VERSION="1.2.8"
     jdk: openjdk11
 script:
   - sbt "^^ ${SBT_VERSION}" clean test scripted
@@ -24,5 +22,3 @@ before_cache:
 before_script:
   - rm -rf $HOME/.ivy2/cache/org.owasp/dependency-check-utils/jars/data
 sudo: false
-# commented out until sbt-coveralls plugin is fixed
-#after_success: "sbt coveralls"
