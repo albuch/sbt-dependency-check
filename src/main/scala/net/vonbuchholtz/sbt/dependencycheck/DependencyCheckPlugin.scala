@@ -267,7 +267,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
         val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
-        var checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
+        val checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
         checkDependencies ++= logAddDependencies((externalDependencyClasspath in Compile).value, Compile, log)
 
         val skipRuntimeScope = dependencyCheckSkipRuntimeScope.value
@@ -333,17 +333,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
     val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
-    var aggregatedDependencies = scala.collection.mutable.Set[Attributed[File]]()
+    val aggregatedDependencies = scala.collection.mutable.Set[Attributed[File]]()
     val compileDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateCompileTask.all(aggregateCompileFilter).value
-    aggregatedDependencies = addClasspathDependencies(compileDependencies, aggregatedDependencies, log)
+    aggregatedDependencies ++= compileDependencies.flatMap(deps => deps._3)
     val runtimeDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateRuntimeTask.all(aggregateRuntimeFilter).value
-    aggregatedDependencies = addClasspathDependencies(runtimeDependencies, aggregatedDependencies, log)
+    aggregatedDependencies ++= runtimeDependencies.flatMap(deps => deps._3)
     val testDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateTestTask.all(aggregateTestFilter).value
-    aggregatedDependencies = addClasspathDependencies(testDependencies, aggregatedDependencies, log)
+    aggregatedDependencies ++= testDependencies.flatMap(deps => deps._3)
     val providedDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateProvidedTask.all(aggregateProvidedFilter).value
-    aggregatedDependencies = removeClasspathDependencies(providedDependencies, aggregatedDependencies, log)
+    aggregatedDependencies --= providedDependencies.flatMap(deps => deps._3)
     val optionalDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateOptionalTask.all(aggregateOptionalFilter).value
-    aggregatedDependencies = removeClasspathDependencies(optionalDependencies, aggregatedDependencies, log)
+    aggregatedDependencies --= optionalDependencies.flatMap(deps => deps._3)
 
     val scanSet: Seq[File] = (dependencyCheckScanSet.value.map {
       _ ** "*"
@@ -422,26 +422,6 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       Def.task {
         (thisProjectRef.value, configuration.value, Classpaths.managedJars(configuration.value, classpathTypes.value, update.value))
       }
-  }
-
-  def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: scala.collection.mutable.Set[Attributed[File]], log: Logger): scala.collection.mutable.Set[Attributed[File]] = {
-    var newClasspath = checkClasspath
-    for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
-      log.debug(s"Adding ${conf.name} classpath for project ${projectRef.project}")
-      classpath.foreach(f => log.debug(s"\t${f.data.getName}"))
-      newClasspath ++= classpath
-    }
-    newClasspath
-  }
-
-  def removeClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: scala.collection.mutable.Set[Attributed[File]], log: Logger): scala.collection.mutable.Set[Attributed[File]] = {
-    var newClasspath = checkClasspath
-    for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
-      log.debug(s"Removing ${conf.name} classpath for project ${projectRef.project}")
-      classpath.foreach(f => log.info(s"\t${f.data.getName}"))
-      newClasspath --= classpath
-    }
-    newClasspath
   }
 
   def updateTask: Def.Initialize[Task[Unit]] = Def.task {
