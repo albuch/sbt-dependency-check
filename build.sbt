@@ -36,9 +36,10 @@ scriptedLaunchOpts := { scriptedLaunchOpts.value ++
 }
 scriptedBufferLog := false
 
-publishTo := sonatypePublishTo.value
+publishTo := sonatypePublishToBundle.value
 publishMavenStyle := true
 sonatypeProfileName := "net.vonbuchholtz"
+Global / useGpg := false
 
 // To sync with Maven central, you need to supply the following information:
 pomExtra in Global := {
@@ -76,7 +77,7 @@ releaseProcess := Seq[ReleaseStep](
 	setReleaseVersionInReadme,
 	tagRelease,
 	releaseStepCommandAndRemaining("^ publishSigned"),
-	releaseStepCommandAndRemaining("sonatypeReleaseAll"),
+	releaseStepCommandAndRemaining("sonatypeBundleRelease"),
 	setNextVersion,
 	commitNextVersion
 	//,pushChanges
