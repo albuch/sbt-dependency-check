@@ -17,8 +17,8 @@ libraryDependencies ++= Seq(
 	"org.owasp" % "dependency-check-core" % "5.2.2"
 )
 libraryDependencies ++= {
-	appConfiguration.value.provider.id.version match {
-		case sv if sv.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.28")
+	(sbtBinaryVersion in pluginCrossBuild).value match {
+		case version if version.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.28")
 		case _ => Seq.empty
 	}
 }
