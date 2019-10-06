@@ -39,6 +39,7 @@ scriptedBufferLog := false
 publishTo := sonatypePublishToBundle.value
 publishMavenStyle := true
 sonatypeProfileName := "net.vonbuchholtz"
+Global / useGpg := false
 
 // To sync with Maven central, you need to supply the following information:
 pomExtra in Global := {
