@@ -36,7 +36,7 @@ scriptedLaunchOpts := { scriptedLaunchOpts.value ++
 }
 scriptedBufferLog := false
 
-publishTo := sonatypePublishTo.value
+publishTo := sonatypePublishToBundle.value
 publishMavenStyle := true
 sonatypeProfileName := "net.vonbuchholtz"
 
@@ -76,7 +76,7 @@ releaseProcess := Seq[ReleaseStep](
 	setReleaseVersionInReadme,
 	tagRelease,
 	releaseStepCommandAndRemaining("^ publishSigned"),
-	releaseStepCommandAndRemaining("sonatypeReleaseAll"),
+	releaseStepCommandAndRemaining("sonatypeBundleRelease"),
 	setNextVersion,
 	commitNextVersion
 	//,pushChanges
