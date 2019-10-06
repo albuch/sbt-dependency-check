@@ -101,5 +101,9 @@ def write(path: String, txt: String): Unit = {
 	Files.write(Paths.get(path), txt.getBytes(StandardCharsets.UTF_8))
 }
 
-def read(path: String): String =
-	scala.io.Source.fromFile(path, "UTF-8").mkString
+def read(path: String): String = {
+	val source = scala.io.Source.fromFile(path, "UTF-8")
+	val content = source.mkString
+	source.close()
+	content
+}
