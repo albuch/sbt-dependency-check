@@ -38,7 +38,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckOSSIndexAnalyzerUsername = settingKey[Option[String]]("The username to use for the Sonatype OSS Index service.")
 	lazy val dependencyCheckOSSIndexAnalyzerPassword = settingKey[Option[String]]("The password to use for the Sonatype OSS Index service.")
 	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation.")
-	lazy val dependencyCheckNexusUrl = settingKey[Option[URL]]("Defines the Nexus Server’s web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled.")
+	lazy val dependencyCheckNexusUrl = settingKey[Option[URL]]("Defines the Nexus Server's web service end point (example http://domain.enterprise/service/local/). If not set the Nexus Analyzer will be disabled.")
 	lazy val dependencyCheckNexusUsesProxy = settingKey[Option[Boolean]]("Whether or not the defined proxy should be used when connecting to Nexus.")
 	lazy val dependencyCheckNexusUser = settingKey[Option[String]]("The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection.")
 	lazy val dependencyCheckNexusPassword = settingKey[Option[String]]("The password to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection.")

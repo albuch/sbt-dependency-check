@@ -24,7 +24,7 @@ object DependencyCheckListSettingsTask {
 
     def logFileSetting(key: String, setting: String, log: Logger): Unit = {
       val someFile: Option[File] = Option(settings.getFile(key))
-      log.info(s"\t$setting: ${if(someFile.isDefined) someFile.get.getPath else ""}")
+      log.info(s"\t$setting: ${someFile.getOrElse(new File("")).getPath}")
     }
 
     def logUrlSetting(key: String, setting: String, log: Logger): Unit = {

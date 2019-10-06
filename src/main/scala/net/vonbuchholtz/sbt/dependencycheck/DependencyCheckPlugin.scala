@@ -267,7 +267,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
         val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
-        var checkDependencies = Set[Attributed[File]]()
+        var checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
         checkDependencies ++= logAddDependencies((externalDependencyClasspath in Compile).value, Compile, log)
 
         val skipRuntimeScope = dependencyCheckSkipRuntimeScope.value
@@ -301,7 +301,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
         withEngine(initializeSettings.value) { engine =>
           try {
-            createReport(engine, checkDependencies, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
+            createReport(engine, checkDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
             determineTaskFailureStatus(cvssScore, engine, name.value)
           } catch {
             case e: VulnerabilityFoundException =>
@@ -333,7 +333,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
     val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
-    var aggregatedDependencies = Set[Attributed[File]]()
+    var aggregatedDependencies = scala.collection.mutable.Set[Attributed[File]]()
     val compileDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateCompileTask.all(aggregateCompileFilter).value
     aggregatedDependencies = addClasspathDependencies(compileDependencies, aggregatedDependencies, log)
     val runtimeDependencies: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])] = aggregateRuntimeTask.all(aggregateRuntimeFilter).value
@@ -352,7 +352,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }).get
     withEngine(initializeSettings.value) { engine =>
       try {
-        createReport(engine, aggregatedDependencies, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
+        createReport(engine, aggregatedDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
         determineTaskFailureStatus(cvssScore, engine, name.value)
       } catch {
         case e: VulnerabilityFoundException =>
@@ -424,7 +424,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
 
-  def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
+  def addClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: scala.collection.mutable.Set[Attributed[File]], log: Logger): scala.collection.mutable.Set[Attributed[File]] = {
     var newClasspath = checkClasspath
     for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
       log.debug(s"Adding ${conf.name} classpath for project ${projectRef.project}")
@@ -434,7 +434,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     newClasspath
   }
 
-  def removeClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: Set[Attributed[File]], log: Logger): Set[Attributed[File]] = {
+  def removeClasspathDependencies(classpathToAdd: Seq[(ProjectRef, Configuration, Seq[Attributed[File]])], checkClasspath: scala.collection.mutable.Set[Attributed[File]], log: Logger): scala.collection.mutable.Set[Attributed[File]] = {
     var newClasspath = checkClasspath
     for ((projectRef, conf, classpath) <- classpathToAdd if classpath.nonEmpty) {
       log.debug(s"Removing ${conf.name} classpath for project ${projectRef.project}")
