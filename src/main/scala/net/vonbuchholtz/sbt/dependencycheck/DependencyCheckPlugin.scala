@@ -14,6 +14,7 @@ import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
+import java.io.{StringWriter, PrintWriter}
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
@@ -359,7 +360,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           log.error(s"${e.getLocalizedMessage}")
           throw e
         case e: ExceptionCollection =>
-          e.getExceptions.asScala.foreach(t => log.error(s"Failed creating report: ${t.getLocalizedMessage} - ${Option(t.getCause).fold("")(cause => cause.getLocalizedMessage)}"))
+          // We have to log the full stacktrace here, since SBT doesn't use `printStackTrace`
+          // when logging exceptions.
+          // See https://github.com/albuch/sbt-dependency-check/issues/98
+          val sw = new StringWriter
+          e.printStackTrace(new PrintWriter(sw, true))
+          log.error(s"Failed creating report: $sw")
           throw e
         case e: Exception =>
           log.error(s"Failed creating report: ${e.getLocalizedMessage}")
