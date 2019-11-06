@@ -14,6 +14,7 @@ import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
+import scala.util.control.NonFatal
 import java.io.{StringWriter, PrintWriter}
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
@@ -304,7 +305,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           try {
             createReport(engine, checkDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
             determineTaskFailureStatus(cvssScore, engine, name.value)
-          } catch { case e: Exception =>
+          } catch { case NonFatal(e) =>
             logFailure(log, e)
             throw e
           }
@@ -351,7 +352,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       try {
         createReport(engine, aggregatedDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
         determineTaskFailureStatus(cvssScore, engine, name.value)
-      } catch { case e: Exception =>
+      } catch { case NonFatal(e) =>
         logFailure(log, e)
         throw e
       }
@@ -543,7 +544,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     format.filter(_ => upperCaseFormats.isEmpty ).foldLeft(upperCaseFormats)(_ :+ _)
   }
 
-  private def logFailure(log: Logger, ex: Exception): Unit = ex match {
+  private def logFailure(log: Logger, ex: Throwable): Unit = ex match {
     case e: VulnerabilityFoundException =>
       log.error(s"${e.getLocalizedMessage}")
     case e: ExceptionCollection =>
@@ -552,7 +553,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           e.getExceptions.asScala.toVector.flatMap { t =>
             s"  ${t.getLocalizedMessage}" +:
               Option(t.getCause).map { cause =>
-                s"    ${cause.getLocalizedMessage}"
+                s"  - ${cause.getLocalizedMessage}"
               }.toVector
           }
       ).mkString("\n")
@@ -566,7 +567,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         e.printStackTrace(new PrintWriter(sw, true))
         log.error(sw.toString)
       }
-    case e: Exception =>
+    case e =>
       log.error(s"Failed creating report: ${e.getLocalizedMessage}")
   }
 }
