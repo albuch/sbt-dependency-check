@@ -14,6 +14,8 @@ import sbt.{Def, File, ScopeFilter, _}
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
+import scala.util.control.NonFatal
+import java.io.{StringWriter, PrintWriter}
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
@@ -303,13 +305,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           try {
             createReport(engine, checkDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
             determineTaskFailureStatus(cvssScore, engine, name.value)
-          } catch {
-            case e: VulnerabilityFoundException =>
-              log.error(s"${e.getLocalizedMessage}")
-              throw e
-            case e: Exception =>
-              log.error(s"Failed creating report: ${e.getLocalizedMessage}")
-              throw e
+          } catch { case NonFatal(e) =>
+            logFailure(log, e)
+            throw e
           }
         }
 
@@ -354,16 +352,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       try {
         createReport(engine, aggregatedDependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
         determineTaskFailureStatus(cvssScore, engine, name.value)
-      } catch {
-        case e: VulnerabilityFoundException =>
-          log.error(s"${e.getLocalizedMessage}")
-          throw e
-        case e: ExceptionCollection =>
-          e.getExceptions.asScala.foreach(t => log.error(s"Failed creating report: ${t.getLocalizedMessage} - ${Option(t.getCause).fold("")(cause => cause.getLocalizedMessage)}"))
-          throw e
-        case e: Exception =>
-          log.error(s"Failed creating report: ${e.getLocalizedMessage}")
-          throw e
+      } catch { case NonFatal(e) =>
+        logFailure(log, e)
+        throw e
       }
     }
   }
@@ -553,4 +544,30 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     format.filter(_ => upperCaseFormats.isEmpty ).foldLeft(upperCaseFormats)(_ :+ _)
   }
 
+  private def logFailure(log: Logger, ex: Throwable): Unit = ex match {
+    case e: VulnerabilityFoundException =>
+      log.error(s"${e.getLocalizedMessage}")
+    case e: ExceptionCollection =>
+      val prettyMessage = (
+        "Failed creating report:" +:
+          e.getExceptions.asScala.toVector.flatMap { t =>
+            s"  ${t.getLocalizedMessage}" +:
+              Option(t.getCause).map { cause =>
+                s"  - ${cause.getLocalizedMessage}"
+              }.toVector
+          }
+      ).mkString("\n")
+      log.error(prettyMessage)
+
+      // We have to log the full stacktraces here, since SBT doesn't use `printStackTrace`
+      // when logging exceptions.
+      // See https://github.com/albuch/sbt-dependency-check/issues/98
+      e.getExceptions.asScala.foreach { t =>
+        val sw = new StringWriter
+        e.printStackTrace(new PrintWriter(sw, true))
+        log.error(sw.toString)
+      }
+    case e =>
+      log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+  }
 }
