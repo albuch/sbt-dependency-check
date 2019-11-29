@@ -14,7 +14,7 @@ sbtPlugin := true
 useCoursier := false // FIXME: remove once https://github.com/sbt/sbt/issues/4706 has been removed
 
 libraryDependencies ++= Seq(
-	"commons-collections" % "commons-collections" % "3.2.2",
+	"commons-collections" % "commons-collections" % "20031027.000000",
 	"org.owasp" % "dependency-check-core" % "5.2.4"
 )
 libraryDependencies ++= {
