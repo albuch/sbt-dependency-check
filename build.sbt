@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
 )
 libraryDependencies ++= {
 	(sbtBinaryVersion in pluginCrossBuild).value match {
-		case version if version.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.29")
+		case version if version.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.30")
 		case _ => Seq.empty
 	}
 }
