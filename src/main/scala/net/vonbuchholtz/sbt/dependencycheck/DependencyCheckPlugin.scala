@@ -17,8 +17,6 @@ import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 import java.io.{PrintWriter, StringWriter}
 
-import net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.{compileDependenciesTask, optionalDependenciesTask, providedDependenciesTask, runtimeDependenciesTask, testDependenciesTask}
-
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   object autoImport extends DependencyCheckKeys
@@ -117,10 +115,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckUseSbtModuleIdAsGav := None,
     dependencyCheck := checkTask.value,
     dependencyCheckAggregate := aggregateTask.value,
+    dependencyCheckAnyProject := anyProjectTask.value,
     dependencyCheckUpdateOnly := updateTask.value,
     dependencyCheckPurge := purgeTask.value,
     dependencyCheckListSettings := listSettingsTask.value,
     aggregate in dependencyCheckAggregate := false,
+    aggregate in dependencyCheckAnyProject := false,
     aggregate in dependencyCheckUpdateOnly := false,
     aggregate in dependencyCheckPurge := false,
     aggregate in dependencyCheckListSettings := false,
@@ -321,7 +321,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
-    log.info(s"Running aggregate-check for ${name.value}")
+    log.info(s"Running aggregate check for ${name.value}")
 
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
     val reportFormat: String = dependencyCheckFormat.value
@@ -335,6 +335,39 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencies ++= logAddDependencies(aggregateRuntimeFilter.value.flatten, Runtime, log)
     dependencies ++= logAddDependencies(aggregateTestFilter.value.flatten, Test, log)
     dependencies --= logRemoveDependencies(aggregateOptionalFilter.value.flatten, Optional, log)
+
+    log.info("Scanning following dependencies: ")
+    dependencies.foreach(f => log.info("\t" + f.data.getName))
+
+    val scanSet: Seq[File] = getScanSet.value
+
+    withEngine(initializeSettings.value) { engine =>
+      try {
+        createReport(engine, dependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
+        determineTaskFailureStatus(cvssScore, engine, name.value)
+      } catch { case NonFatal(e) =>
+        logFailure(log, e)
+        throw e
+      }
+    }
+  }
+
+  def anyProjectTask: Def.Initialize[Task[Unit]] = Def.task {
+    val log: Logger = streams.value.log
+    log.info(s"Running anyProject check for ${name.value}")
+
+    val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
+    val reportFormat: String = dependencyCheckFormat.value
+    val reportFormats: Seq[String] = dependencyCheckFormats.value
+    val cvssScore: Float = dependencyCheckFailBuildOnCVSS.value
+    val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
+
+    val dependencies = scala.collection.mutable.Set[Attributed[File]]()
+    dependencies ++= logAddDependencies(anyCompileFilter.value.flatten, Compile, log)
+    dependencies --= logRemoveDependencies(anyProvidedFilter.value.flatten, Provided, log)
+    dependencies ++= logAddDependencies(anyRuntimeFilter.value.flatten, Runtime, log)
+    dependencies ++= logAddDependencies(anyTestFilter.value.flatten, Test, log)
+    dependencies --= logRemoveDependencies(anyOptionalFilter.value.flatten, Optional, log)
 
     log.info("Scanning following dependencies: ")
     dependencies.foreach(f => log.info("\t" + f.data.getName))
