@@ -10,7 +10,7 @@ lazy val root = (project in file("."))
   .settings(
     libraryDependencies += "org.eclipse.jetty" % "jetty-runner" % "9.2.4.v20141103" % "provided",
     libraryDependencies += "commons-collections" % "commons-collections" % "3.2.1" % "optional",
-    dependencyCheckSkipTestScope := false,
+    dependencyCheckSkipTestScope := true,
     dependencyCheckSkipProvidedScope := true,
     dependencyCheckSkipOptionalScope := true,
     dependencyCheckFailBuildOnCVSS := 0
