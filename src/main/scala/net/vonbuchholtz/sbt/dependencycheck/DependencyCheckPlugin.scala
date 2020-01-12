@@ -27,6 +27,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   override def trigger: PluginTrigger = allRequirements
 
+  //noinspection TypeAnnotation
   override lazy val projectSettings = Seq(
     dependencyCheckFormat := "HTML",
     dependencyCheckFormats := Seq(),
@@ -260,6 +261,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
     val log: Logger = streams.value.log
+    muteJCS(log)
 
     if (!dependencyCheckSkip.value) {
       Def.task {
@@ -321,6 +323,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
+    muteJCS(log)
     log.info(s"Running aggregate check for ${name.value}")
 
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
@@ -354,6 +357,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def anyProjectTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
+    muteJCS(log)
     log.info(s"Running anyProject check for ${name.value}")
 
     val outputDir: File = dependencyCheckOutputDirectory.value.getOrElse(crossTarget.value)
@@ -445,8 +449,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
 
+  //noinspection MutatorLikeMethodIsParameterless
   def updateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
+    muteJCS(log)
     log.info(s"Running update-only for ${name.value}")
 
     withEngine(initializeSettings.value) { engine =>
@@ -456,6 +462,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
+    muteJCS(log)
     log.info(s"Running purge for ${name.value}")
     withEngine(initializeSettings.value) { engine =>
       DependencyCheckPurgeTask.purge(dependencyCheckConnectionString.value, engine.getSettings, log)
@@ -464,6 +471,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
+    muteJCS(log)
     log.info(s"Running list-settings for ${name.value}")
 
     withEngine(initializeSettings.value) { engine =>
@@ -599,5 +607,26 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
     case e =>
       log.error(s"Failed creating report: ${e.getLocalizedMessage}")
+  }
+
+  private def muteJCS(log: Logger): Unit = {
+    val noisyLoggers = List(
+      "org.apache.commons.jcs.auxiliary.disk.AbstractDiskCache",
+      "org.apache.commons.jcs.engine.memory.AbstractMemoryCache",
+      "org.apache.commons.jcs.engine.control.CompositeCache",
+      "org.apache.commons.jcs.auxiliary.disk.indexed.IndexedDiskCache",
+      "org.apache.commons.jcs.engine.control.CompositeCache",
+      "org.apache.commons.jcs.engine.memory.AbstractMemoryCache",
+      "org.apache.commons.jcs.engine.control.event.ElementEventQueue",
+      "org.apache.commons.jcs.engine.memory.AbstractDoubleLinkedListMemoryCache",
+      "org.apache.commons.jcs.auxiliary.AuxiliaryCacheConfigurator",
+      "org.apache.commons.jcs.engine.control.CompositeCacheManager",
+      "org.apache.commons.jcs.utils.threadpool.ThreadPoolManager",
+      "org.apache.commons.jcs.engine.control.CompositeCacheConfigurator"
+    )
+    noisyLoggers.foreach(logger => {
+      val log = java.util.logging.Logger.getLogger(logger)
+      log.setLevel(java.util.logging.Level.WARNING)
+    })
   }
 }
