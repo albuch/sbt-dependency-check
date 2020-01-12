@@ -287,11 +287,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         if (!skipRuntimeScope) {
           checkDependencies ++= logAddDependencies(runtimeClasspath, Runtime, log)
         }
-        if (!skipTestScope) {
-          checkDependencies ++= logAddDependencies(testClasspath, Test, log)
-        }
         if (skipProvidedScope) {
           checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypeValue, updateValue), Provided, log)
+        }
+        if (!skipTestScope) {
+          checkDependencies ++= logAddDependencies(testClasspath, Test, log)
         }
         if (skipOptionalScope) {
           checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypeValue, updateValue), Optional, log)
