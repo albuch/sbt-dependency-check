@@ -333,9 +333,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
     val dependencies = scala.collection.mutable.Set[Attributed[File]]()
     dependencies ++= logAddDependencies(compileDependenciesTask.all(anyCompileFilter).value.flatten, Compile, log)
+    dependencies --= logRemoveDependencies(providedDependenciesTask.all(anyProvidedFilter).value.flatten, Provided, log)
     dependencies ++= logAddDependencies(runtimeDependenciesTask.all(anyRuntimeFilter).value.flatten, Runtime, log)
     dependencies ++= logAddDependencies(testDependenciesTask.all(anyTestFilter).value.flatten, Test, log)
-    dependencies --= logRemoveDependencies(providedDependenciesTask.all(anyProvidedFilter).value.flatten, Provided, log)
     dependencies --= logRemoveDependencies(otionalDependenciesTask.all(anyOptionalFilter).value.flatten, Optional, log)
 
     log.info("Scanning following dependencies: ")
