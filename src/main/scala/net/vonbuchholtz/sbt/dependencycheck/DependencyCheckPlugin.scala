@@ -284,11 +284,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         val classpathTypeValue = classpathTypes.value
         val updateValue = update.value
 
-        if (!skipRuntimeScope) {
-          checkDependencies ++= logAddDependencies(runtimeClasspath, Runtime, log)
-        }
         if (skipProvidedScope) {
           checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Provided, classpathTypeValue, updateValue), Provided, log)
+        }
+        if (!skipRuntimeScope) {
+          checkDependencies ++= logAddDependencies(runtimeClasspath, Runtime, log)
         }
         if (!skipTestScope) {
           checkDependencies ++= logAddDependencies(testClasspath, Test, log)
@@ -393,36 +393,16 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }).get
   }
 
-  lazy val anyCompileFilter = Def.settingDyn {
-    compileDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Compile)))
-  }
-  lazy val anyRuntimeFilter = Def.settingDyn {
-    runtimeDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Runtime)))
-  }
-  lazy val anyTestFilter = Def.settingDyn {
-    testDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Test)))
-  }
-  lazy val anyProvidedFilter = Def.settingDyn {
-    providedDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Provided)))
-  }
-  lazy val anyOptionalFilter = Def.settingDyn {
-    optionalDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Optional)))
-  }
-  lazy val aggregateCompileFilter = Def.settingDyn {
-    compileDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile)))
-  }
-  lazy val aggregateRuntimeFilter = Def.settingDyn {
-    runtimeDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime)))
-  }
-  lazy val aggregateTestFilter = Def.settingDyn {
-    testDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test)))
-  }
-  lazy val aggregateProvidedFilter = Def.settingDyn {
-    providedDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided)))
-  }
-  lazy val aggregateOptionalFilter = Def.settingDyn {
-    optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional)))
-  }
+  lazy val anyCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Compile))) }
+  lazy val anyRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Runtime))) }
+  lazy val anyTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Test))) }
+  lazy val anyProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Provided))) }
+  lazy val anyOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Optional))) }
+  lazy val aggregateCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile))) }
+  lazy val aggregateRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime))) }
+  lazy val aggregateTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test))) }
+  lazy val aggregateProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided))) }
+  lazy val aggregateOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional))) }
 
   lazy val compileDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value)
