@@ -15,7 +15,9 @@ import sbt.{Def, File, ScopeFilter, _}
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
-import java.io.{StringWriter, PrintWriter}
+import java.io.{PrintWriter, StringWriter}
+
+import net.vonbuchholtz.sbt.dependencycheck.DependencyCheckPlugin.{compileDependenciesTask, optionalDependenciesTask, providedDependenciesTask, runtimeDependenciesTask, testDependenciesTask}
 
 object DependencyCheckPlugin extends sbt.AutoPlugin {
 
@@ -328,11 +330,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
     val dependencies = scala.collection.mutable.Set[Attributed[File]]()
-    dependencies ++= logAddDependencies(compileDependenciesTask.all(anyCompileFilter).value.flatten, Compile, log)
-    dependencies --= logRemoveDependencies(providedDependenciesTask.all(anyProvidedFilter).value.flatten, Provided, log)
-    dependencies ++= logAddDependencies(runtimeDependenciesTask.all(anyRuntimeFilter).value.flatten, Runtime, log)
-    dependencies ++= logAddDependencies(testDependenciesTask.all(anyTestFilter).value.flatten, Test, log)
-    dependencies --= logRemoveDependencies(otionalDependenciesTask.all(anyOptionalFilter).value.flatten, Optional, log)
+    dependencies ++= logAddDependencies(aggregateCompileFilter.value.flatten, Compile, log)
+    dependencies --= logRemoveDependencies(aggregateProvidedFilter.value.flatten, Provided, log)
+    dependencies ++= logAddDependencies(aggregateRuntimeFilter.value.flatten, Runtime, log)
+    dependencies ++= logAddDependencies(aggregateTestFilter.value.flatten, Test, log)
+    dependencies --= logRemoveDependencies(aggregateOptionalFilter.value.flatten, Optional, log)
 
     log.info("Scanning following dependencies: ")
     dependencies.foreach(f => log.info("\t" + f.data.getName))
@@ -358,16 +360,36 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }).get
   }
 
-  lazy val anyCompileFilter = ScopeFilter(inAnyProject, inConfigurations(Compile))
-  lazy val anyRuntimeFilter = ScopeFilter(inAnyProject, inConfigurations(Runtime))
-  lazy val anyTestFilter = ScopeFilter(inAnyProject, inConfigurations(Test))
-  lazy val anyProvidedFilter = ScopeFilter(inAnyProject, inConfigurations(Provided))
-  lazy val anyOptionalFilter = ScopeFilter(inAnyProject, inConfigurations(Optional))
-//  lazy val aggregateCompileFilter = ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile))
-//  lazy val aggregateRuntimeFilter = ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime))
-//  lazy val aggregateTestFilter = ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test))
-//  lazy val aggregateProvidedFilter = ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided))
-//  lazy val aggregateOptionalFilter = ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional))
+  lazy val anyCompileFilter = Def.settingDyn {
+    compileDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Compile)))
+  }
+  lazy val anyRuntimeFilter = Def.settingDyn {
+    runtimeDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Runtime)))
+  }
+  lazy val anyTestFilter = Def.settingDyn {
+    testDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Test)))
+  }
+  lazy val anyProvidedFilter = Def.settingDyn {
+    providedDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Provided)))
+  }
+  lazy val anyOptionalFilter = Def.settingDyn {
+    optionalDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Optional)))
+  }
+  lazy val aggregateCompileFilter = Def.settingDyn {
+    compileDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile)))
+  }
+  lazy val aggregateRuntimeFilter = Def.settingDyn {
+    runtimeDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime)))
+  }
+  lazy val aggregateTestFilter = Def.settingDyn {
+    testDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test)))
+  }
+  lazy val aggregateProvidedFilter = Def.settingDyn {
+    providedDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided)))
+  }
+  lazy val aggregateOptionalFilter = Def.settingDyn {
+    optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional)))
+  }
 
   lazy val compileDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value)
@@ -401,7 +423,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         Classpaths.managedJars(configuration.value, classpathTypes.value, update.value)
       }
   }
-  lazy val otionalDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  lazy val optionalDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
       Def.task { Seq.empty }
     else
@@ -474,8 +496,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   def logDependencies(log: Logger, classpath: Seq[Attributed[File]], configuration: Configuration, action: String): Seq[Attributed[File]] = {
-    log.debug(s"$action ${configuration.name} dependencies to check.")
-    classpath.foreach(f => log.debug("\t" + f.data.getName))
+    log.info(s"$action ${configuration.name} dependencies to check.")
+    classpath.foreach(f => log.info("\t" + f.data.getName))
     classpath
   }
 
