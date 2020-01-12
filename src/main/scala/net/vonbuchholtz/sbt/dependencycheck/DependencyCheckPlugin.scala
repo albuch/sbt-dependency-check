@@ -295,11 +295,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
           checkDependencies --= logRemoveDependencies(Classpaths.managedJars(Optional, classpathTypeValue, updateValue), Optional, log)
         }
 
-        val scanSet: Seq[File] = (dependencyCheckScanSet.value.map {
-          _ ** "*"
-        } reduceLeft (_ +++ _) filter {
-          _.isFile
-        }).get
+        val scanSet: Seq[File] = getScanSet.value
 
         withEngine(initializeSettings.value) { engine =>
           try {
@@ -341,11 +337,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     log.info("Scanning following dependencies: ")
     dependencies.foreach(f => log.info("\t" + f.data.getName))
 
-    val scanSet: Seq[File] = (dependencyCheckScanSet.value.map {
-      _ ** "*"
-    } reduceLeft (_ +++ _) filter {
-      _.isFile
-    }).get
+    val scanSet: Seq[File] = getScanSet.value
+
     withEngine(initializeSettings.value) { engine =>
       try {
         createReport(engine, dependencies.toSet, scanSet, outputDir, getFormats(Some(reportFormat), reportFormats), useSbtModuleIdAsGav, log)
@@ -355,6 +348,14 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         throw e
       }
     }
+  }
+
+  def getScanSet: Def.Initialize[Task[Seq[File]]] = Def.task {
+    (dependencyCheckScanSet.value.map {
+      _ ** "*"
+    } reduceLeft (_ +++ _) filter {
+      _.isFile
+    }).get
   }
 
   lazy val anyCompileFilter = ScopeFilter(inAnyProject, inConfigurations(Compile))
