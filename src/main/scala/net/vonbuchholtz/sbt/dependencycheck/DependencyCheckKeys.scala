@@ -92,8 +92,9 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckUseSbtModuleIdAsGav = settingKey[Option[Boolean]]("Uses the SBT ModuleId as GAV (reduces dependency on Maven Central for resolving)")
 
 	// TaskKeys
-	lazy val dependencyCheck = TaskKey[Unit]("dependencyCheck", "Runs dependency-check against the project and generates a report.")
-	lazy val dependencyCheckAggregate = TaskKey[Unit]("dependencyCheckAggregate", "Runs dependency-check against the child projects and aggregates the results into a single report.")
+	lazy val dependencyCheck = TaskKey[Unit]("dependencyCheck", "Runs dependency-check against the project and generates a report per sub project.")
+	lazy val dependencyCheckAggregate = TaskKey[Unit]("dependencyCheckAggregate", "Runs dependency-check against project aggregates and combines the results into a single report.")
+	lazy val dependencyCheckAnyProject = TaskKey[Unit]("dependencyCheckAnyProject", "Runs dependency-check against all projects and combines the results into a single report.")
 	lazy val dependencyCheckUpdateOnly = TaskKey[Unit]("dependencyCheckUpdateOnly", "Updates the local cache of the NVD data from NIST.")
 	lazy val dependencyCheckPurge = TaskKey[Unit]("dependencyCheckPurge", "Deletes the local copy of the NVD. This is used to force a refresh of the data.")
 	lazy val dependencyCheckListSettings = TaskKey[Unit]("dependencyCheckListSettings", "List the settings of the plugin")

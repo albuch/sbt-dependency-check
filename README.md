@@ -30,6 +30,7 @@ Task | Description | Command
 :-------|:------------|:-----
 dependencyCheck | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | ```$ sbt dependencyCheck```
 dependencyCheckAggregate | Runs dependency-check against the current project, it's aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAggregate```
+dependencyCheckAnyProject | Runs dependency-check against all projects, aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAnyProject```
 dependencyCheckUpdateOnly | Updates the local cache of the NVD data from NIST. | ```$ sbt dependencyCheckUpdateOnly```
 dependencyCheckPurge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | ```$ sbt dependencyCheckPurge```
 dependencyCheckListSettings | Prints all settings and their values for the project. | ```$ sbt dependencyCheckListSettings```
