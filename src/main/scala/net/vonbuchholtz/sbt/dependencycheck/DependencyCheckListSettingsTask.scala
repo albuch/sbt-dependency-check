@@ -77,6 +77,7 @@ object DependencyCheckListSettingsTask {
     logUrlSetting(ANALYZER_NODE_AUDIT_URL, "dependencyCheckNodeAuditAnalyzerUrl", log)
     logBooleanSetting(ANALYZER_NODE_AUDIT_SKIPDEV, "dependencyCheckNodeAuditSkipDevDependencies" , log)
     logBooleanSetting(ANALYZER_NODE_AUDIT_USE_CACHE, "dependencyCheckNodeAuditAnalyzerUseCache", log)
+    logBooleanSetting(ANALYZER_NPM_CPE_ENABLED, "dependencyCheckNPMCPEAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUGETCONF_ENABLED, "dependencyCheckNugetConfAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)

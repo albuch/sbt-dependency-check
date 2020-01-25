@@ -78,6 +78,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNodeAuditAnalyzerUrl := None,
     dependencyCheckNodeAuditSkipDevDependencies := None,
     dependencyCheckNodeAuditAnalyzerUseCache := None,
+    dependencyCheckNPMCPEAnalyzerEnabled := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -222,6 +223,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NODE_AUDIT_USE_CACHE, dependencyCheckNodeAuditAnalyzerUseCache.value)
     setUrlSetting(ANALYZER_NODE_AUDIT_URL, dependencyCheckNodeAuditAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_SKIPDEV, dependencyCheckNodeAuditSkipDevDependencies.value)
+    setBooleanSetting(ANALYZER_NPM_CPE_ENABLED, dependencyCheckNPMCPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)

@@ -101,6 +101,7 @@ dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Ana
 dependencyCheckNodeAuditSkipDevDependencies | Sets whether the Node Audit Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
 dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
+dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true

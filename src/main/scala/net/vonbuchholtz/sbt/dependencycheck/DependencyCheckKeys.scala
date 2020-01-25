@@ -54,6 +54,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckNodeAuditAnalyzerUrl = settingKey[Option[URL]]("Sets the URL to the NPM Audit API. If not set uses default URL.")
 	lazy val dependencyCheckNodeAuditSkipDevDependencies = settingKey[Option[Boolean]]("Sets whether the Node Audit Analyzer will skip devDependencies.")
 	lazy val dependencyCheckNodeAuditAnalyzerUseCache = settingKey[Option[Boolean]]("Sets whether the Node Audit Analyzer will cache results.")
+	lazy val dependencyCheckNPMCPEAnalyzerEnabled = settingKey[Option[Boolean]](" Sets whether the or not the experimental NPM CPE Analyzer should be used.")
 	lazy val dependencyCheckNuspecAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Nuget Nuspec Analyzer will be used.")
 	lazy val dependencyCheckNugetConfAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental .NET Nuget packages.config Analyzer will be used.")
 	lazy val dependencyCheckCocoapodsEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Cocoapods Analyzer should be used.")
