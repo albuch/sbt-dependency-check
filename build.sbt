@@ -11,7 +11,6 @@ name := "sbt-dependency-check"
 
 crossSbtVersions := Vector("0.13.18", "1.2.8")
 sbtPlugin := true
-useCoursier := false // FIXME: remove once https://github.com/sbt/sbt/issues/4706 has been removed
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
