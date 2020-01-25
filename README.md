@@ -98,6 +98,7 @@ dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ 
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
+dependencyCheckNodeAuditSkipDevDependencies | Sets whether the Node Audit Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
 dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
