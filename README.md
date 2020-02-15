@@ -20,7 +20,7 @@ For more information on how OWASP DependencyCheck works and how to read the repo
 ## Getting started
 sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.3")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "2.0.0")
 
 For sbt 1.0.0+ use version `0.1.10` or higher.
 
@@ -212,7 +212,7 @@ If you want to apply some configuration for all your SBT projects you can add th
 
 1. Add the plugin to `~/sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "1.3.3")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "2.0.0")
     ```
 
 1. Add settings at `~/.sbt/1.0/global.sbt` using their fully qualified name (including package and nested object structure). E.g.
