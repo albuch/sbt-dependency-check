@@ -210,7 +210,7 @@ initialize ~= { _ =>
 ### Global Plugin Configuration
 If you want to apply some configuration for all your SBT projects you can add them as Global Settings:
 
-1. Add the plugin to `~/sbt/1.0/plugins/sbt-dependency-check.sbt`
+1. Add the plugin to `~/.sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "2.0.0")
     ```
