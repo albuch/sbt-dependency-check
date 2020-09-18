@@ -1,4 +1,4 @@
-import sbt.{Project, _}
+import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations.setNextVersion
@@ -14,9 +14,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "5.3.0",
-	// FIX CVE-2019-10086 introduced by dependency-check-core:5.3.0
-	"commons-beanutils" % "commons-beanutils" % "1.9.4"
+	"org.owasp" % "dependency-check-core" % "6.0.1"
 )
 libraryDependencies ++= {
 	(sbtBinaryVersion in pluginCrossBuild).value match {
