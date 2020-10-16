@@ -86,6 +86,7 @@ object DependencyCheckListSettingsTask {
     logFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, "dependencyCheckPathToBundleAudit", log)
     logStringSetting(ANALYZER_BUNDLE_AUDIT_WORKING_DIRECTORY, "dependencyCheckBundleAuditWorkingDirectory", log)
     logBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, "dependencyCheckAssemblyAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_PE_ENABLED, "dependencyCheckPEAnalyzerEnabled", log)
     logFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, "dependencyCheckPathToDotNETCore", log)
     logStringSetting(CVE_CPE_STARTS_WITH_FILTER, "dependencyCheckCpeStartsWith", log)
     logStringSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)

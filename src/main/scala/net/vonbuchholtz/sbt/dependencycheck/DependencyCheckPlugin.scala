@@ -87,6 +87,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckBundleAuditWorkingDirectory := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
+    dependencyCheckPEAnalyzerEnabled := None,
     dependencyCheckPathToDotNETCore := None,
     dependencyCheckRetireJSAnalyzerEnabled := None,
     dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
@@ -228,6 +229,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, dependencyCheckPathToDotNETCore.value)
+    setBooleanSetting(ANALYZER_PE_ENABLED, dependencyCheckPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COCOAPODS_ENABLED, dependencyCheckCocoapodsEnabled.value)
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)

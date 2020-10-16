@@ -63,6 +63,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to Ruby Bundle Audit.")
 	lazy val dependencyCheckBundleAuditWorkingDirectory = settingKey[Option[File]]("Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from.")
 	lazy val dependencyCheckAssemblyAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Assembly Analyzer should be used.")
+	lazy val dependencyCheckPEAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the DLL/EXE PE Analyzer should be used.")
 	lazy val dependencyCheckPathToDotNETCore = settingKey[Option[File]]("The path to Core for .NET assembly analysis on non-windows systems.")
 	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental RetireJS Analyzer should be used.")
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository.")
