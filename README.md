@@ -138,6 +138,8 @@ Setting | Description | Default Value
 :-------|:------------|:-------------
 dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. When mirroring the NVD you must mirror the *.json.gz and the *.meta files. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.gz>
 dependencyCheckCveUrlBase | Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-%d.json.gz>
+dependencyCheckCveUser | The username used when connecting to the `dependencyCheckCveUrlBase`. | 
+dependencyCheckCvePassword | The password used when connecting to the `dependencyCheckCveUrlBase`. | 
 dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver

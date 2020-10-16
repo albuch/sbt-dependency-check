@@ -111,6 +111,8 @@ object DependencyCheckListSettingsTask {
     // Advanced Configuration
     logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
     logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
+    logStringSetting(CVE_USER, "dependencyCheckCveUser", log)
+    logStringSetting(CVE_PASSWORD, "dependencyCheckCvePassword", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
     logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
     logStringSetting(DB_VERSION, "dependencyCheckDatabaseVersion", log)

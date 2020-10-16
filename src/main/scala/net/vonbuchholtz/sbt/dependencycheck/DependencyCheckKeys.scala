@@ -87,6 +87,8 @@ trait DependencyCheckKeys {
 	// Advanced configuration
 	lazy val dependencyCheckCveUrlModified = settingKey[Option[URL]]("URL for the modified CVE JSON data feed. ")
 	lazy val dependencyCheckCveUrlBase = settingKey[Option[String]]("Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. ")
+	lazy val dependencyCheckCveUser = settingKey[Option[String]]("The username used when connecting to the cveUrl. ")
+	lazy val dependencyCheckCvePassword = settingKey[Option[String]]("The password used when connecting to the cveUrl. ")
 	lazy val dependencyCheckConnectionTimeout = settingKey[Option[Int]]("Sets the URL Connection Timeout used when downloading external data. ")
 	lazy val dependencyCheckDataDirectory = settingKey[Option[File]]("Sets the data directory to hold SQL CVEs contents. This should generally not be changed. ")
 	lazy val dependencyCheckDatabaseDriverName = settingKey[Option[String]]("The name of the database driver. Example: org.h2.Driver. ")
