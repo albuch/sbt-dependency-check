@@ -1,5 +1,6 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
+import org.apache.commons.logging.LogFactory
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.agent.DependencyCheckScanAgent
 import org.owasp.dependencycheck.data.nexus.MavenArtifact
@@ -614,7 +615,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   private def muteJCS(log: Logger): Unit = {
-    val noisyLoggers = List(
+    val noisyClasses = List(
       "org.apache.commons.jcs.auxiliary.disk.AbstractDiskCache",
       "org.apache.commons.jcs.engine.memory.AbstractMemoryCache",
       "org.apache.commons.jcs.engine.control.CompositeCache",
@@ -628,9 +629,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       "org.apache.commons.jcs.utils.threadpool.ThreadPoolManager",
       "org.apache.commons.jcs.engine.control.CompositeCacheConfigurator"
     )
-    noisyLoggers.foreach(logger => {
-      val log = java.util.logging.Logger.getLogger(logger)
-      log.setLevel(java.util.logging.Level.WARNING)
+    noisyClasses.foreach(className => {
+      val log = java.util.logging.Logger.getLogger(className)
+      log.setLevel(java.util.logging.Level.SEVERE)
+      // Calling Apache Commons LogFactory seems to be needed to propagate the Log Level setting
+      LogFactory.getLog(className)
     })
   }
 }
