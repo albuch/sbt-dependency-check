@@ -71,6 +71,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_OPENSSL_ENABLED, "dependencyCheckOpensslAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CMAKE_ENABLED, "dependencyCheckCmakeAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_AUTOCONF_ENABLED, "dependencyCheckAutoconfAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_PIP_ENABLED, "dependencyCheckPipAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, "dependencyCheckComposerAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, "dependencyCheckNodeAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, "dependencyCheckNodeAuditAnalyzerEnabled", log)

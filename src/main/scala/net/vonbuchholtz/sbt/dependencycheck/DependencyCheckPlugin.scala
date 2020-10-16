@@ -72,6 +72,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOpensslAnalyzerEnabled := None,
     dependencyCheckCmakeAnalyzerEnabled := None,
     dependencyCheckAutoconfAnalyzerEnabled := None,
+    dependencyCheckPipAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
     dependencyCheckNodeAuditAnalyzerEnabled := None,
@@ -218,6 +219,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_OPENSSL_ENABLED, dependencyCheckOpensslAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CMAKE_ENABLED, dependencyCheckCmakeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_AUTOCONF_ENABLED, dependencyCheckAutoconfAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_PIP_ENABLED, dependencyCheckPipAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, dependencyCheckNodeAuditAnalyzerEnabled.value)

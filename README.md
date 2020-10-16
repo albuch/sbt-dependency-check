@@ -95,6 +95,7 @@ dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Ge
 dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
 dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMake Analyzer should be used. | true
 dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. | true
+dependencyCheckPipAnalyzerEnabled | Sets whether or not the _experimental_ pip Analyzer should be used | true
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
@@ -111,7 +112,7 @@ dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
-dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | 
+dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | true
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
