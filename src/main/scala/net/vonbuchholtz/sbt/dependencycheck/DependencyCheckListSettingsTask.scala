@@ -82,6 +82,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUGETCONF_ENABLED, "dependencyCheckNugetConfAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)
+    logBooleanSetting(ANALYZER_MIX_AUDIT_ENABLED, "dependencyCheckMixAuditAnalyzerEnabled", log)
+    logFileSetting(ANALYZER_MIX_AUDIT_PATH, "dependencyCheckMixAuditPath", log)
     logBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, "dependencyCheckSwiftEnabled", log)
     logBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, "dependencyCheckBundleAuditEnabled", log)
     logFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, "dependencyCheckPathToBundleAudit", log)

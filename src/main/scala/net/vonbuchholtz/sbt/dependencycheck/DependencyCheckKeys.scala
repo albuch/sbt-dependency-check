@@ -59,6 +59,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckNuspecAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the .NET Nuget Nuspec Analyzer will be used.")
 	lazy val dependencyCheckNugetConfAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental .NET Nuget packages.config Analyzer will be used.")
 	lazy val dependencyCheckCocoapodsEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Cocoapods Analyzer should be used.")
+	lazy val dependencyCheckMixAuditAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Mix Audit Analyzer should be used.")
+	lazy val dependencyCheckMixAuditPath = settingKey[Option[File]]("Sets the path to the mix_audit executable; only used if mix audit analyzer is enabled and experimental analyzers are enabled.")
 	lazy val dependencyCheckSwiftEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Swift Package Manager Analyzer should be used.")
 	lazy val dependencyCheckBundleAuditEnabled = settingKey[Option[Boolean]]("Sets whether or not the Ruby Bundle Audit Analyzer should be used.")
 	lazy val dependencyCheckPathToBundleAudit = settingKey[Option[File]]("The path to Ruby Bundle Audit.")
