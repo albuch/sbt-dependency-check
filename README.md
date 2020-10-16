@@ -111,6 +111,7 @@ dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
+dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | 
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
