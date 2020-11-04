@@ -49,6 +49,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckCmakeAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental CMake Analyzer should be used.")
 	lazy val dependencyCheckAutoconfAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental autoconf Analyzer should be used.")
 	lazy val dependencyCheckPipAnalyzerEnabled = settingKey[Option[Boolean]](" Sets whether the experimental pip Analyzer should be used")
+	lazy val dependencyCheckPipfileAnalyzerEnabled = settingKey[Option[Boolean]](" Sets whether the experimental Pipfile Analyzer should be used")
 	lazy val dependencyCheckComposerAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental PHP Composer Lock File Analyzer should be used.")
 	lazy val dependencyCheckNodeAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Node.js Analyzer should be used.")
 	lazy val dependencyCheckNodeAuditAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the Node Audit Analyzer should be used.")
