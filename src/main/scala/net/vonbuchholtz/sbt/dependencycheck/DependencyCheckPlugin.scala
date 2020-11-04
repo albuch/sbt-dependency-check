@@ -73,6 +73,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOpensslAnalyzerEnabled := None,
     dependencyCheckCmakeAnalyzerEnabled := None,
     dependencyCheckAutoconfAnalyzerEnabled := None,
+    dependencyCheckPipAnalyzerEnabled := None,
+    dependencyCheckPipfileAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
     dependencyCheckNodeAuditAnalyzerEnabled := None,
@@ -83,11 +85,14 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
+    dependencyCheckMixAuditAnalyzerEnabled := None,
+    dependencyCheckMixAuditPath := None,
     dependencyCheckSwiftEnabled := None,
     dependencyCheckBundleAuditEnabled := None,
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckBundleAuditWorkingDirectory := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
+    dependencyCheckPEAnalyzerEnabled := None,
     dependencyCheckPathToDotNETCore := None,
     dependencyCheckRetireJSAnalyzerEnabled := None,
     dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
@@ -108,6 +113,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     // Advanced configuration
     dependencyCheckCveUrlModified := None,
     dependencyCheckCveUrlBase := None,
+    dependencyCheckCveUser := None,
+    dependencyCheckCvePassword := None,
     dependencyCheckConnectionTimeout := None,
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
@@ -218,6 +225,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_OPENSSL_ENABLED, dependencyCheckOpensslAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CMAKE_ENABLED, dependencyCheckCmakeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_AUTOCONF_ENABLED, dependencyCheckAutoconfAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_PIP_ENABLED, dependencyCheckPipAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_PIPFILE_ENABLED, dependencyCheckPipfileAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, dependencyCheckNodeAuditAnalyzerEnabled.value)
@@ -229,7 +238,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, dependencyCheckPathToDotNETCore.value)
+    setBooleanSetting(ANALYZER_PE_ENABLED, dependencyCheckPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COCOAPODS_ENABLED, dependencyCheckCocoapodsEnabled.value)
+    setBooleanSetting(ANALYZER_MIX_AUDIT_ENABLED, dependencyCheckMixAuditAnalyzerEnabled.value)
+    setFileSetting(ANALYZER_MIX_AUDIT_PATH, dependencyCheckMixAuditPath.value)
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
@@ -250,6 +262,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     // Advanced Configuration
     setUrlSetting(CVE_MODIFIED_JSON, dependencyCheckCveUrlModified.value)
     setStringSetting(CVE_BASE_JSON, dependencyCheckCveUrlBase.value)
+    setStringSetting(CVE_USER, dependencyCheckCveUser.value)
+    setStringSetting(CVE_PASSWORD, dependencyCheckCvePassword.value)
     setIntSetting(CONNECTION_TIMEOUT, dependencyCheckConnectionTimeout.value)
     setFileSetting(DATA_DIRECTORY, dependencyCheckDataDirectory.value)
     setStringSetting(DB_DRIVER_NAME, dependencyCheckDatabaseDriverName.value)

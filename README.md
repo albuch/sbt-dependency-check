@@ -1,4 +1,4 @@
-# sbt-dependency-check [![Build Status](https://travis-ci.org/albuch/sbt-dependency-check.svg)](https://travis-ci.org/albuch/sbt-dependency-check) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/25bd3b5e4f8e4ee78cfbdca62de31ca7)](https://app.codacy.com/app/albuch/sbt-dependency-check?utm_source=github.com&utm_medium=referral&utm_content=albuch/sbt-dependency-check&utm_campaign=Badge_Grade_Dashboard) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt) 
+# sbt-dependency-check [![Build Status](https://travis-ci.com/albuch/sbt-dependency-check.svg?branch=master)](https://travis-ci.com/albuch/sbt-dependency-check) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/25bd3b5e4f8e4ee78cfbdca62de31ca7)](https://app.codacy.com/app/albuch/sbt-dependency-check?utm_source=github.com&utm_medium=referral&utm_content=albuch/sbt-dependency-check&utm_campaign=Badge_Grade_Dashboard) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt) 
 The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
 (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
 which already offers several integrations with other build and continuous integration systems.
@@ -95,6 +95,8 @@ dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Ge
 dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
 dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMake Analyzer should be used. | true
 dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. | true
+dependencyCheckPipAnalyzerEnabled | Sets whether or not the _experimental_ pip Analyzer should be used | true
+dependencyCheckPipfileAnalyzerEnabled | Sets whether or not the _experimental_ Pipfile Analyzer should be used | true
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
@@ -105,12 +107,15 @@ dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
+dependencyCheckMixAuditAnalyzerEnabled | Sets whether or not the _experimental_ Mix Audit Analyzer should be used. | tue
+dependencyCheckMixAuditPath | Sets the path to the mix_audit executable; only used if mix audit analyzer is enabled and experimental analyzers are enabled. | 
 dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
+dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | true
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
 dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
@@ -134,6 +139,8 @@ Setting | Description | Default Value
 :-------|:------------|:-------------
 dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. When mirroring the NVD you must mirror the *.json.gz and the *.meta files. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.gz>
 dependencyCheckCveUrlBase | Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-%d.json.gz>
+dependencyCheckCveUser | The username used when connecting to the `dependencyCheckCveUrlBase`. | 
+dependencyCheckCvePassword | The password used when connecting to the `dependencyCheckCveUrlBase`. | 
 dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
