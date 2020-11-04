@@ -14,7 +14,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.0.2"
+	"org.owasp" % "dependency-check-core" % "6.0.3"
 )
 libraryDependencies ++= {
 	(sbtBinaryVersion in pluginCrossBuild).value match {
