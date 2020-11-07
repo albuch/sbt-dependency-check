@@ -9,19 +9,13 @@ val sbtDependencyCheck = (project in file("."))
 organization := "net.vonbuchholtz"
 name := "sbt-dependency-check"
 
-crossSbtVersions := Vector("0.13.18", "1.2.8")
+crossSbtVersions := Vector("1.2.8")
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
 	"org.owasp" % "dependency-check-core" % "6.0.3"
 )
-libraryDependencies ++= {
-	(sbtBinaryVersion in pluginCrossBuild).value match {
-		case version if version.startsWith("0.13") => Seq("org.slf4j" % "slf4j-simple" % "1.7.30")
-		case _ => Seq.empty
-	}
-}
 
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
 dependencyUpdatesFailBuild := true

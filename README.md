@@ -18,11 +18,11 @@ For more information on how OWASP DependencyCheck works and how to read the repo
 * [License](#license)
 
 ## Getting started
-sbt-dependency-check is an AutoPlugin, so you need sbt 0.13.5+. Simply add the plugin to `project/plugins.sbt` file.
+sbt-dependency-check is an AutoPlugin. Simply add the plugin to `project/plugins.sbt` file.
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "2.1.0")
 
-For sbt 1.0.0+ use version `0.1.10` or higher.
+For sbt v1.x use sbt-dependency-check `v2.0.0` or higher as previous versions aren't compatible with NVD feeds anymore. Starting with sbt-dependency-check `v3.0.0` sbt v0.13.x is no longer supported.
 
 ## Usage
 ### Tasks
