@@ -428,7 +428,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   lazy val aggregateOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional))) }
 
   lazy val compileDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
-    if ((dependencyCheckSkip ?? false).value)
+    if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value)
       Def.task { Seq.empty }
     else
       Def.task {
@@ -436,7 +436,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
   lazy val runtimeDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
-    if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
+    if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
       Def.task { Seq.empty }
     else
       Def.task {
@@ -444,7 +444,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
   lazy val testDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
-    if ((dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
+    if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
       Def.task { Seq.empty }
     else
       Def.task {
@@ -452,7 +452,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
   lazy val providedDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
-    if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
+    if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
       Def.task { Seq.empty }
     else
       Def.task {
@@ -460,7 +460,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       }
   }
   lazy val optionalDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
-    if ((dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
+    if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
       Def.task { Seq.empty }
     else
       Def.task {
