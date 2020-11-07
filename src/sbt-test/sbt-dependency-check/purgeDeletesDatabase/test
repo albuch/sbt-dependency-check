@@ -1,4 +1,5 @@
-$ mkdir /tmp/sbt-dependency-check
+$ mkdir /tmp/sbt-dependency-check/data
+$ copy-file data/odc.mv.db /tmp/sbt-dependency-check/odc.mv.db
 > dependencyCheck
 $ exists /tmp/sbt-dependency-check/odc.mv.db
 > dependencyCheckPurge
