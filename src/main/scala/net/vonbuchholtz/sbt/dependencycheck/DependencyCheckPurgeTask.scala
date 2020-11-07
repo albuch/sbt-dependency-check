@@ -12,7 +12,7 @@ object DependencyCheckPurgeTask {
     }
 
     try {
-      val db: File = new File(settings.getDataDirectory, "dc.h2.db")
+      val db: File = new File(settings.getDataDirectory, settings.getString(Settings.KEYS.DB_FILE_NAME))
       if (db.exists()) {
         if (db.delete) {
           log.info("Database file purged; local copy of the NVD has been removed")

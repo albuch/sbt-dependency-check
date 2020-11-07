@@ -1,0 +1,5 @@
+$ mkdir /tmp/sbt-dependency-check
+> dependencyCheck
+$ exists /tmp/sbt-dependency-check/odc.mv.db
+> dependencyCheckPurge
+$ absent /tmp/sbt-dependency-check/odc.mv.db
