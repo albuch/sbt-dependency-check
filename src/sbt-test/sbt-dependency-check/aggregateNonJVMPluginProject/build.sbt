@@ -1,4 +1,4 @@
-// See https://github.com/albuch/sbt-dependency-check/issues/95
+// See https://github.com/albuch/sbt-dependency-check/issues/145
 
 name := "dependency-check-repro"
 
