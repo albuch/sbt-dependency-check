@@ -161,7 +161,7 @@ lazy val commonSettings = Seq(
   version := "0.1.0",
   scalaVersion := "2.10.6",
   // Add your sbt-dependency-check settings
-  dependencyCheckFormat := Some("All")
+  dependencyCheckFormat := "ALL"
 )
 
 lazy val root = (project in file("."))
