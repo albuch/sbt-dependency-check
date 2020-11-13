@@ -11,11 +11,12 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+sbt.bat
+.bsp/
 
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
 
 # IDEA
-.idea/
-sbt.bat
+.idea/bsp added to gitgignore
