@@ -19,4 +19,4 @@ sbt.bat
 .worksheet
 
 # IDEA
-.idea/bsp added to gitgignore
+.idea/
