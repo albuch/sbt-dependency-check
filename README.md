@@ -22,7 +22,8 @@ sbt-dependency-check is an AutoPlugin. Simply add the plugin to `project/plugins
 
     addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "2.1.0")
 
-For sbt v1.x use sbt-dependency-check `v2.0.0` or higher as previous versions aren't compatible with NVD feeds anymore. Starting with sbt-dependency-check `v3.0.0` sbt v0.13.x is no longer supported.
+Use sbt-dependency-check `v2.0.0` or higher as previous versions aren't compatible with NVD feeds anymore. 
+Starting with sbt-dependency-check `v3.0.0` sbt v0.13.x is no longer supported.
 
 ## Usage
 ### Tasks
@@ -39,7 +40,8 @@ dependencyCheckListSettings | Prints all settings and their values for the proje
 The reports will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`. See Configuration for details.
 
 **Note:** The first run might take a while as the full data from the National Vulnerability Database (NVD) hosted by NIST: <https://nvd.nist.gov> has to be downloaded and imported into the database.
-Later runs will only download change sets unless the last update was more than 7 days ago.
+Later runs will only download change sets unless the last update was more than 7 days ago. 
+It is recommended to set up a mirror of the NVD feed in your local network to reduce the risk of rate limiting. See https://github.com/stevespringett/nist-data-mirror for instructions.
 
 ### Configuration
 `sbt-dependency-check` uses the default configuration of [OWASP DependencyCheck](https://github.com/jeremylong/DependencyCheck).
@@ -152,34 +154,27 @@ dependencyCheckCpeStartsWith | The starting String to identify the CPEs that are
 
 ### Multi-Project setup
 
-Add all plugin settings to commonSettings that you pass to your projects.
+Use either `Global` or `ThisBuild` scope if you want to define a setting for all projects. 
+Define on the project level if you want to diverge from the default or Global/ThisBuild setting for a specific project.
 
 **build.sbt**
 ```Scala
-lazy val commonSettings = Seq(
-  organization := "com.example",
-  version := "0.1.0",
-  scalaVersion := "2.10.6",
-  // Add your sbt-dependency-check settings
-  dependencyCheckFormat := "ALL"
-)
+
+Global / dependencyCheckFormats := Seq("HTML", "JSON")
 
 lazy val root = (project in file("."))
   .aggregate(core)
-  .settings(commonSettings: _*)
   .settings(
 	libraryDependencies += "com.github.t3hnar" %% "scala-bcrypt" % "2.6" % "test",
 	dependencyCheckSkipTestScope := false
   )
 
 lazy val util = (project in file("util"))
-  .settings(commonSettings: _*)
   .settings(
     libraryDependencies += "commons-beanutils" % "commons-beanutils" % "1.9.1"
   )
 
 lazy val core = project.dependsOn(util)
-  .settings(commonSettings: _*)
   .settings(
     libraryDependencies += "org.apache.commons" % "commons-collections4" % "4.1" % "runtime",
     dependencyCheckSkip := true
@@ -187,18 +182,17 @@ lazy val core = project.dependsOn(util)
 
 ```
 
-The only settings, that are supported to work for `aggregate()` and `dependsOn()` projects, are the scope skipping ones:
+Almost all settings are only evaluated for the project you are executing the task on, not for each individual sub-project. The exemption that are supported to work for `aggregate()` and `dependsOn()` projects, are the scope skipping settings:
 * `dependencyCheckSkip`
 * `dependencyCheckSkipTestScope`
 * `dependencyCheckSkipRuntimeScope`
 * `dependencyCheckSkipProvidedScope`
 * `dependencyCheckSkipOptionalScope`
 
-You can set these individually for each project.
+You should set these individually for each project if necessary.
 
 ### Changing Log Level
 Add the following to your `build.sbt` file to increase the log level from  default `info` to e.g. `debug`.
-#### SBT >= v1.0.0
 ```
 logLevel in dependencyCheck := Level.Debug
 ```
@@ -206,16 +200,10 @@ and add `-Dlog4j2.level=debug` when running a check:
 ```
 sbt -Dlog4j2.level=debug dependencyCheck
 ```
-#### SBT <= v0.13.x
-```
-logLevel := Level.Debug
-initialize ~= { _ =>
-    sys.props += (("org.slf4j.simpleLogger.log.org.owasp", "debug"))
-}
-```
+
 
 ### Global Plugin Configuration
-If you want to apply some configuration for all your SBT projects you can add them as Global Settings:
+If you want to apply some default configuration for all your SBT projects you can add them as Global Settings:
 
 1. Add the plugin to `~/.sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
@@ -240,7 +228,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         dependencyCheck
 
 ## License
-Copyright (c) 2019 Alexander v. Buchholtz
+Copyright (c) 2020 Alexander v. Buchholtz
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

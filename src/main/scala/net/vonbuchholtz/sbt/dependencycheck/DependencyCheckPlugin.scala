@@ -28,16 +28,13 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   override def trigger: PluginTrigger = allRequirements
 
-  //noinspection TypeAnnotation
-  override lazy val projectSettings = Seq(
+  override lazy val globalSettings = Seq(
     dependencyCheckFormat := "HTML",
     dependencyCheckFormats := Seq(),
     dependencyCheckAutoUpdate := None,
     dependencyCheckCveValidForHours := None,
     dependencyCheckFailBuildOnCVSS := 11,
     dependencyCheckJUnitFailBuildOnCVSS := None,
-    dependencyCheckOutputDirectory := Some(crossTarget.value),
-    dependencyCheckScanSet := Seq(baseDirectory.value / "src/main/resources"),
     dependencyCheckSkip := false,
     dependencyCheckSkipTestScope := true,
     dependencyCheckSkipRuntimeScope := false,
@@ -123,7 +120,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckMetaFileName := Some("dependency-check.ser"),
-    dependencyCheckUseSbtModuleIdAsGav := None,
+    dependencyCheckUseSbtModuleIdAsGav := None
+  )
+  //noinspection TypeAnnotation
+  override lazy val projectSettings = Seq(
+    dependencyCheckOutputDirectory := Some(crossTarget.value),
+    dependencyCheckScanSet := Seq(baseDirectory.value / "src/main/resources"),
     dependencyCheck := checkTask.value,
     dependencyCheckAggregate := aggregateTask.value,
     dependencyCheckAnyProject := anyProjectTask.value,
