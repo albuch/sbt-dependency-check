@@ -229,7 +229,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         dependencyCheck
 
 ## License
-Copyright (c) 2020 Alexander v. Buchholtz
+Copyright (c) 2016-2021 Alexander Baron v. Buchholtz
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
