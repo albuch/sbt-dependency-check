@@ -54,8 +54,8 @@ dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data i
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
 dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
 dependencyCheckJUnitFailBuildOnCVSS | If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure. The default value is 0 - all vulnerabilities are considered a failure.| 0
-dependencyCheckFormat | The report format to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). This setting is ignored if dependencyCheckReportFormats is set. | HTML
-dependencyCheckFormats | A sequence of report formats to be generated (HTML, XML, JUNIT, CSV, JSON, ALL). | 
+dependencyCheckFormat | The report format to be generated (HTML, XML, JUNIT, CSV, JSON, SARIF, ALL). This setting is ignored if dependencyCheckReportFormats is set. | HTML
+dependencyCheckFormats | A sequence of report formats to be generated (HTML, XML, JUNIT, CSV, JSON, SARIF, ALL). | 
 dependencyCheckOutputDirectory | The location to write the report(s). | `crossTarget.value` e.g. `./target/scala-2.11`
 dependencyCheckScanSet | An optional sequence of files that specify additional files and/or directories to analyze as part of the scan. If not specified, defaults to standard scala conventions (see [SBT documentation](http://www.scala-sbt.org/0.13/docs/Directories.html#Source+code) for details). | `/src/main/resources`
 dependencyCheckSkip | Skips the dependency-check analysis |  false
@@ -106,6 +106,7 @@ dependencyCheckNodeAuditSkipDevDependencies | Sets whether the Node Audit Analyz
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
 dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. | true
+dependencyCheckYarnAuditAnalyzerEnabled | Sets whether the Yarn Audit Analyzer should be used. This analyzer requires yarn and an internet connection. Use `dependencyCheckNodeAuditSkipDevDependencies` to skip dev dependencies. | true
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
