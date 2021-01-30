@@ -7,7 +7,7 @@ import org.owasp.dependencycheck.data.nexus.MavenArtifact
 import org.owasp.dependencycheck.dependency.naming.{GenericIdentifier, Identifier, PurlIdentifier}
 import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType}
 import org.owasp.dependencycheck.exception.ExceptionCollection
-import org.owasp.dependencycheck.utils.Settings
+import org.owasp.dependencycheck.utils.{Settings, SeverityUtil}
 import org.owasp.dependencycheck.utils.Settings.KEYS._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
@@ -79,6 +79,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNodeAuditSkipDevDependencies := None,
     dependencyCheckNodeAuditAnalyzerUseCache := None,
     dependencyCheckNPMCPEAnalyzerEnabled := None,
+    dependencyCheckYarnAuditAnalyzerEnabled := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -583,7 +584,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   def failBuildOnCVSS(dependencies: Array[Dependency], cvssScore: Float): Boolean = dependencies.exists(p => {
     p.getVulnerabilities.asScala.exists(v => {
-      (v.getCvssV2 != null && v.getCvssV2.getScore >= cvssScore) || (v.getCvssV3 != null && v.getCvssV3.getBaseScore >= cvssScore)
+      (v.getCvssV2 != null && v.getCvssV2.getScore >= cvssScore) || (v.getCvssV3 != null && v.getCvssV3.getBaseScore >= cvssScore || (v.getUnscoredSeverity != null && SeverityUtil.estimateCvssV2(v.getUnscoredSeverity) >= cvssScore)) || (cvssScore <= 0.0f)
     })
   })
 
