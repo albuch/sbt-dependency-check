@@ -237,6 +237,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setUrlSetting(ANALYZER_NODE_AUDIT_URL, dependencyCheckNodeAuditAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_SKIPDEV, dependencyCheckNodeAuditSkipDevDependencies.value)
     setBooleanSetting(ANALYZER_NPM_CPE_ENABLED, dependencyCheckNPMCPEAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_YARN_AUDIT_ENABLED, dependencyCheckYarnAuditAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
