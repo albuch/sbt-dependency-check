@@ -14,7 +14,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.1.2",
+	"org.owasp" % "dependency-check-core" % "6.1.3",
 	"com.google.guava" % "guava" % "30.1.1-jre"
 )
 
