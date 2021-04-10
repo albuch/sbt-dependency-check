@@ -25,9 +25,9 @@ jobs:
         with:
           java-version: "adopt@1.${{ matrix.java }}"
       - name: Coursier cache
-        uses: coursier/cache-action@v5
-      - name: Build and Test
-        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
+        uses: coursier/cache-action@v6
+      #- name: Build and Test
+      #  run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
       - name: DependencyCheck
         run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" dependencyCheck
         continue-on-error: true
