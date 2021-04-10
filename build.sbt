@@ -14,8 +14,8 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.1.2",
-	"com.google.guava" % "guava" % "30.1-jre"
+	"org.owasp" % "dependency-check-core" % "6.1.5",
+	"com.google.guava" % "guava" % "30.1.1-jre"
 )
 
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
