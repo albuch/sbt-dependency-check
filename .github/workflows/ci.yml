@@ -27,4 +27,4 @@ jobs:
       - name: Coursier cache
         uses: coursier/cache-action@v5
       - name: Build and Test
-        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test
+        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
