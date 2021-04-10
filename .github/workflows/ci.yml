@@ -10,14 +10,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-            - os: ubuntu-latest
-              java: 8
-                - java: 8
-                  sbt: "1.2.8"
-                - java: 8
-                  sbt: "1.2.8"
-                - java: 11
-                  sbt: "1.4.9"
+          - java: 8
+            sbt: "1.2.8"
+          - java: 11
+            sbt: "1.2.8"
+          - java: 11
+            sbt: "1.4.9"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
