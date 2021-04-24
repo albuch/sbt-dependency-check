@@ -1,0 +1,37 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - java: 8
+            sbt: "1.2.8"
+          - java: 11
+            sbt: "1.2.8"
+          - java: 11
+            sbt: "1.4.9"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Scala
+        uses: olafurpg/setup-scala@v10
+        with:
+          java-version: "adopt@1.${{ matrix.java }}"
+      - name: Coursier cache
+        uses: coursier/cache-action@v6
+      #- name: Build and Test
+      #  run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
+      - name: DependencyCheck
+        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" dependencyCheck
+        continue-on-error: true
+      - name: Print DependencyCheck Result
+        uses: albuch/sbt-dependency-check-action@main
+        with:
+          jsonReportPath: "target/scala-2.12/sbt-1.0/dependency-check-report.json"
