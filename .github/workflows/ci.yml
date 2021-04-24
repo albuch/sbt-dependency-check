@@ -30,7 +30,6 @@ jobs:
       #  run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
       - name: DependencyCheck
         run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" dependencyCheck
-        continue-on-error: true
       - name: Print DependencyCheck Result
         uses: albuch/sbt-dependency-check-action@main
         with:

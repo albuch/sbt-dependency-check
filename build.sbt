@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
 dependencyUpdatesFailBuild := true
 
-dependencyCheckFailBuildOnCVSS := 0
+dependencyCheckFailBuildOnCVSS := 11
 dependencyCheckSkipProvidedScope := true
 dependencyCheckFormat := "ALL"
 dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
