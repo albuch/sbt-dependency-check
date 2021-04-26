@@ -80,6 +80,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNodeAuditAnalyzerUseCache := None,
     dependencyCheckNPMCPEAnalyzerEnabled := None,
     dependencyCheckYarnAuditAnalyzerEnabled := None,
+    dependencyCheckPathToYarn := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -90,6 +91,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckBundleAuditWorkingDirectory := None,
     dependencyCheckAssemblyAnalyzerEnabled := None,
+    dependencyCheckMSBuildAnalyzerEnabled := None,
     dependencyCheckPEAnalyzerEnabled := None,
     dependencyCheckPathToDotNETCore := None,
     dependencyCheckRetireJSAnalyzerEnabled := None,
@@ -238,9 +240,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NODE_AUDIT_SKIPDEV, dependencyCheckNodeAuditSkipDevDependencies.value)
     setBooleanSetting(ANALYZER_NPM_CPE_ENABLED, dependencyCheckNPMCPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_YARN_AUDIT_ENABLED, dependencyCheckYarnAuditAnalyzerEnabled.value)
+    setFileSetting(ANALYZER_YARN_PATH, dependencyCheckPathToYarn.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_MSBUILD_PROJECT_ENABLED, dependencyCheckMSBuildAnalyzerEnabled.value)
     setFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, dependencyCheckPathToDotNETCore.value)
     setBooleanSetting(ANALYZER_PE_ENABLED, dependencyCheckPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COCOAPODS_ENABLED, dependencyCheckCocoapodsEnabled.value)
