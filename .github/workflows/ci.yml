@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+  schedule:
+    - cron: '* 2 * * *'
+
 jobs:
   test:
     strategy:
