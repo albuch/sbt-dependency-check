@@ -107,6 +107,7 @@ dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not 
 dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
 dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. | true
 dependencyCheckYarnAuditAnalyzerEnabled | Sets whether the Yarn Audit Analyzer should be used. This analyzer requires yarn and an internet connection. Use `dependencyCheckNodeAuditSkipDevDependencies` to skip dev dependencies. | true
+dependencyCheckPathToYarn | Sets the path to the Yarn executable. |
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
@@ -117,6 +118,7 @@ dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit An
 dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
+dependencyCheckMSBuildAnalyzerEnabled | Sets whether the MSBuild Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
 dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | true
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
