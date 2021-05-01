@@ -14,7 +14,7 @@ sbtPlugin := true
 
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.1.5"
+	"org.owasp" % "dependency-check-core" % "6.1.6"
 )
 
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
