@@ -12,9 +12,11 @@ name := "sbt-dependency-check"
 crossSbtVersions := Vector("1.2.8")
 sbtPlugin := true
 
+resolvers += Resolver.sonatypeRepo("snapshots")
+
 libraryDependencies ++= Seq(
 	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.1.6"
+	"org.owasp" % "dependency-check-core" % "6.2.1-SNAPSHOT"
 )
 
 dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
