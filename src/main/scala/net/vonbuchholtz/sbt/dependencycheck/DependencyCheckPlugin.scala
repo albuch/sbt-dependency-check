@@ -138,12 +138,12 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckUpdateOnly := updateTask.value,
     dependencyCheckPurge := purgeTask.value,
     dependencyCheckListSettings := listSettingsTask.value,
-    aggregate in dependencyCheckAggregate := false,
-    aggregate in dependencyCheckAnyProject := false,
-    aggregate in dependencyCheckUpdateOnly := false,
-    aggregate in dependencyCheckPurge := false,
-    aggregate in dependencyCheckListSettings := false,
-    concurrentRestrictions in Global += Tags.exclusive(NonParallel)
+    dependencyCheckAggregate / aggregate := false,
+    dependencyCheckAnyProject / aggregate := false,
+    dependencyCheckUpdateOnly / aggregate := false,
+    dependencyCheckPurge / aggregate := false,
+    dependencyCheckListSettings / aggregate := false,
+    Global / concurrentRestrictions += Tags.exclusive(NonParallel)
   )
 
   private val NonParallel = Tags.Tag("NonParallel")
@@ -307,15 +307,15 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         val useSbtModuleIdAsGav: Boolean = dependencyCheckUseSbtModuleIdAsGav.value.getOrElse(false)
 
         val checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
-        checkDependencies ++= logAddDependencies((externalDependencyClasspath in Compile).value, Compile, log)
+        checkDependencies ++= logAddDependencies((Compile / externalDependencyClasspath).value, Compile, log)
 
         val skipRuntimeScope = dependencyCheckSkipRuntimeScope.value
         val skipTestScope = dependencyCheckSkipTestScope.value
         val skipProvidedScope = dependencyCheckSkipProvidedScope.value
         val skipOptionalScope = dependencyCheckSkipOptionalScope.value
 
-        val runtimeClasspath = (externalDependencyClasspath in Runtime).value
-        val testClasspath = (externalDependencyClasspath in Test).value
+        val runtimeClasspath = (Runtime / externalDependencyClasspath).value
+        val testClasspath = (Test / externalDependencyClasspath).value
         val classpathTypeValue = classpathTypes.value
         val updateValue = update.value
 
@@ -446,7 +446,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       Def.task { Seq.empty }
     else
       Def.task {
-        (externalDependencyClasspath in configuration).value
+        (configuration / externalDependencyClasspath).value
       }
   }
   lazy val runtimeDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
@@ -454,7 +454,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       Def.task { Seq.empty }
     else
       Def.task {
-        (externalDependencyClasspath in configuration).value
+        (configuration / externalDependencyClasspath).value
       }
   }
   lazy val testDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
@@ -462,7 +462,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
       Def.task { Seq.empty }
     else
       Def.task {
-        (externalDependencyClasspath in configuration).value
+        (configuration / externalDependencyClasspath).value
       }
   }
   lazy val providedDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {

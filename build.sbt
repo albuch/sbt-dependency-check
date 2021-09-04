@@ -3,39 +3,39 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations.setNextVersion
 
+
+ThisBuild / organization := "net.vonbuchholtz"
+ThisBuild / name.withRank(KeyRanks.Invisible) := "sbt-dependency-check"
+
 val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
+	.settings(
+		libraryDependencies ++= Seq(
+			"commons-collections" % "commons-collections" % "3.2.2",
+			"org.owasp" % "dependency-check-core" % "6.3.1"
+		),
+		sbtPlugin := true,
+		dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt"),
+		dependencyUpdatesFailBuild := true
+	)
 
-organization := "net.vonbuchholtz"
-name := "sbt-dependency-check"
 
-crossSbtVersions := Vector("1.2.8")
-sbtPlugin := true
+ThisBuild / crossSbtVersions .withRank(KeyRanks.Invisible) := Vector("1.2.8")
 
-libraryDependencies ++= Seq(
-	"commons-collections" % "commons-collections" % "3.2.2",
-	"org.owasp" % "dependency-check-core" % "6.3.1"
-)
+ThisBuild / dependencyCheckFailBuildOnCVSS := 11
+ThisBuild / dependencyCheckSkipProvidedScope := true
+ThisBuild / dependencyCheckFormat := "ALL"
+ThisBuild / dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
 
-dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt")
-dependencyUpdatesFailBuild := true
+Global / scriptedLaunchOpts ++= Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
+Global / scriptedBufferLog := false
 
-dependencyCheckFailBuildOnCVSS := 11
-dependencyCheckSkipProvidedScope := true
-dependencyCheckFormat := "ALL"
-dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
-
-scriptedLaunchOpts := { scriptedLaunchOpts.value ++
-	Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
-}
-scriptedBufferLog := false
-
-publishTo := sonatypePublishToBundle.value
-publishMavenStyle := true
+ThisBuild / publishTo := sonatypePublishToBundle.value
+ThisBuild / publishMavenStyle .withRank(KeyRanks.Invisible) := true
 sonatypeProfileName := "net.vonbuchholtz"
 
 // To sync with Maven central, you need to supply the following information:
-pomExtra in Global := {
+ Global / pomExtra := {
 	<url>https://github.com/albuch/sbt-dependency-check</url>
 		<licenses>
 			<license>
