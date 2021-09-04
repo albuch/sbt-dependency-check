@@ -4,8 +4,8 @@ import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations.setNextVersion
 
 
-ThisBuild / organization := "net.vonbuchholtz"
-ThisBuild / name.withRank(KeyRanks.Invisible) := "sbt-dependency-check"
+organization := "net.vonbuchholtz"
+name := "sbt-dependency-check"
 
 val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
