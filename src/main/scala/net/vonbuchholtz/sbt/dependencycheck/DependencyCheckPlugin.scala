@@ -73,7 +73,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPipAnalyzerEnabled := None,
     dependencyCheckPipfileAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
+    dependencyCheckCpanFileAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
+    dependencyCheckNodePackageSkipDevDependencies := None,
     dependencyCheckNodeAuditAnalyzerEnabled := None,
     dependencyCheckNodeAuditAnalyzerUrl := None,
     dependencyCheckNodeAuditSkipDevDependencies := None,
@@ -87,6 +89,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckMixAuditAnalyzerEnabled := None,
     dependencyCheckMixAuditPath := None,
     dependencyCheckSwiftEnabled := None,
+    dependencyCheckSwiftPackageResolvedAnalyzerEnabled := None,
     dependencyCheckBundleAuditEnabled := None,
     dependencyCheckPathToBundleAudit := None,
     dependencyCheckBundleAuditWorkingDirectory := None,
@@ -233,7 +236,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_PIP_ENABLED, dependencyCheckPipAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PIPFILE_ENABLED, dependencyCheckPipfileAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_CPANFILE_ENABLED, dependencyCheckCpanFileAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_NODE_PACKAGE_SKIPDEV, dependencyCheckNodePackageSkipDevDependencies.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_ENABLED, dependencyCheckNodeAuditAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_AUDIT_USE_CACHE, dependencyCheckNodeAuditAnalyzerUseCache.value)
     setUrlSetting(ANALYZER_NODE_AUDIT_URL, dependencyCheckNodeAuditAnalyzerUrl.value)
@@ -251,6 +256,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_MIX_AUDIT_ENABLED, dependencyCheckMixAuditAnalyzerEnabled.value)
     setFileSetting(ANALYZER_MIX_AUDIT_PATH, dependencyCheckMixAuditPath.value)
     setBooleanSetting(ANALYZER_SWIFT_PACKAGE_MANAGER_ENABLED, dependencyCheckSwiftEnabled.value)
+    setBooleanSetting(ANALYZER_SWIFT_PACKAGE_RESOLVED_ENABLED, dependencyCheckSwiftPackageResolvedAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_BUNDLE_AUDIT_ENABLED, dependencyCheckBundleAuditEnabled.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_WORKING_DIRECTORY, dependencyCheckBundleAuditWorkingDirectory.value)
