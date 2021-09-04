@@ -100,7 +100,9 @@ dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ 
 dependencyCheckPipAnalyzerEnabled | Sets whether or not the _experimental_ pip Analyzer should be used | true
 dependencyCheckPipfileAnalyzerEnabled | Sets whether or not the _experimental_ Pipfile Analyzer should be used | true
 dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
+dependencyCheckCpanFileAnalyzerEnabled | Sets whether or not the _experimental_ Perl CPAN File Analyzer should be used. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
+dependencyCheckNodePackageSkipDevDependencies | Sets whether the Node.js Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
 dependencyCheckNodeAuditSkipDevDependencies | Sets whether the Node Audit Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
@@ -114,6 +116,7 @@ dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapo
 dependencyCheckMixAuditAnalyzerEnabled | Sets whether or not the _experimental_ Mix Audit Analyzer should be used. | tue
 dependencyCheckMixAuditPath | Sets the path to the mix_audit executable; only used if mix audit analyzer is enabled and experimental analyzers are enabled. | 
 dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
+dependencyCheckSwiftPackageResolvedAnalyzerEnabled | Sets whether or not the _experimental_ Swift Package Resolved Analyzer should be used. | true
 dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
 dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
