@@ -12,7 +12,7 @@ val sbtDependencyCheck = (project in file("."))
 	.settings(
 		libraryDependencies ++= Seq(
 			"commons-collections" % "commons-collections" % "3.2.2",
-			"org.owasp" % "dependency-check-core" % "6.3.1"
+			"org.owasp" % "dependency-check-core" % "6.4.1"
 		),
 		sbtPlugin := true,
 		dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt"),

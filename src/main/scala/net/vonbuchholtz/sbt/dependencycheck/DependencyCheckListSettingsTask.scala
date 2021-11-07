@@ -120,6 +120,8 @@ object DependencyCheckListSettingsTask {
     logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
     logStringSetting(CVE_USER, "dependencyCheckCveUser", log)
     logStringSetting(CVE_PASSWORD, "dependencyCheckCvePassword", log)
+    logStringSetting(CVE_DOWNLOAD_WAIT_TIME, "dependencyCheckCveWaitTime", log)
+    logStringSetting(CVE_START_YEAR, "dependencyCheckCveStartYear", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
     logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
     logStringSetting(DB_VERSION, "dependencyCheckDatabaseVersion", log)

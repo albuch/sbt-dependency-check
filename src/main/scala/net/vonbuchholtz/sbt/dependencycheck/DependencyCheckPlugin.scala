@@ -118,6 +118,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckCveUrlBase := None,
     dependencyCheckCveUser := None,
     dependencyCheckCvePassword := None,
+    dependencyCheckCveWaitTime := None,
+    dependencyCheckCveStartYear := None,
     dependencyCheckConnectionTimeout := None,
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
@@ -278,6 +280,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(CVE_BASE_JSON, dependencyCheckCveUrlBase.value)
     setStringSetting(CVE_USER, dependencyCheckCveUser.value)
     setStringSetting(CVE_PASSWORD, dependencyCheckCvePassword.value)
+    setIntSetting(CVE_DOWNLOAD_WAIT_TIME, dependencyCheckCveWaitTime.value)
+    setIntSetting(CVE_START_YEAR, dependencyCheckCveStartYear.value.map(_.max(2002)))
     setIntSetting(CONNECTION_TIMEOUT, dependencyCheckConnectionTimeout.value)
     setFileSetting(DATA_DIRECTORY, dependencyCheckDataDirectory.value)
     setStringSetting(DB_DRIVER_NAME, dependencyCheckDatabaseDriverName.value)

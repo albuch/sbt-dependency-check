@@ -52,7 +52,7 @@ Setting | Description | Default Value
 :-------|:------------|:-------------
 dependencyCheckAutoUpdate | Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false. | true
 dependencyCheckCveValidForHours | Sets the number of hours to wait before checking for new updates from the NVD. | 4
-dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. | 11.0
+dependencyCheckFailBuildOnCVSS | Specifies if the build should be failed if a CVSS score above, or equal to, a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. More information on CVSS scores can be found at the [NVD](https://nvd.nist.gov/vuln-metrics/cvss) | 11.0
 dependencyCheckJUnitFailBuildOnCVSS | If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure. The default value is 0 - all vulnerabilities are considered a failure.| 0
 dependencyCheckFormat | The report format to be generated (HTML, XML, JUNIT, CSV, JSON, SARIF, ALL). This setting is ignored if dependencyCheckReportFormats is set. | HTML
 dependencyCheckFormats | A sequence of report formats to be generated (HTML, XML, JUNIT, CSV, JSON, SARIF, ALL). | 
@@ -91,41 +91,41 @@ dependencyCheckNexusUrl | Defines the Nexus Server’s web service end point (ex
 dependencyCheckNexusUsesProxy | Whether or not the defined proxy should be used when connecting to Nexus. | true
 dependencyCheckNexusUser | The username to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. | 
 dependencyCheckNexusPassword | The password to authenticate to the Nexus Server's web service end point. If not set the Nexus Analyzer will use an unauthenticated connection. |
-dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the _experimental_ Python Distribution Analyzer will be used.  | true
-dependencyCheckPyPackageAnalyzerEnabled | Sets whether the _experimental_ Python Package Analyzer will be used. | true
-dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Gemspec Analyzer will be used. | true
-dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. | true
-dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMake Analyzer should be used. | true
-dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. | true
-dependencyCheckPipAnalyzerEnabled | Sets whether or not the _experimental_ pip Analyzer should be used | true
-dependencyCheckPipfileAnalyzerEnabled | Sets whether or not the _experimental_ Pipfile Analyzer should be used | true
-dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. | true
-dependencyCheckCpanFileAnalyzerEnabled | Sets whether or not the _experimental_ Perl CPAN File Analyzer should be used. | true
+dependencyCheckPyDistributionAnalyzerEnabled | Sets whether the _experimental_ Python Distribution Analyzer will be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckPyPackageAnalyzerEnabled | Sets whether the _experimental_ Python Package Analyzer will be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckRubygemsAnalyzerEnabled | Sets whether the _experimental_ Ruby Gemspec Analyzer will be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckOpensslAnalyzerEnabled | Sets whether or not the openssl Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckCmakeAnalyzerEnabled | Sets whether or not the _experimental_ CMake Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckAutoconfAnalyzerEnabled | Sets whether or not the _experimental_ autoconf Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckPipAnalyzerEnabled | Sets whether or not the _experimental_ pip Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckPipfileAnalyzerEnabled | Sets whether or not the _experimental_ Pipfile Analyzer should be used `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckComposerAnalyzerEnabled | Sets whether or not the _experimental_ PHP Composer Lock File Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckCpanFileAnalyzerEnabled | Sets whether or not the _experimental_ Perl CPAN File Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckNodeAnalyzerEnabled | Sets whether or not the _retired_ Node.js Analyzer should be used. | false
 dependencyCheckNodePackageSkipDevDependencies | Sets whether the Node.js Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerEnabled | Sets whether or not the Node Audit Analyzer should be used. | true
 dependencyCheckNodeAuditSkipDevDependencies | Sets whether the Node Audit Analyzer will skip devDependencies. | false
 dependencyCheckNodeAuditAnalyzerUrl | Sets the URL to the NPM Audit API. If not set uses default URL. | 
 dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer will cache results. Cached results expire after 24 hours. | true
-dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. | true
+dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckYarnAuditAnalyzerEnabled | Sets whether the Yarn Audit Analyzer should be used. This analyzer requires yarn and an internet connection. Use `dependencyCheckNodeAuditSkipDevDependencies` to skip dev dependencies. | true
 dependencyCheckPathToYarn | Sets the path to the Yarn executable. |
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
-dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. | false
-dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. | true
-dependencyCheckMixAuditAnalyzerEnabled | Sets whether or not the _experimental_ Mix Audit Analyzer should be used. | tue
+dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. `dependencyCheckEnableExperimental` must be set to true. | false
+dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckMixAuditAnalyzerEnabled | Sets whether or not the _experimental_ Mix Audit Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | tue
 dependencyCheckMixAuditPath | Sets the path to the mix_audit executable; only used if mix audit analyzer is enabled and experimental analyzers are enabled. | 
-dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. | true
-dependencyCheckSwiftPackageResolvedAnalyzerEnabled | Sets whether or not the _experimental_ Swift Package Resolved Analyzer should be used. | true
-dependencyCheckBundleAuditEnabled | Sets whether or not the Ruby Bundle Audit Analyzer should be used. | true
+dependencyCheckSwiftEnabled | Sets whether or not the _experimental_ Swift Package Manager Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckSwiftPackageResolvedAnalyzerEnabled | Sets whether or not the _experimental_ Swift Package Resolved Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckBundleAuditEnabled | Sets whether or not the _experimental_ Ruby Bundle Audit Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckPathToBundleAudit| The path to Ruby Bundle Audit. |
 dependencyCheckBundleAuditWorkingDirectory | Sets the path for the working directory that the Ruby Bundle Audit binary should be executed from. | 
 dependencyCheckAssemblyAnalyzerEnabled | Sets whether or not the .NET Assembly Analyzer should be used. | true
 dependencyCheckMSBuildAnalyzerEnabled | Sets whether the MSBuild Analyzer should be used. | true
 dependencyCheckPathToDotNETCore | The path to .NET Core for .NET assembly analysis on non-windows systems. |
-dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. | true
+dependencyCheckPEAnalyzerEnabled | Sets whether or not the _experimental_ PE Analyzer that reads the PE headers of DLL and EXE files should be used. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckRetireJSAnalyzerEnabled | Sets whether or not the RetireJS Analyzer should be used. | true
-dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
+dependencyCheckRetireJSAnalyzerRepoJSUrl | Set the URL to the RetireJS repository. **Note** the file name must be `jsrepository.json` | https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json 
 dependencyCheckRetireJsAnalyzerRepoValidFor | Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer | 24
 dependencyCheckRetireJsAnalyzerFilters | Set one or more filters for the RetireJS analyzer. | 
 dependencyCheckRetireJsAnalyzerFilterNonVulnerable | Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies | false
@@ -136,8 +136,8 @@ dependencyCheckArtifactoryAnalyzerParallelAnalysis | Sets whether the Artifactor
 dependencyCheckArtifactoryAnalyzerUsername | The user name (only used with API token) to connect to Artifactory instance. | 
 dependencyCheckArtifactoryAnalyzerApiToken | The API token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead  | 
 dependencyCheckArtifactoryAnalyzerBearerToken | The bearer token to connect to Artifactory instance. __Note:__ These settings should not be added to your local `build.sbt` file and commited to your code repository for security reasons. They can be added to `~/.sbt/<version>/global.sbt` file instead | 
-dependencyCheckGolangDepEnabled | Sets whether or not the experimental Golang Dependency Analyzer should be used. | true
-dependencyCheckGolangModEnabled | Sets whether or not the experimental Golang Module Analyzer should be used. Requires `go` to be installed. | true
+dependencyCheckGolangDepEnabled | Sets whether or not the _experimental_ Golang Dependency Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
+dependencyCheckGolangModEnabled | Sets whether or not the _experimental_ Golang Module Analyzer should be used. Requires `go` to be installed. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckPathToGo | The path to the "go" runtime. | 
 
 #### Advanced Configuration
@@ -145,10 +145,12 @@ The following properties can be configured in the plugin. However, they are less
 
 Setting | Description | Default Value
 :-------|:------------|:-------------
-dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. When mirroring the NVD you must mirror the *.json.gz and the *.meta files. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.gz>
+dependencyCheckCveUrlModified | URL for the modified CVE JSON data feed. When mirroring the NVD you must mirror the *.json.gz and the *.meta files. Optional if your custom `dependencyCheckCveUrlBase` is just a domain name change. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.gz>
 dependencyCheckCveUrlBase | Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. | <https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-%d.json.gz>
 dependencyCheckCveUser | The username used when connecting to the `dependencyCheckCveUrlBase`. | 
-dependencyCheckCvePassword | The password used when connecting to the `dependencyCheckCveUrlBase`. | 
+dependencyCheckCvePassword | The password used when connecting to the `dependencyCheckCveUrlBase`. |
+dependencyCheckCveWaitTime | The time in milliseconds to wait between downloads from the NVD. | 4000
+dependencyCheckCveStartYear | The first year of NVD CVE data to download from the NVD. | 2002
 dependencyCheckConnectionTimeout | Sets the URL Connection Timeout used when downloading external data. |
 dependencyCheckDataDirectory | Sets the data directory to hold SQL CVEs contents. This should generally not be changed. | [JAR]\data
 dependencyCheckDatabaseDriverName | The name of the database driver. Example: org.h2.Driver. | org.h2.Driver
