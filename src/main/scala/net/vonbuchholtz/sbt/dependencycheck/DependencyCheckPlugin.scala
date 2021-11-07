@@ -118,6 +118,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckCveUrlBase := None,
     dependencyCheckCveUser := None,
     dependencyCheckCvePassword := None,
+    dependencyCheckCveWaitTime := None,
+    dependencyCheckCveStartYear := None,
     dependencyCheckConnectionTimeout := None,
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
