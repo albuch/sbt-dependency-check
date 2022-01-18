@@ -110,6 +110,8 @@ dependencyCheckNodeAuditAnalyzerUseCache | Sets whether the Node Audit Analyzer 
 dependencyCheckNPMCPEAnalyzerEnabled | Sets whether the or not the _experimental_ NPM CPE Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true
 dependencyCheckYarnAuditAnalyzerEnabled | Sets whether the Yarn Audit Analyzer should be used. This analyzer requires yarn and an internet connection. Use `dependencyCheckNodeAuditSkipDevDependencies` to skip dev dependencies. | true
 dependencyCheckPathToYarn | Sets the path to the Yarn executable. |
+dependencyCheckPNPMAuditAnalyzerEnabled | Sets whether the Pnpm Audit Analyzer is enabled. This analyzer requires pnpm and an internet connection. Use `nodeAuditSkipDevDependencies` to skip dev dependencies. | true
+dependencyCheckPathToPNPM | Sets the path to the `pnpm` executable. | 
 dependencyCheckNuspecAnalyzerEnabled | Sets whether or not the .NET Nuget Nuspec Analyzer will be used. | true
 dependencyCheckNugetConfAnalyzerEnabled | Sets whether the _experimental_ .NET Nuget packages.config Analyzer will be used. `dependencyCheckEnableExperimental` must be set to true. | false
 dependencyCheckCocoapodsEnabled | Sets whether or not the _experimental_ Cocoapods Analyzer should be used. `dependencyCheckEnableExperimental` must be set to true. | true

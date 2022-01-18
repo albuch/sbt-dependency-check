@@ -83,6 +83,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckNPMCPEAnalyzerEnabled := None,
     dependencyCheckYarnAuditAnalyzerEnabled := None,
     dependencyCheckPathToYarn := None,
+    dependencyCheckPNPMAuditAnalyzerEnabled := None,
+    dependencyCheckPathToPNPM := None,
     dependencyCheckNuspecAnalyzerEnabled := None,
     dependencyCheckNugetConfAnalyzerEnabled := None,
     dependencyCheckCocoapodsEnabled := None,
@@ -248,6 +250,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_NPM_CPE_ENABLED, dependencyCheckNPMCPEAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_YARN_AUDIT_ENABLED, dependencyCheckYarnAuditAnalyzerEnabled.value)
     setFileSetting(ANALYZER_YARN_PATH, dependencyCheckPathToYarn.value)
+    setBooleanSetting(ANALYZER_PNPM_AUDIT_ENABLED, dependencyCheckPNPMAuditAnalyzerEnabled.value)
+    setFileSetting(ANALYZER_PNPM_PATH, dependencyCheckPathToPNPM.value)
     setBooleanSetting(ANALYZER_NUSPEC_ENABLED, dependencyCheckNuspecAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NUGETCONF_ENABLED, dependencyCheckNugetConfAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_ASSEMBLY_ENABLED, dependencyCheckAssemblyAnalyzerEnabled.value)

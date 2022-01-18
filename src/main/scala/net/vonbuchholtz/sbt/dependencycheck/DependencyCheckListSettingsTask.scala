@@ -84,6 +84,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_NPM_CPE_ENABLED, "dependencyCheckNPMCPEAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_YARN_AUDIT_ENABLED, "dependencyCheckYarnAuditAnalyzerEnabled", log)
     logFileSetting(ANALYZER_YARN_PATH, "dependencyCheckPathToYarn", log)
+    logBooleanSetting(ANALYZER_PNPM_AUDIT_ENABLED, "dependencyCheckPNPMAuditAnalyzerEnabled", log)
+    logFileSetting(ANALYZER_PNPM_PATH, "dependencyCheckPathToPNPM", log)
     logBooleanSetting(ANALYZER_NUSPEC_ENABLED, "dependencyCheckNuspecAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NUGETCONF_ENABLED, "dependencyCheckNugetConfAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COCOAPODS_ENABLED, "dependencyCheckCocoapodsEnabled", log)
