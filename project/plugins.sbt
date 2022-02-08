@@ -9,5 +9,5 @@ Compile / unmanagedSourceDirectories += baseDirectory.value.getParentFile / "src
 libraryDependencies ++= Seq(
   "commons-collections" % "commons-collections" % "3.2.2",
   "org.owasp" % "dependency-check-core" % "6.5.3",
-  "org.slf4j" % "slf4j-simple" % "1.7.35"
+  "org.slf4j" % "slf4j-simple" % "1.7.36"
 )
