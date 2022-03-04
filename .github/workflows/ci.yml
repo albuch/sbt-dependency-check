@@ -33,7 +33,7 @@ jobs:
         run: sbt -v -Dfile.encoding=UTF-8 "^ publishLocal"
       - name: Get plugin version
         run: |
-          PLUGIN_VERSION=$(sbt -Dsbt.supershell=false -error "print version")
+          PLUGIN_VERSION=$(sbt -Dsbt.supershell=false -error "print version" | tr -d "[:space:]")
           echo ${PLUGIN_VERSION}
           echo "PLUGIN_VERSION=${PLUGIN_VERSION}" >> $GITHUB_ENV
       - name: Test example project for current snapshot
