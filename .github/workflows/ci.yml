@@ -37,7 +37,7 @@ jobs:
           echo ${PLUGIN_VERSION}
           echo "PLUGIN_VERSION=${PLUGIN_VERSION}" >> $GITHUB_ENV
       - name: Test example project for current snapshot
-        run: sbt -v -Dfile.encoding=UTF-8 -Dplugin.version="${{ env.PLUGIN_VERSION }}" "^^ ${{ matrix.sbt }} dependencyCheck"
+        run: sbt -v -Dfile.encoding=UTF-8 -Dplugin.version="${{ env.PLUGIN_VERSION }}" "^^ ${{ matrix.sbt }} version"
         working-directory: ./testProject
       - name: Build and Test
         run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
