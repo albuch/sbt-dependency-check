@@ -31,12 +31,14 @@ jobs:
         uses: coursier/cache-action@v6
       - name: Publish Local
         run: sbt -v -Dfile.encoding=UTF-8 "^ publishLocal"
-      - name: Build and Test
-        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
       - name: Get plugin version
-        run: echo "PLUGIN_VERSION=$(sbt -Dsbt.supershell=false -error \"print version\")" >> $GITHUB_ENV
+        run: |
+          sbt -Dsbt.supershell=false -error "print version"
+          echo "PLUGIN_VERSION=$(sbt -Dsbt.supershell=false -error \"print version\")" >> $GITHUB_ENV
       - name: Test example project for current snapshot
         run: sbt -v -Dfile.encoding=UTF-8 -Dplugin.version=${{ env.PLUGIN_VERSION }} "^^ ${{ matrix.sbt }} dependencyCheck"
+      - name: Build and Test
+        run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
         working-directory: ./testProject
       - name: DependencyCheck
         run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" dependencyCheck
