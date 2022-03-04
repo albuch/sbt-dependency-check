@@ -1,4 +1,4 @@
-import sbt.{Project, _}
+import sbt.{Global, Project, _}
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations.setNextVersion
@@ -16,19 +16,18 @@ val sbtDependencyCheck = (project in file("."))
 		),
 		sbtPlugin := true,
 		dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt"),
-		dependencyUpdatesFailBuild := true
+		dependencyUpdatesFailBuild := true,
+		crossSbtVersions := Vector("1.2.8"),
+		scriptedLaunchOpts ++= Seq("-Xmx1024M", "-Dplugin.version=" + version.value),
+		scriptedBufferLog := false
 	)
 
-
-ThisBuild / crossSbtVersions .withRank(KeyRanks.Invisible) := Vector("1.2.8")
 
 ThisBuild / dependencyCheckFailBuildOnCVSS := 11
 ThisBuild / dependencyCheckSkipProvidedScope := true
 ThisBuild / dependencyCheckFormat := "ALL"
 ThisBuild / dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
 
-Global / scriptedLaunchOpts ++= Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
-Global / scriptedBufferLog := false
 
 ThisBuild / publishTo := sonatypePublishToBundle.value
 ThisBuild / publishMavenStyle .withRank(KeyRanks.Invisible) := true

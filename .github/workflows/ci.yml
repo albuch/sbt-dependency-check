@@ -18,7 +18,7 @@ jobs:
           - java: 11
             sbt: "1.2.8"
           - java: 11
-            sbt: "1.5.5"
+            sbt: "1.6.2"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,6 +29,18 @@ jobs:
           java-version: "adopt@1.${{ matrix.java }}"
       - name: Coursier cache
         uses: coursier/cache-action@v6
+      - name: Publish Local
+        run: sbt -v -Dfile.encoding=UTF-8 "^ publishLocal"
+      - name: Get plugin version
+        run: |
+          PLUGIN_VERSION=$(sbt -Dsbt.ci=true -Dsbt.supershell=false -Dsbt.color=false -Dsbt.log.noformat=true -error "print version")
+          echo ${PLUGIN_VERSION}
+          echo "PLUGIN_VERSION=${PLUGIN_VERSION}" >> $GITHUB_ENV
+      - name: Test example project for current snapshot
+        run: |
+          echo "sbt.version=${{ matrix.sbt }}" > ./project/build.properties
+          sbt -v -Dfile.encoding=UTF-8 -Dplugin.version="${{ env.PLUGIN_VERSION }}" version
+        working-directory: ./testProject
       - name: Build and Test
         run: sbt -v -Dfile.encoding=UTF-8 "^^ ${{ matrix.sbt }}" clean test scripted
       - name: DependencyCheck
