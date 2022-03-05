@@ -4,7 +4,7 @@
         <notes><![CDATA[
    FP per issue #4162
    ]]></notes>
-        <packageUrl regex="true">^pkg:maven/commons-digester/commons-digester@.*$</packageUrl>
+        <packageUrl regex="true">^pkg:maven/commons-(?:digester|validator)/commons-(?:digester|validator)@.*$</packageUrl>
         <cpe>cpe:/a:apache:james</cpe>
     </suppress>
 </suppressions>
