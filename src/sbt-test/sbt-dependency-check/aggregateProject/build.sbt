@@ -32,5 +32,5 @@ lazy val core = project.dependsOn(util)
 lazy val ignore = (project in file("ignore"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind"  % "2.9.9"
+    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind"  % "2.13.1"
   )

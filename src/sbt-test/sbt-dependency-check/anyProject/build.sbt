@@ -20,5 +20,5 @@ lazy val core = (project in file("core"))
 lazy val inScope = (project in file("inScope"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind"  % "2.9.9"
+    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind"  % "2.13.1"
   )
