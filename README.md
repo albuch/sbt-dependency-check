@@ -15,6 +15,7 @@ For more information on how OWASP DependencyCheck works and how to read the repo
    * [Changing Log Level](#changing-log-level)
    * [Global Plugin Configuration](#global-plugin-configuration)
    * [Running behind a proxy](#running-behind-a-proxy)
+* [Release](#release)
 * [License](#license)
 
 ## Getting started
@@ -235,6 +236,10 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
         -Dhttp.proxyPassword=password \
         -DnoProxyHosts="localhost|http://www.google.com" \
         dependencyCheck
+
+## Release
+Run `release` task and follow instructions.
+Verify that release reached [Maven Central](https://repo1.maven.org/maven2/net/vonbuchholtz/sbt-dependency-check_2.12_1.0/). It takes up to too additional hours to be indexed for https://search.maven.org.
 
 ## License
 Copyright (c) 2016-2022 Alexander Baron v. Buchholtz
