@@ -20,22 +20,21 @@ For more information on how OWASP DependencyCheck works and how to read the repo
 ## Getting started
 sbt-dependency-check is an AutoPlugin. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "3.4.1")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.0.0")
 
 Use sbt-dependency-check `v2.0.0` or higher as previous versions aren't compatible with NVD feeds anymore. 
 Starting with sbt-dependency-check `v3.0.0` sbt v0.13.x is no longer supported.
 
 ## Usage
 ### Tasks
-Task | Description | Command
-:-------|:------------|:-----
-dependencyCheck | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project. | ```$ sbt dependencyCheck```
-dependencyCheckAggregate | Runs dependency-check against the current project, its aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAggregate```
-dependencyCheckAnyProject | Runs dependency-check against all projects, aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAnyProject```
-dependencyCheckUpdateOnly | Updates the local cache of the NVD data from NIST. | ```$ sbt dependencyCheckUpdateOnly```
-dependencyCheckPurge | Deletes the local copy of the NVD. This is used to force a refresh of the data. | ```$ sbt dependencyCheckPurge```
-dependencyCheckListSettings | Prints all settings and their values for the project. | ```$ sbt dependencyCheckListSettings```
-
+| Task                        | Description                                                                                                                                                 | Command                                 |
+|:----------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------|
+| dependencyCheck             | Runs dependency-check against the current project, its aggregates and dependencies and generates a report for each project.                                 | ```$ sbt dependencyCheck```             |
+| dependencyCheckAggregate    | Runs dependency-check against the current project, its aggregates and dependencies and generates a single report in the current project's output directory. | ```$ sbt dependencyCheckAggregate```    |
+| dependencyCheckAnyProject   | Runs dependency-check against all projects, aggregates and dependencies and generates a single report in the current project's output directory.            | ```$ sbt dependencyCheckAnyProject```   |
+| dependencyCheckUpdateOnly   | Updates the local cache of the NVD data from NIST.                                                                                                          | ```$ sbt dependencyCheckUpdateOnly```   |
+| dependencyCheckPurge        | Deletes the local copy of the NVD. This is used to force a refresh of the data.                                                                             | ```$ sbt dependencyCheckPurge```        |
+| dependencyCheckListSettings | Prints all settings and their values for the project.                                                                                                       | ```$ sbt dependencyCheckListSettings``` |
 
 The reports will be written to the default location `crossTarget.value`. This can be overwritten by setting `dependencyCheckOutputDirectory`. See Configuration for details.
 
@@ -217,7 +216,7 @@ If you want to apply some default configuration for all your SBT projects you ca
 
 1. Add the plugin to `~/.sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "3.4.1")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.0.0")
     ```
 
 1. Add settings at `~/.sbt/1.0/global.sbt` using their fully qualified name (including package and nested object structure). E.g.
