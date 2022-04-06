@@ -35,6 +35,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckOSSIndexAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the OSS Index Analyzer should be used.")
 	lazy val dependencyCheckOSSIndexAnalyzerUrl = settingKey[Option[URL]]("Sets the URL to the OSS Index repository.")
 	lazy val dependencyCheckOSSIndexAnalyzerUseCache = settingKey[Option[Boolean]]("Sets whether the OSS Index  Analyzer will cache results.")
+	lazy val dependencyCheckOSSIndexWarnOnlyOnRemoteErrors = settingKey[Option[Boolean]]("Sets whether remote errors from the OSS Index (e.g. BAD GATEWAY, RATE LIMIT EXCEEDED) will result in warnings only instead of failing execution.")
 	lazy val dependencyCheckOSSIndexAnalyzerUsername = settingKey[Option[String]]("The username to use for the Sonatype OSS Index service.")
 	lazy val dependencyCheckOSSIndexAnalyzerPassword = settingKey[Option[String]]("The password to use for the Sonatype OSS Index service.")
 	lazy val dependencyCheckNexusAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Nexus Analyzer will be used. This analyzer is superseded by the Central Analyzer; however, you can configure this to run against a Nexus Pro installation.")

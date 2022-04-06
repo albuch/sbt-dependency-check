@@ -57,6 +57,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOSSIndexAnalyzerEnabled := None,
     dependencyCheckOSSIndexAnalyzerUrl := None,
     dependencyCheckOSSIndexAnalyzerUseCache := None,
+    dependencyCheckOSSIndexWarnOnlyOnRemoteErrors := None,
     dependencyCheckOSSIndexAnalyzerUsername := None,
     dependencyCheckOSSIndexAnalyzerPassword := None,
     dependencyCheckNexusAnalyzerEnabled := None,
@@ -226,6 +227,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_OSSINDEX_ENABLED, dependencyCheckOSSIndexAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_OSSINDEX_URL, dependencyCheckOSSIndexAnalyzerUrl.value)
     setBooleanSetting(ANALYZER_OSSINDEX_USE_CACHE, dependencyCheckOSSIndexAnalyzerUseCache.value)
+    setBooleanSetting(ANALYZER_OSSINDEX_WARN_ONLY_ON_REMOTE_ERRORS, dependencyCheckOSSIndexWarnOnlyOnRemoteErrors.value)
+    setStringSetting(ANALYZER_OSSINDEX_USER, dependencyCheckOSSIndexAnalyzerUsername.value)
+    setStringSetting(ANALYZER_OSSINDEX_PASSWORD, dependencyCheckOSSIndexAnalyzerPassword.value)
     setBooleanSetting(ANALYZER_NEXUS_ENABLED, dependencyCheckNexusAnalyzerEnabled.value)
     setUrlSetting(ANALYZER_NEXUS_URL, dependencyCheckNexusUrl.value)
     setStringSetting(ANALYZER_NEXUS_USER, dependencyCheckNexusUser.value)
