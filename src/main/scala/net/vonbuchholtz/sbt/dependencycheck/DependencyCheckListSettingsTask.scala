@@ -58,6 +58,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)
     logUrlSetting(ANALYZER_OSSINDEX_URL, "dependencyCheckOSSIndexAnalyzerUrl", log)
     logBooleanSetting(ANALYZER_OSSINDEX_USE_CACHE, "dependencyCheckOSSIndexAnalyzerUseCache", log)
+    logBooleanSetting(ANALYZER_OSSINDEX_WARN_ONLY_ON_REMOTE_ERRORS, "dependencyCheckOSSIndexWarnOnlyOnRemoteErrors", log)
     logStringSetting(ANALYZER_OSSINDEX_USER, "dependencyCheckOSSIndexAnalyzerUsername", log)
     logStringSetting(ANALYZER_OSSINDEX_PASSWORD, "dependencyCheckOSSIndexAnalyzerPassword", log)
     logBooleanSetting(ANALYZER_NEXUS_ENABLED, "dependencyCheckNexusAnalyzerEnabled", log)
