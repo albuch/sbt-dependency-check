@@ -12,6 +12,7 @@ val sbtDependencyCheck = (project in file("."))
 	.settings(
 		libraryDependencies ++= Seq(
 			"commons-collections" % "commons-collections" % "3.2.2",
+			"com.google.code.gson" % "gson" % "2.9.0",
 			"org.owasp" % "dependency-check-core" % "7.0.4"
 		),
 		sbtPlugin := true,
