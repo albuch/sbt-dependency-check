@@ -212,6 +212,8 @@ and add `-Dlog4j2.level=debug` when running a check:
 sbt -Dlog4j2.level=debug dependencyCheck
 ```
 
+Replace `dependencyCheck` with the right [task name](#tasks) that you use for your project.
+
 
 ### Global Plugin Configuration
 If you want to apply some default configuration for all your SBT projects you can add them as Global Settings:
