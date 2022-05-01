@@ -21,7 +21,7 @@ For more information on how OWASP DependencyCheck works and how to read the repo
 ## Getting started
 sbt-dependency-check is an AutoPlugin. Simply add the plugin to `project/plugins.sbt` file.
 
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.0.0")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.1.0")
 
 Use sbt-dependency-check `v2.0.0` or higher as previous versions aren't compatible with NVD feeds anymore. 
 Starting with sbt-dependency-check `v3.0.0` sbt v0.13.x is no longer supported.
@@ -220,7 +220,7 @@ If you want to apply some default configuration for all your SBT projects you ca
 
 1. Add the plugin to `~/.sbt/1.0/plugins/sbt-dependency-check.sbt`
     ```Scala
-    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.0.0")
+    addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "4.1.0")
     ```
 
 1. Add settings at `~/.sbt/1.0/global.sbt` using their fully qualified name (including package and nested object structure). E.g.
@@ -242,7 +242,7 @@ SBT and `sbt-dependency-check` both honor the standard http and https proxy sett
 
 ## Release
 Run `release` task and follow instructions.
-Verify that release reached [Maven Central](https://repo1.maven.org/maven2/net/vonbuchholtz/sbt-dependency-check_2.12_1.0/). It takes up to too additional hours to be indexed for https://search.maven.org.
+Verify that release reached [Maven Central](https://repo1.maven.org/maven2/net/vonbuchholtz/sbt-dependency-check_2.12_1.0/). It takes up to two additional hours to be indexed for https://search.maven.org.
 
 ## License
 Copyright (c) 2016-2022 Alexander Baron v. Buchholtz
