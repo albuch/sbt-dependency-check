@@ -7,4 +7,11 @@
         <packageUrl regex="true">^pkg:maven/commons-(?:digester|validator)/commons-(?:digester|validator)@.*$</packageUrl>
         <cpe>cpe:/a:apache:james</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: h2-2.1.210.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.h2database/h2@.*$</packageUrl>
+        <vulnerabilityName>CVE-2018-14335</vulnerabilityName>
+    </suppress>
 </suppressions>
