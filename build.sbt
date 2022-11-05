@@ -11,6 +11,7 @@ val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
 	.settings(
 		libraryDependencies ++= Seq(
+			"com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4.2",
 			"org.yaml" % "snakeyaml" % "1.33",
 			"org.owasp" % "dependency-check-core" % "7.3.0"
 		),
