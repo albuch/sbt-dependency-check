@@ -11,6 +11,7 @@ val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
 	.settings(
 		libraryDependencies ++= Seq(
+			"org.yaml" % "snakeyaml" % "1.33",
 			"org.owasp" % "dependency-check-core" % "7.3.0"
 		),
 		sbtPlugin := true,
