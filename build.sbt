@@ -11,8 +11,7 @@ val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
 	.settings(
 		libraryDependencies ++= Seq(
-			"com.google.code.gson" % "gson" % "2.9.0",
-			"org.owasp" % "dependency-check-core" % "7.1.0"
+			"org.owasp" % "dependency-check-core" % "7.3.0"
 		),
 		sbtPlugin := true,
 		dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt"),

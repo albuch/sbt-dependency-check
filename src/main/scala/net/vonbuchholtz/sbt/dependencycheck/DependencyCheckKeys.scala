@@ -1,6 +1,6 @@
 package net.vonbuchholtz.sbt.dependencycheck
 
-import sbt._
+import sbt.*
 
 trait DependencyCheckKeys {
 
@@ -49,7 +49,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckOpensslAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the openssl Analyzer should be used.")
 	lazy val dependencyCheckCmakeAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental CMake Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
 	lazy val dependencyCheckAutoconfAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental autoconf Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
-	lazy val dependencyCheckPipAnalyzerEnabled = settingKey[Option[Boolean]](" Sets whether the experimental pip Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
+	lazy val dependencyCheckMavenInstallAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the Maven install Analyzer should be used.")
+	lazy val dependencyCheckPipAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental pip Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
 	lazy val dependencyCheckPipfileAnalyzerEnabled = settingKey[Option[Boolean]](" Sets whether the experimental Pipfile Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
 	lazy val dependencyCheckComposerAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental PHP Composer Lock File Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
 	lazy val dependencyCheckCpanFileAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental Perl CPAN File Analyzer should be used. dependencyCheckEnableExperimental must be set to true.")
@@ -79,6 +80,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPEAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental PE Analyzer that reads the PE headers of DLL and EXE files should be used.")
 	lazy val dependencyCheckPathToDotNETCore = settingKey[Option[File]]("The path to Core for .NET assembly analysis on non-windows systems.")
 	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the RetireJS Analyzer should be used.")
+	lazy val dependencyCheckRetireJSForceUpdate = settingKey[Option[Boolean]]("Sets whether the RetireJS Analyzer should update regardless of the ´dependencyCheckAutoUpdate´ setting.")
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. Note: the file name must be 'jsrepository.json'")
 	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer.")
 	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
@@ -101,7 +103,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckCvePassword = settingKey[Option[String]]("The password used when connecting to the cveUrl. ")
 	lazy val dependencyCheckCveWaitTime = settingKey[Option[Int]]("The time in milliseconds to wait between downloads from the NVD.")
 	lazy val dependencyCheckCveStartYear = settingKey[Option[Int]]("The first year of NVD CVE data to download from the NVD.")
-	lazy val dependencyCheckConnectionTimeout = settingKey[Option[Int]]("Sets the URL Connection Timeout used when downloading external data. ")
+	lazy val dependencyCheckConnectionTimeout = settingKey[Option[Int]]("Sets the URL Connection Timeout (in milliseconds) used when downloading external data. ")
+	lazy val dependencyCheckConnectionReadTimeout = settingKey[Option[Int]]("Sets the URL Connection Read Timeout (in milliseconds) used when downloading external data. ")
 	lazy val dependencyCheckDataDirectory = settingKey[Option[File]]("Sets the data directory to hold SQL CVEs contents. This should generally not be changed. ")
 	lazy val dependencyCheckDatabaseDriverName = settingKey[Option[String]]("The name of the database driver. Example: org.h2.Driver. ")
 	lazy val dependencyCheckDatabaseDriverPath = settingKey[Option[File]]("The path to the database driver JAR file; only used if the driver is not in the class path. ")
