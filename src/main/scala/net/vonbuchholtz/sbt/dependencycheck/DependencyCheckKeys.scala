@@ -80,7 +80,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPEAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the experimental PE Analyzer that reads the PE headers of DLL and EXE files should be used.")
 	lazy val dependencyCheckPathToDotNETCore = settingKey[Option[File]]("The path to Core for .NET assembly analysis on non-windows systems.")
 	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the RetireJS Analyzer should be used.")
-	lazy val dependencyCheckRetireJSForceUpdate = settingKey[Option[Boolean]]("Sets whether the RetireJS Analyzer should update regardless of the ´dependencyCheckAutoUpdate´ setting.")
+	lazy val dependencyCheckRetireJSForceUpdate = settingKey[Option[Boolean]]("Sets whether the RetireJS Analyzer should update regardless of the dependencyCheckAutoUpdate setting.")
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. Note: the file name must be 'jsrepository.json'")
 	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer.")
 	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
