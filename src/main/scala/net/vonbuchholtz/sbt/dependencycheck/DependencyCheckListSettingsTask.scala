@@ -53,6 +53,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_ARCHIVE_ENABLED, "dependencyCheckArchiveAnalyzerEnabled", log)
     logStringSetting(ADDITIONAL_ZIP_EXTENSIONS, "dependencyCheckZipExtensions", log)
     logBooleanSetting(ANALYZER_JAR_ENABLED, "dependencyCheckJarAnalyzer", log)
+    logBooleanSetting(ANALYZER_DART_ENABLED, "dependencyCheckDartAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CENTRAL_ENABLED, "dependencyCheckCentralAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, "dependencyCheckCentralAnalyzerUseCache", log)
     logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)

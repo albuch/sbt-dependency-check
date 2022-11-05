@@ -52,6 +52,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
+    dependencyCheckDartAnalyzerEnabled := None,
     dependencyCheckCentralAnalyzerEnabled := Some(false),
     dependencyCheckCentralAnalyzerUseCache := None,
     dependencyCheckOSSIndexAnalyzerEnabled := None,
@@ -225,6 +226,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)
     setStringSetting(ADDITIONAL_ZIP_EXTENSIONS, dependencyCheckZipExtensions.value)
     setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_DART_ENABLED, dependencyCheckDartAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, dependencyCheckCentralAnalyzerUseCache.value)
     setBooleanSetting(ANALYZER_OSSINDEX_ENABLED, dependencyCheckOSSIndexAnalyzerEnabled.value)

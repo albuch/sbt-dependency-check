@@ -30,6 +30,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckArchiveAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the Archive Analyzer will be used.")
 	lazy val dependencyCheckZipExtensions = settingKey[Option[String]]("A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed.")
 	lazy val dependencyCheckJarAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used.")
+	lazy val dependencyCheckDartAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental Dart analyzer is enabled. dependencyCheckEnableExperimental must be set to true.")
 	lazy val dependencyCheckCentralAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below).")
 	lazy val dependencyCheckCentralAnalyzerUseCache = settingKey[Option[Boolean]]("Sets whether the Central Analyzer will cache results.")
 	lazy val dependencyCheckOSSIndexAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the OSS Index Analyzer should be used.")
