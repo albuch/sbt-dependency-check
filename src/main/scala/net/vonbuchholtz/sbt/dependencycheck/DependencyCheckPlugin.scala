@@ -8,12 +8,12 @@ import org.owasp.dependencycheck.dependency.naming.{GenericIdentifier, Identifie
 import org.owasp.dependencycheck.dependency.{Confidence, Dependency, EvidenceType}
 import org.owasp.dependencycheck.exception.ExceptionCollection
 import org.owasp.dependencycheck.utils.{Settings, SeverityUtil}
-import org.owasp.dependencycheck.utils.Settings.KEYS._
-import sbt.Keys._
+import org.owasp.dependencycheck.utils.Settings.KEYS.*
+import sbt.Keys.*
 import sbt.plugins.JvmPlugin
-import sbt.{Def, File, ScopeFilter, _}
+import sbt.{Def, File, ScopeFilter, *}
 
-import scala.collection.JavaConverters._
+import scala.collection.JavaConverters.*
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 import java.io.{PrintWriter, StringWriter}
@@ -22,7 +22,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
   object autoImport extends DependencyCheckKeys
 
-  import autoImport._
+  import autoImport.*
 
   override def requires = JvmPlugin
 
@@ -52,6 +52,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckArchiveAnalyzerEnabled := None,
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
+    dependencyCheckDartAnalyzerEnabled := None,
     dependencyCheckCentralAnalyzerEnabled := Some(false),
     dependencyCheckCentralAnalyzerUseCache := None,
     dependencyCheckOSSIndexAnalyzerEnabled := None,
@@ -71,6 +72,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckOpensslAnalyzerEnabled := None,
     dependencyCheckCmakeAnalyzerEnabled := None,
     dependencyCheckAutoconfAnalyzerEnabled := None,
+    dependencyCheckMavenInstallAnalyzerEnabled := None,
     dependencyCheckPipAnalyzerEnabled := None,
     dependencyCheckPipfileAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
@@ -101,6 +103,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckPEAnalyzerEnabled := None,
     dependencyCheckPathToDotNETCore := None,
     dependencyCheckRetireJSAnalyzerEnabled := None,
+    dependencyCheckRetireJSForceUpdate := None,
     dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
     dependencyCheckRetireJsAnalyzerRepoValidFor := None,
     dependencyCheckRetireJsAnalyzerFilters := Seq(),
@@ -124,6 +127,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckCveWaitTime := None,
     dependencyCheckCveStartYear := None,
     dependencyCheckConnectionTimeout := None,
+    dependencyCheckConnectionReadTimeout := None,
     dependencyCheckDataDirectory := None,
     dependencyCheckDatabaseDriverName := None,
     dependencyCheckDatabaseDriverPath := None,
@@ -222,6 +226,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_ARCHIVE_ENABLED, dependencyCheckArchiveAnalyzerEnabled.value)
     setStringSetting(ADDITIONAL_ZIP_EXTENSIONS, dependencyCheckZipExtensions.value)
     setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_DART_ENABLED, dependencyCheckDartAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, dependencyCheckCentralAnalyzerUseCache.value)
     setBooleanSetting(ANALYZER_OSSINDEX_ENABLED, dependencyCheckOSSIndexAnalyzerEnabled.value)
@@ -241,6 +246,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_OPENSSL_ENABLED, dependencyCheckOpensslAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CMAKE_ENABLED, dependencyCheckCmakeAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_AUTOCONF_ENABLED, dependencyCheckAutoconfAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_MAVEN_INSTALL_ENABLED, dependencyCheckMavenInstallAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PIP_ENABLED, dependencyCheckPipAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PIPFILE_ENABLED, dependencyCheckPipfileAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
@@ -271,6 +277,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setFileSetting(ANALYZER_BUNDLE_AUDIT_PATH, dependencyCheckPathToBundleAudit.value)
     setFileSetting(ANALYZER_BUNDLE_AUDIT_WORKING_DIRECTORY, dependencyCheckBundleAuditWorkingDirectory.value)
     setBooleanSetting(ANALYZER_RETIREJS_ENABLED, dependencyCheckRetireJSAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_RETIREJS_FORCEUPDATE, dependencyCheckRetireJSForceUpdate.value)
     setUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, dependencyCheckRetireJSAnalyzerRepoJSUrl.value)
     setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
     settings.setArrayIfNotEmpty(ANALYZER_RETIREJS_FILTERS, dependencyCheckRetireJsAnalyzerFilters.value.toArray)
@@ -291,6 +298,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setIntSetting(CVE_DOWNLOAD_WAIT_TIME, dependencyCheckCveWaitTime.value)
     setIntSetting(CVE_START_YEAR, dependencyCheckCveStartYear.value.map(_.max(2002)))
     setIntSetting(CONNECTION_TIMEOUT, dependencyCheckConnectionTimeout.value)
+    setIntSetting(CONNECTION_READ_TIMEOUT, dependencyCheckConnectionReadTimeout.value)
     setFileSetting(DATA_DIRECTORY, dependencyCheckDataDirectory.value)
     setStringSetting(DB_DRIVER_NAME, dependencyCheckDatabaseDriverName.value)
     setFileSetting(DB_DRIVER_PATH, dependencyCheckDatabaseDriverPath.value)

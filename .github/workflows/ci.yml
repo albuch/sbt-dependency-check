@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - main
   schedule:
     - cron: '0 2 * * *'
 
@@ -18,7 +18,7 @@ jobs:
           - java: 11
             sbt: "1.2.8"
           - java: 11
-            sbt: "1.6.2"
+            sbt: "1.7.3"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

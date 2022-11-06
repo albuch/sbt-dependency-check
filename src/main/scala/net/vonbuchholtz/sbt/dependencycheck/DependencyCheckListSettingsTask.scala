@@ -3,7 +3,7 @@ package net.vonbuchholtz.sbt.dependencycheck
 import java.io.File
 
 import org.owasp.dependencycheck.utils.Settings
-import org.owasp.dependencycheck.utils.Settings.KEYS._
+import org.owasp.dependencycheck.utils.Settings.KEYS.*
 import sbt.Logger
 
 object DependencyCheckListSettingsTask {
@@ -53,6 +53,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_ARCHIVE_ENABLED, "dependencyCheckArchiveAnalyzerEnabled", log)
     logStringSetting(ADDITIONAL_ZIP_EXTENSIONS, "dependencyCheckZipExtensions", log)
     logBooleanSetting(ANALYZER_JAR_ENABLED, "dependencyCheckJarAnalyzer", log)
+    logBooleanSetting(ANALYZER_DART_ENABLED, "dependencyCheckDartAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CENTRAL_ENABLED, "dependencyCheckCentralAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, "dependencyCheckCentralAnalyzerUseCache", log)
     logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)
@@ -72,6 +73,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_OPENSSL_ENABLED, "dependencyCheckOpensslAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CMAKE_ENABLED, "dependencyCheckCmakeAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_AUTOCONF_ENABLED, "dependencyCheckAutoconfAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_MAVEN_INSTALL_ENABLED, "dependencyCheckMavenInstallAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_PIP_ENABLED, "dependencyCheckPipAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_PIPFILE_ENABLED, "dependencyCheckPipfileAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, "dependencyCheckComposerAnalyzerEnabled", log)
@@ -102,7 +104,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_PE_ENABLED, "dependencyCheckPEAnalyzerEnabled", log)
     logFileSetting(ANALYZER_ASSEMBLY_DOTNET_PATH, "dependencyCheckPathToDotNETCore", log)
     logStringSetting(CVE_CPE_STARTS_WITH_FILTER, "dependencyCheckCpeStartsWith", log)
-    logStringSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_RETIREJS_FORCEUPDATE, "dependencyCheckRetireJSForceUpdate", log)
     logUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, "dependencyCheckRetireJSAnalyzerRepoJSUrl", log)
     logStringSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, "dependencyCheckRetireJsAnalyzerRepoValidFor", log)
     logStringSetting(ANALYZER_RETIREJS_FILTERS, "dependencyCheckRetireJsAnalyzerFilters", log)
@@ -126,6 +129,7 @@ object DependencyCheckListSettingsTask {
     logStringSetting(CVE_DOWNLOAD_WAIT_TIME, "dependencyCheckCveWaitTime", log)
     logStringSetting(CVE_START_YEAR, "dependencyCheckCveStartYear", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
+    logStringSetting(CONNECTION_READ_TIMEOUT, "dependencyCheckConnectionReadTimeout", log)
     logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
     logStringSetting(DB_VERSION, "dependencyCheckDatabaseVersion", log)
     logFileSetting(DATA_DIRECTORY, "dependencyCheckDataDirectory", log)
