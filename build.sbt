@@ -13,7 +13,7 @@ val sbtDependencyCheck = (project in file("."))
 		libraryDependencies ++= Seq(
 			"com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4.2",
 			"org.yaml" % "snakeyaml" % "1.33",
-			"org.owasp" % "dependency-check-core" % "7.3.0"
+			"org.owasp" % "dependency-check-core" % "7.3.2"
 		),
 		sbtPlugin := true,
 		dependencyUpdatesFilter -= moduleFilter(organization = "org.scala-lang") | moduleFilter(organization = "org.scala-sbt"),
