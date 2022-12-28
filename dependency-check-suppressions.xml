@@ -2,16 +2,16 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress>
         <notes><![CDATA[
-   FP per issue #4162
+   file name: h2-2.1.214.jar
    ]]></notes>
-        <packageUrl regex="true">^pkg:maven/commons-(?:digester|validator)/commons-(?:digester|validator)@.*$</packageUrl>
-        <cpe>cpe:/a:apache:james</cpe>
+        <packageUrl regex="true">^pkg:maven/com\.h2database/h2@.*$</packageUrl>
+        <vulnerabilityName>CVE-2022-45868</vulnerabilityName>
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: h2-2.1.210.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/com\.h2database/h2@.*$</packageUrl>
-        <vulnerabilityName>CVE-2018-14335</vulnerabilityName>
+        FP per issue #5121 - fix for commons-net
+        ]]></notes>
+        <packageUrl regex="true">^(?!pkg:maven/commons-net/commons-net).*$</packageUrl>
+        <cpe>cpe:/a:apache:commons_net</cpe>
     </suppress>
 </suppressions>
