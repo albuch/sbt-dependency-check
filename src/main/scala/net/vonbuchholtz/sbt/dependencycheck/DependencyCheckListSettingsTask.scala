@@ -76,6 +76,7 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_MAVEN_INSTALL_ENABLED, "dependencyCheckMavenInstallAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_PIP_ENABLED, "dependencyCheckPipAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_PIPFILE_ENABLED, "dependencyCheckPipfileAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_POETRY_ENABLED, "dependencyCheckPoetryAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, "dependencyCheckComposerAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CPANFILE_ENABLED, "dependencyCheckCpanFileAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, "dependencyCheckNodeAnalyzerEnabled", log)

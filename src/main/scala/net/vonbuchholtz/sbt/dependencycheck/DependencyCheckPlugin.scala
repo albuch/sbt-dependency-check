@@ -75,6 +75,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckMavenInstallAnalyzerEnabled := None,
     dependencyCheckPipAnalyzerEnabled := None,
     dependencyCheckPipfileAnalyzerEnabled := None,
+    dependencyCheckPoetryAnalyzerEnabled := None,
     dependencyCheckComposerAnalyzerEnabled := None,
     dependencyCheckCpanFileAnalyzerEnabled := None,
     dependencyCheckNodeAnalyzerEnabled := None,
@@ -249,6 +250,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_MAVEN_INSTALL_ENABLED, dependencyCheckMavenInstallAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PIP_ENABLED, dependencyCheckPipAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_PIPFILE_ENABLED, dependencyCheckPipfileAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_POETRY_ENABLED, dependencyCheckPoetryAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_COMPOSER_LOCK_ENABLED, dependencyCheckComposerAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CPANFILE_ENABLED, dependencyCheckCpanFileAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_NODE_PACKAGE_ENABLED, dependencyCheckNodeAnalyzerEnabled.value)
