@@ -28,7 +28,7 @@ jobs:
       - name: Setup Scala
         uses: coursier/setup-action@v1
         with:
-          jvm: "adopt:{{ matrix.java }}"
+          jvm: "adopt:${{ matrix.java }}"
       - name: Publish Local
         run: sbt -v -Dfile.encoding=UTF-8 "^ publishLocal"
       - name: Get plugin version
