@@ -23,12 +23,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Coursier cache
+        uses: coursier/cache-action@v6
       - name: Setup Scala
         uses: coursier/setup-action@v1
         with:
-          java: "adopt:{{ matrix.java }}"
-      - name: Coursier cache
-        uses: coursier/cache-action@v6
+          jvm: "adopt:{{ matrix.java }}"
       - name: Publish Local
         run: sbt -v -Dfile.encoding=UTF-8 "^ publishLocal"
       - name: Get plugin version
