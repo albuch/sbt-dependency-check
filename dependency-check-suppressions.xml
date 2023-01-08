@@ -9,9 +9,19 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-        FP per issue #5121 - fix for commons-net
-        ]]></notes>
-        <packageUrl regex="true">^(?!pkg:maven/commons-net/commons-net).*$</packageUrl>
-        <cpe>cpe:/a:apache:commons_net</cpe>
+   file name: dependency-check-utils-7.4.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.owasp/dependency\-check\-utils@.*$</packageUrl>
+        <cpe>cpe:/a:utils_project:utils</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: snakeyaml-1.33.jar
+   False-positive for jackson-dataformats-text: https://github.com/FasterXML/jackson-dataformats-text/issues/361
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@1.33$</packageUrl>
+        <vulnerabilityName>CVE-2022-1471</vulnerabilityName>
+        <vulnerabilityName>CVE-2022-3064</vulnerabilityName>
+        <vulnerabilityName>CVE-2021-4235</vulnerabilityName>
     </suppress>
 </suppressions>

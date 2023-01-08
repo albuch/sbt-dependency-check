@@ -11,8 +11,6 @@ val sbtDependencyCheck = (project in file("."))
 	.enablePlugins(SbtPlugin)
 	.settings(
 		libraryDependencies ++= Seq(
-			"com.fasterxml.jackson.core" % "jackson-databind" % "2.14.1",
-			"org.yaml" % "snakeyaml" % "1.33",
 			"org.owasp" % "dependency-check-core" % "7.4.4"
 		),
 		sbtPlugin := true,
@@ -28,6 +26,7 @@ ThisBuild / dependencyCheckFailBuildOnCVSS := 11
 ThisBuild / dependencyCheckSkipProvidedScope := true
 ThisBuild / dependencyCheckFormat := "ALL"
 ThisBuild / dependencyCheckSuppressionFiles := Seq(new File("dependency-check-suppressions.xml"))
+ThisBuild / dependencyCheckAssemblyAnalyzerEnabled := Some(false)
 
 
 ThisBuild / publishTo := sonatypePublishToBundle.value
