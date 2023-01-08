@@ -1,0 +1,3 @@
+$ mkdir /tmp/sbt-dependency-check/data
+> dependencyCheck
+$ exists /tmp/sbt-dependency-check/odc.mv.db
