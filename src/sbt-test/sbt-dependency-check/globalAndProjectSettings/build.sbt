@@ -28,10 +28,10 @@ lazy val alsoinscope = (project in file("alsoinscope")).settings(
 
 TaskKey[Unit]("depCheckAssert") := {
   val rootPassword = dependencyCheckCvePassword.value
-  val rootInThisBuildUser = (dependencyCheckCveUser in ThisBuild ).value
-  val rootInThisBuildPassword = (dependencyCheckCvePassword in ThisBuild ).value
-  val inscopePassword = (dependencyCheckCvePassword in inscope).value
-  val alsoinscopePassword = (dependencyCheckCvePassword in alsoinscope).value
+  val rootInThisBuildUser = ( ThisBuild / dependencyCheckCveUser).value
+  val rootInThisBuildPassword = (ThisBuild / dependencyCheckCvePassword).value
+  val inscopePassword = (inscope / dependencyCheckCvePassword).value
+  val alsoinscopePassword = (alsoinscope / dependencyCheckCvePassword).value
   assert( rootPassword.contains("root") )
   assert( rootInThisBuildUser.contains("ThisBuild") )
   assert( rootInThisBuildPassword.contains("Global") )

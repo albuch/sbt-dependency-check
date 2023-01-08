@@ -622,13 +622,17 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   })
 
   private[this] def withEngine(settings: Settings)(fn: Engine => Any): Unit = {
-    val engine: Engine = new Engine(classOf[Engine].getClassLoader, settings)
+    val oldClassLoader = Thread.currentThread().getContextClassLoader
+    val newClassLoader = classOf[Engine].getClassLoader
+    val engine: Engine = new Engine(newClassLoader, settings)
     try {
+      Thread.currentThread().setContextClassLoader(newClassLoader)
       fn(engine)
       ()
     } finally {
       engine.close()
       engine.getSettings.cleanup(true)
+      Thread.currentThread().setContextClassLoader(oldClassLoader)
     }
   }
 
