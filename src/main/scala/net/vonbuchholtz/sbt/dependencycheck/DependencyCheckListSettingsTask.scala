@@ -54,6 +54,9 @@ object DependencyCheckListSettingsTask {
     logStringSetting(ADDITIONAL_ZIP_EXTENSIONS, "dependencyCheckZipExtensions", log)
     logBooleanSetting(ANALYZER_JAR_ENABLED, "dependencyCheckJarAnalyzer", log)
     logBooleanSetting(ANALYZER_DART_ENABLED, "dependencyCheckDartAnalyzerEnabled", log)
+    logBooleanSetting(ANALYZER_KNOWN_EXPLOITED_ENABLED,"dependencyCheckKnownExploitedEnabled", log)
+    logUrlSetting(KEV_URL, "dependencyCheckKnownExploitedUrl", log)
+    logStringSetting(KEV_CHECK_VALID_FOR_HOURS, "dependencyCheckKnownExploitedValidForHours", log)
     logBooleanSetting(ANALYZER_CENTRAL_ENABLED, "dependencyCheckCentralAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, "dependencyCheckCentralAnalyzerUseCache", log)
     logBooleanSetting(ANALYZER_OSSINDEX_ENABLED, "dependencyCheckOSSIndexAnalyzerEnabled", log)
@@ -108,6 +111,8 @@ object DependencyCheckListSettingsTask {
     logBooleanSetting(ANALYZER_RETIREJS_ENABLED, "dependencyCheckRetireJSAnalyzerEnabled", log)
     logBooleanSetting(ANALYZER_RETIREJS_FORCEUPDATE, "dependencyCheckRetireJSForceUpdate", log)
     logUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, "dependencyCheckRetireJSAnalyzerRepoJSUrl", log)
+    logStringSetting(ANALYZER_RETIREJS_REPO_JS_USER, "dependencyCheckRetireJsAnalyzerRepoUser", log)
+    logStringSetting(ANALYZER_RETIREJS_REPO_JS_PASSWORD, "dependencyCheckRetireJsAnalyzerRepoPassword", log)
     logStringSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, "dependencyCheckRetireJsAnalyzerRepoValidFor", log)
     logStringSetting(ANALYZER_RETIREJS_FILTERS, "dependencyCheckRetireJsAnalyzerFilters", log)
     logBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, "dependencyCheckRetireJsAnalyzerFilterNonVulnerable", log)
@@ -139,6 +144,10 @@ object DependencyCheckListSettingsTask {
     logStringSetting(DB_CONNECTION_STRING, "dependencyCheckConnectionString", log)
     logStringSetting(DB_USER, "dependencyCheckDatabaseUser", log)
     logStringSetting(DB_PASSWORD, "dependencyCheckDatabasePassword", log)
+    logBooleanSetting(HOSTED_SUPPRESSIONS_FORCEUPDATE, "dependencyCheckHostedSuppressionsForceUpdate", log)
+    logUrlSetting(HOSTED_SUPPRESSIONS_URL, "dependencyCheckHostedSuppressionsUrl", log)
+    logStringSetting(HOSTED_SUPPRESSIONS_VALID_FOR_HOURS, "dependencyCheckHostedSuppressionsValidForHours", log)
+
     log.info(s"\tdependencyCheckUseSbtModuleIdAsGav: ${useSbtModuleIdAsGav.toString}")
   }
 }

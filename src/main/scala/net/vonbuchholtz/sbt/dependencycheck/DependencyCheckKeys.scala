@@ -5,7 +5,7 @@ import sbt.*
 trait DependencyCheckKeys {
 
 	// Configuration
-	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE data is enabled. It is not recommended that this be turned to false.")
+	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE, retireJS and hosted suppressions data is enabled. It is not recommended that this be turned to false.")
 	lazy val dependencyCheckCveValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
 	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Float]("Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. More information on CVSS scores can be found at https://nvd.nist.gov/vuln-metrics/cvss")
   lazy val dependencyCheckJUnitFailBuildOnCVSS = settingKey[Option[Float]]("If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure.")
@@ -22,7 +22,8 @@ trait DependencyCheckKeys {
   lazy val dependencyCheckSuppressionFiles = settingKey[Seq[File]]("The sequence of file paths to the XML suppression files - used to suppress false positives")
   lazy val dependencyCheckCpeStartsWith = settingKey[Option[String]]("The starting String to identify the CPEs that are qualified to be imported.")
   lazy val dependencyCheckHintsFile = settingKey[Option[File]]("The file path to the XML hints file - used to resolve false negatives.")
-  lazy val dependencyCheckAnalysisTimeout = settingKey[Option[Int]]("Set the analysis timeout in minutes.")
+	lazy val dependencyCheckUseSbtModuleIdAsGav = settingKey[Option[Boolean]]("Uses the SBT ModuleId as GAV (reduces dependency on Maven Central for resolving)")
+	lazy val dependencyCheckAnalysisTimeout = settingKey[Option[Int]]("Set the analysis timeout in minutes.")
   lazy val dependencyCheckEnableExperimental = settingKey[Option[Boolean]]("Enable the experimental analyzers. If not enabled the experimental analyzers (see below) will not be loaded or used.")
   lazy val dependencyCheckEnableRetired = settingKey[Option[Boolean]]("Enable the retired analyzers. If not enabled retired analyzers will not be loaded or used.")
 
@@ -31,6 +32,9 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckZipExtensions = settingKey[Option[String]]("A comma-separated list of additional file extensions to be treated like a ZIP file, the contents will be extracted and analyzed.")
 	lazy val dependencyCheckJarAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Jar Analyzer will be used.")
 	lazy val dependencyCheckDartAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether the experimental Dart analyzer is enabled. dependencyCheckEnableExperimental must be set to true.")
+	lazy val dependencyCheckKnownExploitedEnabled = settingKey[Option[Boolean]]("Sets whether the Known Exploited Vulnerability update and analyzer are enabled.")
+	lazy val dependencyCheckKnownExploitedUrl = settingKey[Option[URL]]("Sets URL to the CISA Known Exploited Vulnerabilities JSON data feed.")
+	lazy val dependencyCheckKnownExploitedValidForHours = settingKey[Option[Int]]("Set the interval in hours until the next check for CISA Known Exploited Vulnerabilities JSON data feed is performed.")
 	lazy val dependencyCheckCentralAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether Central Analyzer will be used. If this analyzer is being disabled there is a good chance you also want to disable the Nexus Analyzer (see below).")
 	lazy val dependencyCheckCentralAnalyzerUseCache = settingKey[Option[Boolean]]("Sets whether the Central Analyzer will cache results.")
 	lazy val dependencyCheckOSSIndexAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the OSS Index Analyzer should be used.")
@@ -84,6 +88,8 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckRetireJSAnalyzerEnabled = settingKey[Option[Boolean]]("Sets whether or not the RetireJS Analyzer should be used.")
 	lazy val dependencyCheckRetireJSForceUpdate = settingKey[Option[Boolean]]("Sets whether the RetireJS Analyzer should update regardless of the dependencyCheckAutoUpdate setting.")
 	lazy val dependencyCheckRetireJSAnalyzerRepoJSUrl = settingKey[Option[URL]]("Sets the URL to the RetireJS repository. Note: the file name must be 'jsrepository.json'")
+	lazy val dependencyCheckRetireJsAnalyzerRepoUser = settingKey[Option[String]]("Username for authentication to connect to RetireJS URL.")
+	lazy val dependencyCheckRetireJsAnalyzerRepoPassword = settingKey[Option[String]]("Password for authentication to connect to RetireJS URL.")
 	lazy val dependencyCheckRetireJsAnalyzerRepoValidFor = settingKey[Option[Int]]("Set the interval in hours until the next check for CVEs updates is performed by the RetireJS analyzer.")
 	lazy val dependencyCheckRetireJsAnalyzerFilters = settingKey[Seq[String]]("Set one or more filters for the RetireJS analyzer. ")
 	lazy val dependencyCheckRetireJsAnalyzerFilterNonVulnerable = settingKey[Option[Boolean]]("Sets whether or not the RetireJS analyzer should filter non-vulnerable dependencies.")
@@ -113,8 +119,9 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckConnectionString = settingKey[Option[String]]("The connection string used to connect to the database. ")
 	lazy val dependencyCheckDatabaseUser = settingKey[Option[String]]("The username used when connecting to the database. ")
 	lazy val dependencyCheckDatabasePassword = settingKey[Option[String]]("The password used when connecting to the database. ")
-	lazy val dependencyCheckMetaFileName = settingKey[Option[String]]("CURRENTLY NOT USED. Sets the name of the file to use for storing the metadata about the project. ")
-	lazy val dependencyCheckUseSbtModuleIdAsGav = settingKey[Option[Boolean]]("Uses the SBT ModuleId as GAV (reduces dependency on Maven Central for resolving)")
+	lazy val dependencyCheckHostedSuppressionsForceUpdate = settingKey[Option[Boolean]]("Whether the hosted suppressions file will update regardless of the `dependencyCheckAutoUpdate` setting.")
+	lazy val dependencyCheckHostedSuppressionsUrl = settingKey[Option[URL]]("The URL to a mirrored copy of the hosted suppressions file for internet-constrained environments.")
+	lazy val dependencyCheckHostedSuppressionsValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
 
 	// TaskKeys
 	lazy val dependencyCheck = TaskKey[Unit]("dependencyCheck", "Runs dependency-check against the project and generates a report per sub project.")

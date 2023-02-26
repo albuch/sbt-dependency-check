@@ -20,3 +20,4 @@ sbt.bat
 
 # IDEA
 .idea/
+/src/sbt-test/sbt-dependency-check/purgeDeletesDatabase/data/odc.trace.db
