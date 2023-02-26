@@ -3,7 +3,7 @@ package net.vonbuchholtz.sbt.dependencycheck
 import java.io.{File, IOException}
 
 import org.owasp.dependencycheck.utils.Settings
-import sbt._
+import sbt.*
 
 object DependencyCheckPurgeTask {
   def purge(connectionString: Option[String], settings: Settings, log: Logger): Unit = {

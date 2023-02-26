@@ -321,7 +321,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     settings
   }
 
-  def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
+  private def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
     val log: Logger = streams.value.log
     muteJCS(log)
 
@@ -383,7 +383,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   } tag NonParallel
 
 
-  def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
+  private def aggregateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     muteJCS(log)
     log.info(s"Running aggregate check for ${name.value}")
@@ -417,7 +417,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def anyProjectTask: Def.Initialize[Task[Unit]] = Def.task {
+  private def anyProjectTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     muteJCS(log)
     log.info(s"Running anyProject check for ${name.value}")
@@ -451,7 +451,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def getScanSet: Def.Initialize[Task[Seq[File]]] = Def.task {
+  private def getScanSet: Def.Initialize[Task[Seq[File]]] = Def.task {
     (dependencyCheckScanSet.value.map {
       _ ** "*"
     } reduceLeft (_ +++ _) filter {
@@ -459,18 +459,18 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }).get
   }
 
-  lazy val anyCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Compile))) }
-  lazy val anyRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Runtime))) }
-  lazy val anyTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Test))) }
-  lazy val anyProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Provided))) }
-  lazy val anyOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Optional))) }
-  lazy val aggregateCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile))) }
-  lazy val aggregateRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime))) }
-  lazy val aggregateTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test))) }
-  lazy val aggregateProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided))) }
-  lazy val aggregateOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional))) }
+  private lazy val anyCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Compile))) }
+  private lazy val anyRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Runtime))) }
+  private lazy val anyTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Test))) }
+  private lazy val anyProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Provided))) }
+  private lazy val anyOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAnyProject, inConfigurations(Optional))) }
+  private lazy val aggregateCompileFilter = Def.settingDyn { compileDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Compile))) }
+  private lazy val aggregateRuntimeFilter = Def.settingDyn { runtimeDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Runtime))) }
+  private lazy val aggregateTestFilter = Def.settingDyn { testDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Test))) }
+  private lazy val aggregateProvidedFilter = Def.settingDyn { providedDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Provided))) }
+  private lazy val aggregateOptionalFilter = Def.settingDyn { optionalDependenciesTask.all(ScopeFilter(inAggregates(thisProjectRef.value), inConfigurations(Optional))) }
 
-  lazy val compileDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  private lazy val compileDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value)
       Def.task { Seq.empty }
     else
@@ -478,7 +478,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         (configuration / externalDependencyClasspath).value
       }
   }
-  lazy val runtimeDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  private lazy val runtimeDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || (dependencyCheckSkipRuntimeScope ?? false).value)
       Def.task { Seq.empty }
     else
@@ -486,7 +486,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         (configuration / externalDependencyClasspath).value
       }
   }
-  lazy val testDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  private lazy val testDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || (dependencyCheckSkipTestScope ?? true).value)
       Def.task { Seq.empty }
     else
@@ -494,7 +494,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         (configuration / externalDependencyClasspath).value
       }
   }
-  lazy val providedDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  private lazy val providedDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || !(dependencyCheckSkipProvidedScope ?? false).value)
       Def.task { Seq.empty }
     else
@@ -502,7 +502,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
         Classpaths.managedJars(configuration.value, classpathTypes.value, update.value)
       }
   }
-  lazy val optionalDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
+  private lazy val optionalDependenciesTask: Def.Initialize[Task[Seq[Attributed[File]]]] = Def.taskDyn {
     if (!thisProject.value.autoPlugins.contains(JvmPlugin) || (dependencyCheckSkip ?? false).value || !(dependencyCheckSkipOptionalScope ?? false).value)
       Def.task { Seq.empty }
     else
@@ -512,7 +512,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
   }
 
   //noinspection MutatorLikeMethodIsParameterless
-  def updateTask: Def.Initialize[Task[Unit]] = Def.task {
+  private def updateTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     muteJCS(log)
     log.info(s"Running update-only for ${name.value}")
@@ -522,7 +522,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
+  private def purgeTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     muteJCS(log)
     log.info(s"Running purge for ${name.value}")
@@ -531,7 +531,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
+  private def listSettingsTask: Def.Initialize[Task[Unit]] = Def.task {
     val log: Logger = streams.value.log
     muteJCS(log)
     log.info(s"Running list-settings for ${name.value}")
@@ -545,7 +545,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
+  private def addDependencies(checkClasspath: Set[Attributed[File]], engine: Engine, useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     checkClasspath.foreach(
       attributed =>
         attributed.get(Keys.moduleID.key) match {
@@ -570,21 +570,21 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     )
   }
 
-  def logAddDependencies(classpath: Seq[Attributed[File]], configuration: Configuration, log: Logger): Seq[Attributed[File]] = {
+  private def logAddDependencies(classpath: Seq[Attributed[File]], configuration: Configuration, log: Logger): Seq[Attributed[File]] = {
     logDependencies(log, classpath, configuration, "Adding")
   }
 
-  def logRemoveDependencies(classpath: Seq[Attributed[File]], configuration: Configuration, log: Logger): Seq[Attributed[File]] = {
+  private def logRemoveDependencies(classpath: Seq[Attributed[File]], configuration: Configuration, log: Logger): Seq[Attributed[File]] = {
     logDependencies(log, classpath, configuration, "Removing")
   }
 
-  def logDependencies(log: Logger, classpath: Seq[Attributed[File]], configuration: Configuration, action: String): Seq[Attributed[File]] = {
+  private def logDependencies(log: Logger, classpath: Seq[Attributed[File]], configuration: Configuration, action: String): Seq[Attributed[File]] = {
     log.info(s"$action ${configuration.name} dependencies to check.")
     classpath.foreach(f => log.info("\t" + f.data.getName))
     classpath
   }
 
-  def addEvidence(moduleId: ModuleID, dependency: Dependency, useSbtModuleIdAsGav: Boolean): Unit = {
+  private def addEvidence(moduleId: ModuleID, dependency: Dependency, useSbtModuleIdAsGav: Boolean): Unit = {
     val artifact: MavenArtifact = new MavenArtifact(moduleId.organization, moduleId.name, moduleId.revision)
     dependency.addAsEvidence("sbt", artifact, Confidence.HIGHEST)
     if (useSbtModuleIdAsGav) {
@@ -607,7 +607,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     }
   }
 
-  def createReport(engine: Engine, checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormats: Seq[String], useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
+  private def createReport(engine: Engine, checkClasspath: Set[Attributed[File]], scanSet: Seq[File], outputDir: File, reportFormats: Seq[String], useSbtModuleIdAsGav: Boolean, log: Logger): Unit = {
     addDependencies(checkClasspath, engine, useSbtModuleIdAsGav, log)
     scanSet.foreach(file => engine.scan(file))
 
@@ -615,7 +615,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     reportFormats.foreach(reportFormat => engine.writeReports(engine.getSettings.getString(APPLICATION_NAME), outputDir, reportFormat, null))
   }
 
-  def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
+  private def determineTaskFailureStatus(failCvssScore: Float, engine: Engine, name: String): Unit = {
     if (failBuildOnCVSS(engine.getDependencies, failCvssScore)) {
       DependencyCheckScanAgent.showSummary(name, engine.getDependencies)
       throw new VulnerabilityFoundException(s"Vulnerability with CVSS score higher $failCvssScore found. Failing build.")
