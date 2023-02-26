@@ -24,4 +24,11 @@
         <vulnerabilityName>CVE-2022-3064</vulnerabilityName>
         <vulnerabilityName>CVE-2021-4235</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+        suppress various improper matches to the CPE that belongs only to pkg:maven/org.json/json
+        ]]></notes>
+        <packageUrl regex="true">^(?!pkg:maven/org\.json/json@).+$</packageUrl>
+        <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
 </suppressions>
