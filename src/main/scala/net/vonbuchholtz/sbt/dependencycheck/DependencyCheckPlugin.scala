@@ -53,6 +53,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckZipExtensions := None,
     dependencyCheckJarAnalyzerEnabled := None,
     dependencyCheckDartAnalyzerEnabled := None,
+    dependencyCheckKnownExploitedEnabled := None,
+    dependencyCheckKnownExploitedUrl := None,
+    dependencyCheckKnownExploitedValidForHours := None,
     dependencyCheckCentralAnalyzerEnabled := Some(false),
     dependencyCheckCentralAnalyzerUseCache := None,
     dependencyCheckOSSIndexAnalyzerEnabled := None,
@@ -106,6 +109,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckRetireJSAnalyzerEnabled := None,
     dependencyCheckRetireJSForceUpdate := None,
     dependencyCheckRetireJSAnalyzerRepoJSUrl := None,
+    dependencyCheckRetireJsAnalyzerRepoUser := None,
+    dependencyCheckRetireJsAnalyzerRepoPassword := None,
     dependencyCheckRetireJsAnalyzerRepoValidFor := None,
     dependencyCheckRetireJsAnalyzerFilters := Seq(),
     dependencyCheckRetireJsAnalyzerFilterNonVulnerable := None,
@@ -135,7 +140,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckConnectionString := None,
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
-    dependencyCheckMetaFileName := Some("dependency-check.ser"),
+    dependencyCheckHostedSuppressionsForceUpdate := None,
+    dependencyCheckHostedSuppressionsUrl := None,
+    dependencyCheckHostedSuppressionsValidForHours := None,
     dependencyCheckUseSbtModuleIdAsGav := None
   )
   //noinspection TypeAnnotation
