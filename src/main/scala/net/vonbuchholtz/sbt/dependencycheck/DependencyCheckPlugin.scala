@@ -141,6 +141,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckDatabaseUser := None,
     dependencyCheckDatabasePassword := None,
     dependencyCheckHostedSuppressionsForceUpdate := None,
+    dependencyCheckHostedSuppressionsEnabled := None,
     dependencyCheckHostedSuppressionsUrl := None,
     dependencyCheckHostedSuppressionsValidForHours := None,
     dependencyCheckUseSbtModuleIdAsGav := None
@@ -235,6 +236,9 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(ADDITIONAL_ZIP_EXTENSIONS, dependencyCheckZipExtensions.value)
     setBooleanSetting(ANALYZER_JAR_ENABLED, dependencyCheckJarAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_DART_ENABLED, dependencyCheckDartAnalyzerEnabled.value)
+    setBooleanSetting(ANALYZER_KNOWN_EXPLOITED_ENABLED, dependencyCheckKnownExploitedEnabled.value)
+    setUrlSetting(KEV_URL, dependencyCheckKnownExploitedUrl.value)
+    setIntSetting(KEV_CHECK_VALID_FOR_HOURS, dependencyCheckKnownExploitedValidForHours.value)
     setBooleanSetting(ANALYZER_CENTRAL_ENABLED, dependencyCheckCentralAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_CENTRAL_USE_CACHE, dependencyCheckCentralAnalyzerUseCache.value)
     setBooleanSetting(ANALYZER_OSSINDEX_ENABLED, dependencyCheckOSSIndexAnalyzerEnabled.value)
@@ -288,6 +292,8 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setBooleanSetting(ANALYZER_RETIREJS_ENABLED, dependencyCheckRetireJSAnalyzerEnabled.value)
     setBooleanSetting(ANALYZER_RETIREJS_FORCEUPDATE, dependencyCheckRetireJSForceUpdate.value)
     setUrlSetting(ANALYZER_RETIREJS_REPO_JS_URL, dependencyCheckRetireJSAnalyzerRepoJSUrl.value)
+    setStringSetting(ANALYZER_RETIREJS_REPO_JS_USER, dependencyCheckRetireJsAnalyzerRepoUser.value)
+    setStringSetting(ANALYZER_RETIREJS_REPO_JS_PASSWORD, dependencyCheckRetireJsAnalyzerRepoPassword.value)
     setIntSetting(ANALYZER_RETIREJS_REPO_VALID_FOR_HOURS, dependencyCheckRetireJsAnalyzerRepoValidFor.value)
     settings.setArrayIfNotEmpty(ANALYZER_RETIREJS_FILTERS, dependencyCheckRetireJsAnalyzerFilters.value.toArray)
     setBooleanSetting(ANALYZER_RETIREJS_FILTER_NON_VULNERABLE, dependencyCheckRetireJsAnalyzerFilterNonVulnerable.value)
@@ -315,6 +321,10 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     setStringSetting(DB_USER, dependencyCheckDatabaseUser.value)
     setStringSetting(DB_PASSWORD, dependencyCheckDatabasePassword.value)
     setStringSetting(CVE_CPE_STARTS_WITH_FILTER, dependencyCheckCpeStartsWith.value)
+    setBooleanSetting(HOSTED_SUPPRESSIONS_FORCEUPDATE, dependencyCheckHostedSuppressionsForceUpdate.value)
+    setBooleanSetting(HOSTED_SUPPRESSIONS_ENABLED, dependencyCheckHostedSuppressionsEnabled.value)
+    setUrlSetting(HOSTED_SUPPRESSIONS_URL, dependencyCheckHostedSuppressionsUrl.value)
+    setIntSetting(HOSTED_SUPPRESSIONS_VALID_FOR_HOURS, dependencyCheckHostedSuppressionsValidForHours.value)
 
     initProxySettings()
 

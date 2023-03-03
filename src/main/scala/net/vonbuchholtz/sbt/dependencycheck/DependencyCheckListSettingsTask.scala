@@ -145,6 +145,7 @@ object DependencyCheckListSettingsTask {
     logStringSetting(DB_USER, "dependencyCheckDatabaseUser", log)
     logStringSetting(DB_PASSWORD, "dependencyCheckDatabasePassword", log)
     logBooleanSetting(HOSTED_SUPPRESSIONS_FORCEUPDATE, "dependencyCheckHostedSuppressionsForceUpdate", log)
+    logBooleanSetting(HOSTED_SUPPRESSIONS_ENABLED, "dependencyCheckHostedSuppressionsEnabled", log)
     logUrlSetting(HOSTED_SUPPRESSIONS_URL, "dependencyCheckHostedSuppressionsUrl", log)
     logStringSetting(HOSTED_SUPPRESSIONS_VALID_FOR_HOURS, "dependencyCheckHostedSuppressionsValidForHours", log)
 

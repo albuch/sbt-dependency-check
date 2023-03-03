@@ -120,6 +120,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckDatabaseUser = settingKey[Option[String]]("The username used when connecting to the database. ")
 	lazy val dependencyCheckDatabasePassword = settingKey[Option[String]]("The password used when connecting to the database. ")
 	lazy val dependencyCheckHostedSuppressionsForceUpdate = settingKey[Option[Boolean]]("Whether the hosted suppressions file will update regardless of the `dependencyCheckAutoUpdate` setting.")
+	lazy val dependencyCheckHostedSuppressionsEnabled = settingKey[Option[Boolean]]("Whether the hosted suppression file will be used.")
 	lazy val dependencyCheckHostedSuppressionsUrl = settingKey[Option[URL]]("The URL to a mirrored copy of the hosted suppressions file for internet-constrained environments.")
 	lazy val dependencyCheckHostedSuppressionsValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
 
