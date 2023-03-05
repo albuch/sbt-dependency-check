@@ -6,6 +6,7 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/com\.h2database/h2@.*$</packageUrl>
         <vulnerabilityName>CVE-2022-45868</vulnerabilityName>
+        <vulnerabilityName>CVE-2018-14335</vulnerabilityName>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -30,5 +31,12 @@
         ]]></notes>
         <packageUrl regex="true">^(?!pkg:maven/org\.json/json@).+$</packageUrl>
         <cpe>cpe:/a:json-java_project:json-java</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: guava-31.1-jre.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+        <vulnerabilityName>CVE-2020-8908</vulnerabilityName>
     </suppress>
 </suppressions>
