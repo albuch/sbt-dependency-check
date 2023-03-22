@@ -7,6 +7,6 @@ addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
 Compile / unmanagedSourceDirectories += baseDirectory.value.getParentFile / "src" / "main" / "scala"
 libraryDependencies ++= Seq(
-  "org.owasp" % "dependency-check-core" % "8.1.2",
+  "org.owasp" % "dependency-check-core" % "8.2.0",
   "org.slf4j" % "slf4j-simple" % "2.0.7"
 )
