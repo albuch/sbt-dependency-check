@@ -363,7 +363,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     } catch {
       case e: AssertionError => throw e
       case e: SAXException => throw e
-      case _ => ()
+      case _: Throwable => ()
     }
   }
 
