@@ -13,6 +13,7 @@ import sbt.Keys.*
 import sbt.plugins.JvmPlugin
 import sbt.{Def, File, ScopeFilter, *}
 
+import scala.xml._
 import scala.collection.JavaConverters.*
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
@@ -345,9 +346,7 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     val checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
     checkDependencies ++= logAddDependencies((Compile / externalDependencyClasspath).value, Compile, log)
 
-    import scala.xml._
-
-    Try {
+    try {
       val depsNames = checkDependencies.map(_.data.getName)
 
       val parsed = XML.loadFile(suppressionFiles.head)
@@ -361,11 +360,11 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
 
       unusedFalseEntries.foreach(f => log.info(s"Unnecessary suppression entry for: $f"))
       assert(!(exitWithNonZero && unusedFalseEntries.nonEmpty))
-    }.recover {
+    } catch {
       case e: AssertionError => throw e
       case e: SAXException => throw e
       case _ => ()
-    }.get
+    }
   }
 
   private def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {
