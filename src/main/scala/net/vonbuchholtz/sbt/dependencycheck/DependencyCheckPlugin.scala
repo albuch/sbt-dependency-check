@@ -13,6 +13,7 @@ import sbt.Keys.*
 import sbt.plugins.JvmPlugin
 import sbt.{Def, File, ScopeFilter, *}
 
+import scala.xml._
 import scala.collection.JavaConverters.*
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
@@ -144,13 +145,15 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     dependencyCheckHostedSuppressionsEnabled := None,
     dependencyCheckHostedSuppressionsUrl := None,
     dependencyCheckHostedSuppressionsValidForHours := None,
-    dependencyCheckUseSbtModuleIdAsGav := None
+    dependencyCheckUseSbtModuleIdAsGav := None,
+    dependencyListUnusedSuppressionsExitNonZero := None,
   )
   //noinspection TypeAnnotation
   override lazy val projectSettings = Seq(
     dependencyCheckOutputDirectory := Some(crossTarget.value),
     dependencyCheckScanSet := Seq(baseDirectory.value / "src/main/resources"),
     dependencyCheck := checkTask.value,
+    dependencyListUnusedSuppressions := listUnusedSuppressions.value,
     dependencyCheckAggregate := aggregateTask.value,
     dependencyCheckAnyProject := anyProjectTask.value,
     dependencyCheckUpdateOnly := updateTask.value,
@@ -329,6 +332,39 @@ object DependencyCheckPlugin extends sbt.AutoPlugin {
     initProxySettings()
 
     settings
+  }
+
+  private def listUnusedSuppressions: Def.Initialize[Task[Unit]] = Def.task {
+    val log: Logger = streams.value.log
+    muteJCS(log)
+
+    log.info(s"Running check for ${name.value}")
+
+    val exitWithNonZero = dependencyListUnusedSuppressionsExitNonZero.value.getOrElse(false)
+    val suppressionFiles = dependencyCheckSuppressionFile.value
+
+    val checkDependencies = scala.collection.mutable.Set[Attributed[File]]()
+    checkDependencies ++= logAddDependencies((Compile / externalDependencyClasspath).value, Compile, log)
+
+    try {
+      val depsNames = checkDependencies.map(_.data.getName)
+
+      val parsed = XML.loadFile(suppressionFiles.head)
+      val unusedFalseEntries = (parsed \\ "suppress" \ "notes")
+        .toList
+        .flatMap(_.text.split("file name: ").tail.headOption)
+        .flatMap(_.split("\n").headOption)
+        .map(_.trim)
+        .toSet
+        .diff(depsNames)
+
+      unusedFalseEntries.foreach(f => log.info(s"Unnecessary suppression entry for: $f"))
+      assert(!(exitWithNonZero && unusedFalseEntries.nonEmpty))
+    } catch {
+      case e: AssertionError => throw e
+      case e: SAXException => throw e
+      case _: Throwable => ()
+    }
   }
 
   private def checkTask: Def.Initialize[Task[Unit]] = Def.taskDyn {

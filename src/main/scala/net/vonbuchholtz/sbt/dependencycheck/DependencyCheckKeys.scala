@@ -123,6 +123,7 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckHostedSuppressionsEnabled = settingKey[Option[Boolean]]("Whether the hosted suppression file will be used.")
 	lazy val dependencyCheckHostedSuppressionsUrl = settingKey[Option[URL]]("The URL to a mirrored copy of the hosted suppressions file for internet-constrained environments.")
 	lazy val dependencyCheckHostedSuppressionsValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
+	lazy val dependencyListUnusedSuppressionsExitNonZero = settingKey[Option[Boolean]]("Makes sbt exiting with non-zero status")
 
 	// TaskKeys
 	lazy val dependencyCheck = TaskKey[Unit]("dependencyCheck", "Runs dependency-check against the project and generates a report per sub project.")
@@ -131,4 +132,5 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckUpdateOnly = TaskKey[Unit]("dependencyCheckUpdateOnly", "Updates the local cache of the NVD data from NIST.")
 	lazy val dependencyCheckPurge = TaskKey[Unit]("dependencyCheckPurge", "Deletes the local copy of the NVD. This is used to force a refresh of the data.")
 	lazy val dependencyCheckListSettings = TaskKey[Unit]("dependencyCheckListSettings", "List the settings of the plugin")
+	lazy val dependencyListUnusedSuppressions = TaskKey[Unit]("dependencyListUnusedSuppressions", "List suppression entries for non existing dependencies")
 }
