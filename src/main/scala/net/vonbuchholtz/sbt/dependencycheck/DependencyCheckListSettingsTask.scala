@@ -32,7 +32,6 @@ object DependencyCheckListSettingsTask {
     }
 
     logBooleanSetting(AUTO_UPDATE, "dependencyCheckAutoUpdate", log)
-    logStringSetting(CVE_CHECK_VALID_FOR_HOURS, "dependencyCheckCveValidForHours", log)
     log.info(s"\tdependencyCheckFailBuildOnCVSS: ${failBuildOnCVSS.toString}")
     logFloatSetting(JUNIT_FAIL_ON_CVSS, "dependencyCheckJUnitFailBuildOnCVSS", log)
     log.info(s"\tdependencyCheckFormats (combined with dependencyCheckFormat): ${formats.mkString(", ")}")
@@ -128,12 +127,10 @@ object DependencyCheckListSettingsTask {
     logFileSetting(ANALYZER_GOLANG_PATH, "dependencyCheckPathToGo", log)
 
     // Advanced Configuration
-    logUrlSetting(CVE_MODIFIED_JSON, "dependencyCheckCveUrlModified", log)
-    logStringSetting(CVE_BASE_JSON, "dependencyCheckCveUrlBase", log)
-    logStringSetting(CVE_USER, "dependencyCheckCveUser", log)
-    logStringSetting(CVE_PASSWORD, "dependencyCheckCvePassword", log)
-    logStringSetting(CVE_DOWNLOAD_WAIT_TIME, "dependencyCheckCveWaitTime", log)
-    logStringSetting(CVE_START_YEAR, "dependencyCheckCveStartYear", log)
+    logStringSetting(NVD_API_KEY, "dependencyCheckNvdApiKey", log)
+    logStringSetting(NVD_API_DELAY, "dependencyCheckNvdApiDelay", log)
+    logStringSetting(NVD_API_MAX_RETRY_COUNT, "dependencyCheckNvdApiMaxRetryCount", log)
+    logStringSetting(NVD_API_VALID_FOR_HOURS, "dependencyCheckNvdApiValidForHours", log)
     logStringSetting(CONNECTION_TIMEOUT, "dependencyCheckConnectionTimeout", log)
     logStringSetting(CONNECTION_READ_TIMEOUT, "dependencyCheckConnectionReadTimeout", log)
     logStringSetting(DB_FILE_NAME, "dependencyCheckDatabaseFileName", log)
