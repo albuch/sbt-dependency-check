@@ -6,7 +6,6 @@ trait DependencyCheckKeys {
 
 	// Configuration
 	lazy val dependencyCheckAutoUpdate = settingKey[Option[Boolean]]("Sets whether auto-updating of the NVD CVE/CPE, retireJS and hosted suppressions data is enabled. It is not recommended that this be turned to false.")
-	lazy val dependencyCheckCveValidForHours = settingKey[Option[Int]]("Sets the number of hours to wait before checking for new updates from the NVD.")
 	lazy val dependencyCheckFailBuildOnCVSS = settingKey[Float]("Specifies if the build should be failed if a CVSS score above a specified level is identified. The default is 11 which means since the CVSS scores are 0-10, by default the build will never fail. More information on CVSS scores can be found at https://nvd.nist.gov/vuln-metrics/cvss")
   lazy val dependencyCheckJUnitFailBuildOnCVSS = settingKey[Option[Float]]("If using the JUNIT report format the dependencyCheckJUnitFailOnCVSS sets the CVSS score threshold that is considered a failure.")
   lazy val dependencyCheckFormat = settingKey[String]("The report format to be generated (HTML, XML, JUNIT, CSV, JSON, SARIF, JENKINS, ALL). This setting is ignored if dependencyCheckReportFormats is set.")
@@ -105,12 +104,10 @@ trait DependencyCheckKeys {
 	lazy val dependencyCheckPathToGo = settingKey[Option[File]]("The path to the \"go\" runtime.")
 
 	// Advanced configuration
-	lazy val dependencyCheckCveUrlModified = settingKey[Option[URL]]("URL for the modified CVE JSON data feed. Optional if your custom dependencyCheckCveUrlBase is just a domain name change.")
-	lazy val dependencyCheckCveUrlBase = settingKey[Option[String]]("Base URL for each year's CVE JSON data feed, the %d will be replaced with the year. ")
-	lazy val dependencyCheckCveUser = settingKey[Option[String]]("The username used when connecting to the cveUrl. ")
-	lazy val dependencyCheckCvePassword = settingKey[Option[String]]("The password used when connecting to the cveUrl. ")
-	lazy val dependencyCheckCveWaitTime = settingKey[Option[Int]]("The time in milliseconds to wait between downloads from the NVD.")
-	lazy val dependencyCheckCveStartYear = settingKey[Option[Int]]("The first year of NVD CVE data to download from the NVD.")
+	lazy val dependencyCheckNvdApiKey = settingKey[Option[String]]("The API Key to access the NVD API; obtained from https://nvd.nist.gov/developers/request-an-api-key")
+	lazy val dependencyCheckNvdApiDelay = settingKey[Option[Int]]("The delay between requests for the NVD API.")
+	lazy val dependencyCheckNvdApiMaxRetryCount = settingKey[Option[Int]]("The maximum number of retry requests for a single call to the NVD API.")
+	lazy val dependencyCheckNvdApiValidForHours = settingKey[Option[Int]]("The number of hours to wait before checking for new updates from the NVD.")
 	lazy val dependencyCheckConnectionTimeout = settingKey[Option[Int]]("Sets the URL Connection Timeout (in milliseconds) used when downloading external data. ")
 	lazy val dependencyCheckConnectionReadTimeout = settingKey[Option[Int]]("Sets the URL Connection Read Timeout (in milliseconds) used when downloading external data. ")
 	lazy val dependencyCheckDataDirectory = settingKey[Option[File]]("Sets the data directory to hold SQL CVEs contents. This should generally not be changed. ")
