@@ -1,3 +1,12 @@
+# ⚠️ REPOSITORY RETIRED ⚠️
+
+> **This repository is no longer maintained and has been archived.**
+>
+> Please use an actively maintained alternative like:
+> **[nMoncho/sbt-dependency-check](https://github.com/nMoncho/sbt-dependency-check)**
+
+---
+
 # sbt-dependency-check [![Build Status](https://github.com/albuch/sbt-dependency-check/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/albuch/sbt-dependency-check/actions/workflows/ci.yml) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/25bd3b5e4f8e4ee78cfbdca62de31ca7)](https://app.codacy.com/app/albuch/sbt-dependency-check?utm_source=github.com&utm_medium=referral&utm_content=albuch/sbt-dependency-check&utm_campaign=Badge_Grade_Dashboard) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt) 
 The sbt-dependency-check plugin allows projects to monitor dependent libraries for known, published vulnerabilities
 (e.g. CVEs). The plugin achieves this by using the awesome [OWASP DependencyCheck library](https://github.com/jeremylong/DependencyCheck)
